@@ -1,0 +1,102 @@
+/*reset */
+html {
+  box-sizing: border-box;
+}
+
+*,
+*:before,
+*:after {
+  box-sizing: inherit;
+}
+
+body,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+p,
+ol,
+ul,
+menu {
+  margin: 0;
+  padding: 0;
+  font-weight: normal;
+}
+
+table {
+  border: none;
+  border-spacing: 0;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  text-align: initial;
+}
+
+a,
+a:hover,
+a:focus {
+  text-decoration: none;
+}
+
+/*reset end*/
+
+/* global */
+:root {
+  --orange: #FF6600;
+  --black: #1c1c1c;
+  --form-background-color: #F5F8FA;
+  --form-text-color: #657786;
+  --twitter-post-text-color-grey: #9197A3;
+  --button-disabled-color: #f59453;
+  --button-hover-color: #ff3c01;
+}
+
+/* 設定區塊寬度一致並置中 */
+.container {
+  width: 85%;
+  margin: 0 auto 3rem auto;
+}
+
+/* input */
+input {
+  height: 3.125rem;
+  border: 0;
+  border-bottom: var(--form-text-color) 2px solid;
+  border-radius: 0.25rem;
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  padding-left: 40px;
+}
+.input-title {
+  position: absolute;
+  color: var(--form-text-color);
+  font-size: .9375rem;
+  font-weight: 500;
+}
+
+/* 共用按鈕樣式 */
+.action {
+  color: white;
+  background: var(--orange);
+  border-radius: 3.125rem;
+  font-size: 1rem;
+  padding: 0.25rem 1rem;
+  border-width: 0px; 
+}
+.action:hover {
+  background: var(--button-hover-color);
+}
+.action:disabled {
+  background: var(--button-disabled-color);
+}
+
+.button-text-big {
+  font-size: 1.125rem;
+}
+.button-text-small {
+  font-size: 0.9375rem;
+}
