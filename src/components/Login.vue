@@ -37,7 +37,7 @@
       :disabled="isProcessing"
       type="submit"
       @click.stop.prevent="handleSubmit"
-    >登入</button>
+    >{{ isProcessing ? '登錄中...' : '登入'}}</button>
 
     <div class="router text-center mb-3">
       <p>
