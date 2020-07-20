@@ -31,7 +31,7 @@
           :src="settingImg"
           alt="setting"
         />
-        設定
+        設定   
       </div>
       <button
         class="mb-5 action bottom-text-big"
@@ -50,6 +50,12 @@
 
 <script>
 export default {
+  props: {
+    initialNowPage: {
+      typr: Object,
+      require: true
+    }
+  },
   data () {
     return {
       img: {
@@ -63,36 +69,41 @@ export default {
       homeImg: require('@/assets/home-orange.png'),
       userImg: require('@/assets/user-black.png'),
       settingImg: require('@/assets/setting-black.png'),
-      isSlected: 'home',
+      nowPage: 'home',
       isHome: true,
       isUser: false,
       isSetting: false
     }
   },
+  created () {
+    this.showLight(this.initialNowPage)
+  },
   methods: {
     showLight (slect) {
-      this.isSlected = slect
-      if (this.isSlected === 'home'){
+      this.nowPage = slect
+      if (this.nowPage === 'home'){
         this.isHome = true
         this.isUser = false
         this.isSetting = false
         this.homeImg = this.img.isHome
         this.userImg = this.img.isNotUser
         this.settingImg = this.img.isNotSetting
-      } else if (this.isSlected === 'user') {
+        this.$router.push('/users/tweets')
+      } else if (this.nowPage === 'user') {
         this.isHome = false
         this.isUser = true
         this.isSetting = false
         this.homeImg = this.img.isNotHome
         this.userImg = this.img.isUser
         this.settingImg = this.img.isNotSetting
-      } else if (this.isSlected === 'setting') {
+      } else if (this.nowPage === 'setting') {
         this.isHome = false
         this.isUser = false
         this.isSetting = true
         this.homeImg = this.img.isNotHome
         this.userImg = this.img.isNotUser
         this.settingImg = this.img.isSetting
+        this.$router.push('/users/1/edit')
       }
       
     }
@@ -152,4 +163,6 @@ button {
   width: 100%;
   height: 2.81rem;
 }
+
+
 </style>

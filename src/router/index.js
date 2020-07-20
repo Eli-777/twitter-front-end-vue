@@ -24,7 +24,12 @@ Vue.use(VueRouter)
     component: () => import('../views/SignUp.vue')
   },
   {
-    path: '/usertweets',
+    path: '/users/:id/edit',
+    name: 'user-edit',
+    component: () => import('../views/UserEdit.vue')
+  },
+  {
+    path: '/users/tweets',
     name: 'user-tweets',
     component: UserTweets
   },
