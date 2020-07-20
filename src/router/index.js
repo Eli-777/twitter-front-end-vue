@@ -3,6 +3,7 @@ import VueRouter from 'vue-router'
 import NotFound from './../views/NotFound.vue'
 import SignIn from './../views/SignIn.vue'
 import AdminSignIn from './../views/AdminSignIn.vue'
+import UserTweets from './../views/UserTweets.vue'
 
 Vue.use(VueRouter)
 
@@ -21,6 +22,11 @@ Vue.use(VueRouter)
     path: '/signup',
     name: 'sign-up',
     component: () => import('../views/SignUp.vue')
+  },
+  {
+    path: '/usertweets',
+    name: 'user-tweets',
+    component: UserTweets
   },
   {
     path: '/admin/signin',

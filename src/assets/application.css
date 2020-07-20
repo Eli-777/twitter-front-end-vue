@@ -53,12 +53,30 @@ a:focus {
   --twitter-post-text-color-grey: #9197A3;
   --button-disabled-color: #f59453;
   --button-hover-color: #ff3c01;
+  --border-light-grey: #E6ECF0;
 }
+
+html {
+  font-size: 16px;
+  height: 100%;
+  color: var(--black);
+}
+
+body, #alphitter {
+  height: 100%;
+
+}
+
+
+
 
 /* 設定區塊寬度一致並置中 */
 .container {
+  display: flex;
+  flex-direction: row;
   width: 85%;
-  margin: 0 auto 3rem auto;
+  margin: 0 auto 0 auto;
+  height: 100%;
 }
 
 /* input */
@@ -100,3 +118,7 @@ input {
 .button-text-small {
   font-size: 0.9375rem;
 }
+
+/* * {
+  border: black 1px solid;
+} */

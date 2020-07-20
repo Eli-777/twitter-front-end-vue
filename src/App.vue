@@ -1,5 +1,5 @@
 <template>
-  <div id="restaurant-forum">
+  <div id="alphitter">
     <router-view />
   </div>
 </template>
