@@ -39,6 +39,11 @@ Vue.use(VueRouter)
     component: () => import('../views/UserProfilePage.vue')
   },
   {
+    path: '/tweets/:id',
+    name: 'tweet',
+    component: () => import('../views/Tweet.vue')
+  },
+  {
     path: '/admin/signin',
     name: 'admin-sign-in',
     component: AdminSignIn
