@@ -5,7 +5,7 @@
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit :user="User" @after-submit="handleAfterSubmit"/>
     
-
+    <TweetCreate />
   </div>
 </template>
 
@@ -13,6 +13,7 @@
 import Navbar from "./../components/Navbar";
 import UserCard from "./../components/UserCard"
 import UserPageEdit from "./../components/UserPageEdit"
+import TweetCreate from "./../components/TweetCreate"
 import { Toast } from './../utils/helpers'
 
 const dummyData = {
@@ -40,6 +41,7 @@ export default {
     Navbar,
     UserCard,
     UserPageEdit,
+    TweetCreate
   },
   data () {
     return {

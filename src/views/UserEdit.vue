@@ -85,11 +85,14 @@
 
       </div>
     </form>
+
+    <TweetCreate />
   </div>
 </template>
 
 <script>
 import Navbar from "./../components/Navbar";
+import TweetCreate from "./../components/TweetCreate"
 import { Toast } from "./../utils/helpers"
 
 const dummyData = {
@@ -108,7 +111,8 @@ const dummyData = {
 
 export default {
   components: {
-    Navbar
+    Navbar,
+    TweetCreate
   },
   data () {
     return {

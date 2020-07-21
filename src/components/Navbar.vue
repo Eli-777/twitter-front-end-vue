@@ -35,8 +35,8 @@
       </div>
       <button
         class="mb-5 action bottom-text-big"
-        type="submit"
-        @click.stop.prevent=""
+        data-toggle="modal" 
+        data-target="#tweet-create-modal"
       >推文</button>
     </div>
     <div class="sidebar__logout">

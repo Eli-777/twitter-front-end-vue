@@ -14,6 +14,9 @@
         />
       </div>
     </div>
+
+    <TweetCreate />
+    
   </div>
 
 </template>
@@ -24,6 +27,7 @@
 import Navbar from './../components/Navbar'
 import UserTweetPost from './../components/UserTweetPost'
 import TweetCards from './../components/TweetCards'
+import TweetCreate from './../components/TweetCreate'
 
 
 const dummyData = {
@@ -301,7 +305,8 @@ export default {
   components: {
     Navbar,
     UserTweetPost,
-    TweetCards
+    TweetCards,
+    TweetCreate
   },
   data() {
     return {
