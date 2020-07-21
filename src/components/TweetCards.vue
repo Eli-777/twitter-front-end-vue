@@ -1,5 +1,5 @@
 <template>
-  <div class="tweetcard">
+  <div class="tweetcard ">
     <img class="tweetcard-avator" :src="tweets.user.avator" width="50rem" height="50rem"/>
     <div class="tweetcard-right">
       <div class="tweetcard-title">
@@ -9,7 +9,7 @@
           ．{{tweets.created_at | fromNow}}
         </span>
       </div>
-      <div class="tweetcard-content">{{tweets.user.introduction}}</div>
+      <div class="tweetcard-content">{{tweets.description}}</div>
       <div class="tweetcard-icon">
         <button type="button"><img src="./../assets/tweet.png" alt=""></button>
         {{tweets.commentCount}} 

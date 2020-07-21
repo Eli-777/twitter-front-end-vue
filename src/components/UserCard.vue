@@ -43,11 +43,13 @@
       </li>
     </ul>
     <!-- 推文 -->
-    <TweetCards 
-      v-for="tweet in tweets"
-      :key="tweet.id"
-      :initial-user-tweet="tweet"
-    />
+    <div class="tweet-cards overflow-auto">
+      <TweetCards 
+        v-for="tweet in tweets"
+        :key="tweet.id"
+        :initial-user-tweet="tweet"
+      />
+    </div>
   </div>
 
 </template>

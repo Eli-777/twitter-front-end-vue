@@ -43,6 +43,7 @@ a:focus {
   text-decoration: none;
 }
 
+
 /*reset end*/
 
 /* global */
@@ -118,6 +119,10 @@ input {
 }
 .button-text-small {
   font-size: 0.9375rem;
+}
+
+.tweet-cards{
+  height: 100%;
 }
 
 /* * {
