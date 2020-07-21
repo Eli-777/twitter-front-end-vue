@@ -4,6 +4,7 @@
     <UserCard :user="User"/>
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit :user="User" @after-submit="handleAfterSubmit"/>
+    
 
   </div>
 </template>
@@ -31,6 +32,8 @@ const dummyData = {
     "updated_at": "2009-10-31T01:48:52Z"
   }
 }
+
+
 
 export default {
   components: {
