@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar col-4">
+  <nav class="sidebar col-3">
     <div class="sidebar__icon">
       <router-link
         to="/"
@@ -17,7 +17,7 @@
         />
         首頁
       </div>
-      <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isUser}" @click="showLight('user')">
+      <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isUser}" @click="showLight('profile')">
         <img
           class="img-icon"
           :src="userImg"
@@ -89,13 +89,14 @@ export default {
         this.userImg = this.img.isNotUser
         this.settingImg = this.img.isNotSetting
         this.$router.push('/users/tweets')
-      } else if (this.nowPage === 'user') {
+      } else if (this.nowPage === 'profile') {
         this.isHome = false
         this.isUser = true
         this.isSetting = false
         this.homeImg = this.img.isNotHome
         this.userImg = this.img.isUser
         this.settingImg = this.img.isNotSetting
+        this.$router.push('/users/1/tweets')
       } else if (this.nowPage === 'setting') {
         this.isHome = false
         this.isUser = false
