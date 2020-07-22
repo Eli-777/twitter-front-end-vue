@@ -18,29 +18,41 @@
               :disabled="isProcessing"
               type="submit"
             >{{ isProcessing ? '處理中...' : '儲存'}}</button>
-            <div class="form-group">
-              <img :src="backgroundImage" alt="backgroundImage" width="100%" height="150px"/>
+            <div class="form-group image-input">
+              <img 
+                :src="backgroundImage | emptyImage" 
+                class="background-image"
+                alt="background-image" 
+                width="100%" 
+                height="150px"
+              />
               <input
                 id="backgroundImage"
                 type="file"
                 name="backgroundImage"
                 accept="image/*"
-                class="form-control-file"
+                class="form-control-file background-image-input"
                 @change="handleFileChangeBImg"
               />
             </div>
-            <div class="form-group">
-              <img :src="avatar" alt="avatar" width="100px" height="100px"/>
+            <div class="form-group  image-input">
+              <img 
+                :src="avatar | emptyImage" 
+                class="avator-image"
+                alt="avatar" 
+                width="100px" 
+                height="100px"
+              />
               <input
                 id="avatar"
                 type="file"
                 name="avatar"
                 accept="image/*"
-                class="form-control-file"
+                class="form-control-file avator-image-input"
                 @change="handleFileChangePImg"
               />
             </div>
-    
+            <div class="user-input">
             <div class="form-label-group text-center mb-3">
               <label class="input-title" for="account">名稱</label>
               <input
@@ -54,9 +66,9 @@
                 required
               />
             </div>
-            <div class="form-label-group text-center mb-3">
+            <div class="form-label-group text-center ">
               <label class="input-title" for="account">自我介紹</label>
-              <input
+              <textarea
                 id="introduction"
                 v-model="introduction"
                 name="introduction"
@@ -67,6 +79,7 @@
                 required
               />
             </div>
+            </div>
           </form>
         </div>
       </div>
@@ -76,7 +89,9 @@
 
 <script>
 import { Toast } from './../utils/helpers'
+import { emptyImageFilter } from "./../utils/mixins";
 export default {
+  mixins: [emptyImageFilter],
   props: {
     user: {
       type: Object,
@@ -146,3 +161,53 @@ export default {
   }
 };
 </script>
+
+<style scoped>
+.image-input {
+  position: relative;
+}
+
+.background-image, .background-image-input {
+  height: 150px;
+}
+.background-image-input{
+  position: absolute;
+  border: none;
+  top: 0;
+}
+
+.avator-image, .avator-image-input {
+  border-radius: 50%;
+  width: 100px;
+  height: 100px;
+  border: 4px solid #ffffff;
+  transform: translateY(-50%) translateX(5%);
+}
+.avator-image-input {
+  position: absolute;
+  top: 0;
+}
+input[type="file"] {
+  opacity: 0;
+}
+
+#introduction, #name {
+  width: 100%;
+}
+#introduction {
+  height: 150px;
+  border: 0;
+  border-bottom: var(--form-text-color) 2px solid;
+  border-radius: 0.25rem;
+  background-color: var(--form-background-color);
+  color: var(--form-text-color);
+  padding-left: 4.375rem;
+  resize: none;
+}
+.user-input {
+  position: relative;
+  top: -60px;
+  height: 170px;
+}
+
+</style>

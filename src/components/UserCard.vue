@@ -3,13 +3,22 @@
     <div class="header">
       <button type="button" class="header-button" @click="$router.back()">&larr;</button>
       <div class="header-text m-3">
-        <p class="header-name">name</p>
-        <p class="header-userTweets">25推文</p>
+        <p class="header-name">{{user.name}}</p>
+        <p class="header-userTweets">{{user.tweetCount}}推文</p>
       </div>
     </div>
-    <img :src=" user.backgroundImage | emptyImage" class="card-img-top backgroundImage"  height="150px" />
+    <img 
+      :src=" user.backgroundImage | emptyImage" 
+      class="card-img-top backgroundImage"  
+      height="150px" 
+    />
     <div class="card-body">
-      <img :src=" user.avatar | emptyImage" class="card-img-avatar"  height="140px" width="140px" />
+      <img 
+        :src=" user.avatar | emptyImage" 
+        class="card-img-avatar"  
+        height="140px" 
+        width="140px" 
+      />
       <button  
         class="btn btn-outline-primary edit-profile-button" 
         data-toggle="modal" 
@@ -27,11 +36,11 @@
       <div class="card-body-follow">
         <router-link :to="{ name: 'user-following', params :{ id: user.id}}">
           {{user.followingCount}} 個
-          <p>跟隨中</p>
+          <span>跟隨中</span>
         </router-link>
         <router-link :to="{ name: 'user-follower', params :{ id: user.id}}">
           {{user.followerCount}} 位
-          <p>跟隨者</p>
+          <span>跟隨者</span>
         </router-link>
       </div>
     </div>
@@ -48,7 +57,7 @@
       </li>
     </ul>
     <!-- 推文 -->
-    <div class="tweet-cards overflow-auto">
+    <div class="tweet-cards">
       <TweetCards 
         v-for="tweet in tweets"
         :key="tweet.id"
@@ -214,7 +223,7 @@ export default {
   display: flex;
   margin: 1rem 0;
 }
-.card-body-follow p {
+.card-body-follow span {
   color: var(--form-text-color);
   margin-right: 1.2rem;
 }
@@ -226,6 +235,6 @@ export default {
   
 }
 .tweet-cards{
-  max-height: 80%;
+  max-height: 50%;
 }
 </style>
