@@ -4,13 +4,18 @@
     <TweetCardDetail 
       :initial-tweet="tweet"
     />
-    
+
+    <RepliedModal 
+      :tweet="tweet"
+      @after-create-replied="afterCreateReplied"
+    />
   </div>
 </template>
 
 <script>
 import Navbar from './../components/Navbar'
 import TweetCardDetail from './../components/TweetCardDetail'
+import RepliedModal from "./../components/RepliedModal"
 
 const dummyData = {
   tweet: {
@@ -46,7 +51,8 @@ const dummyData = {
 export default {
   components: {
     Navbar,
-    TweetCardDetail
+    TweetCardDetail,
+    RepliedModal
   },
   data () {
     return {
@@ -60,6 +66,19 @@ export default {
     fetchTweet () {
       const response = dummyData.tweet
       this.tweet = response
+    },
+    afterCreateReplied (payload) {
+      const { repliedId, tweetId, text } = payload
+      this.tweet.push({
+        id: repliedId,
+        UserId: tweetId,
+        User: {
+          id: this.currentUser.id,
+          name: this.currentUser.name
+        },
+        text,
+        createdAt: new Date()
+      })
     }
   }
   

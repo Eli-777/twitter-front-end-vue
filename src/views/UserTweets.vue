@@ -16,7 +16,7 @@
     </div>
 
     <TweetCreate />
-    
+    <RepliedModal />
   </div>
 
 </template>
@@ -28,6 +28,7 @@ import Navbar from './../components/Navbar'
 import UserTweetPost from './../components/UserTweetPost'
 import TweetCards from './../components/TweetCards'
 import TweetCreate from './../components/TweetCreate'
+import RepliedModal from './../components/RepliedModal'
 
 
 const dummyData = {
@@ -306,7 +307,8 @@ export default {
     Navbar,
     UserTweetPost,
     TweetCards,
-    TweetCreate
+    TweetCreate,
+    RepliedModal
   },
   data() {
     return {

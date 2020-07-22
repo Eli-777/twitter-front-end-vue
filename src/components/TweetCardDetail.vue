@@ -30,7 +30,7 @@
         <p>喜歡次數</p>
       </div>
       <div class="card-icon">
-        <button type="button mr-5">
+        <button type="button mr-5" data-toggle="modal" data-target="#tweet-replied-modal">
           <img src="./../assets/tweet.png" alt />
         </button>
         <button type="button">
@@ -40,7 +40,11 @@
     </div>
 
     <!-- 回覆留言區 -->
-    <RepliedCards v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
+    <RepliedCards 
+      v-for="replied in replieds" 
+      :key="replied.id" 
+      :initial-replied="replied" 
+    />
   </div>
 </template>
 

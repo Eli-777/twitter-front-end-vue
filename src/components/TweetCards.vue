@@ -18,7 +18,7 @@
         </div>
         <div class="tweetcard-content">{{tweets.description}}</div>
         <div class="tweetcard-icon">
-          <button type="button">
+          <button type="button" data-toggle="modal" data-target="#tweet-replied-modal">
             <img src="./../assets/tweet.png" alt />
           </button>
           {{tweets.commentCount}}
