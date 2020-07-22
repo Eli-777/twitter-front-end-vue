@@ -127,6 +127,10 @@ input {
   height: 100%;
 }
 
+.center-area {
+  margin-left: 210px;
+}
+
 /* * {
   border: black 1px solid;
 }  */

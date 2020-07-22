@@ -117,6 +117,7 @@ export default {
 
 .sidebar {
   display: flex;
+  position: fixed;
   flex-direction: column;
   width: 210px;
   height: 100%;

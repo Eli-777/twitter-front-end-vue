@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Navbar :initial-now-page="nowPage"/>
-    <form class="w-100">
+    <form class="center-area w-100">
       <div class="form-width col-12 ">
         <div class="form-title  mt-4">
           <h3 class="title">帳戶設定</h3>

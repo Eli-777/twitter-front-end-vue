@@ -1,5 +1,5 @@
 <template>
-  <div class="col-6" style="width: 18rem;">
+  <div class="center-area col-6" style="width: 18rem;">
     <div class="header m-3">
       <button type="button" class="header-button" @click="$router.back()">&larr;</button>
       <p class="header-text">推文</p>

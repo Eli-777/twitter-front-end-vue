@@ -1,12 +1,12 @@
 <template>
   <div class="container"> 
     <Navbar />
-    <div class="center col-6" style="width: 18rem;">
+    <div class="center col-6 center-area" style="width: 18rem;">
       <UserTweetPost 
         :user="user"
         @after-create-tweet="afterCreateTweet"
       />
-      <div class="tweet-cards overflow-auto">
+      <div class="tweet-cards ">
         <TweetCards 
           v-for="tweet in tweets"
           :key="tweet.id"
@@ -349,6 +349,8 @@ export default {
 <style scoped>
 .tweet-cards{
   position: relative;
-  max-height: 80%;
+  max-height: 100%;
+  /* margin-top: 170px; */
+  /* overflow: auto; */
 }
 </style>

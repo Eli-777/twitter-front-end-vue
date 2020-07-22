@@ -73,13 +73,17 @@ export default {
 </script>
 
 <style scoped>
+/* .header {
+  position: fixed;
+  height: 170px;
+  z-index: 999;
+} */
 .header-name{
   font-weight: 500;
 }
 .card {
   display: flex;
   flex-direction: row;
-  /* position: relative; */
 }
 .card img {
   width: 2rem;
