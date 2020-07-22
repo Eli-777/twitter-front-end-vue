@@ -59,6 +59,7 @@ export default {
         id: -1,
         avatar: ''
       },
+      text: '',
       isProcessing: false
     }
   },

@@ -220,4 +220,7 @@ export default {
   color: var(--orange);
   
 }
+.tweet-cards{
+  max-height: 80%;
+}
 </style>

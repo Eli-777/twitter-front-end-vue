@@ -345,5 +345,8 @@ export default {
 
 
 <style scoped>
-
+.tweet-cards{
+  position: relative;
+  max-height: 80%;
+}
 </style>

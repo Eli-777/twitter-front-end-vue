@@ -1,52 +1,60 @@
 <template>
-  <div class="tweetcard ">
-    <img class="tweetcard-avator" :src="tweets.user.avator" width="50rem" height="50rem"/>
-    <div class="tweetcard-right">
-      <div class="tweetcard-title">
-        {{tweets.user.name}} 
-        <span class="tweetcard-account">
-          {{tweets.user.account}}
-          ．{{tweets.created_at | fromNow}}
-        </span>
-      </div>
-      <div class="tweetcard-content">{{tweets.description}}</div>
-      <div class="tweetcard-icon">
-        <button type="button"><img src="./../assets/tweet.png" alt=""></button>
-        {{tweets.commentCount}} 
-        <button type="button"><img src="./../assets/like.png" alt=""></button>
-        {{tweets.likeCount}}
+  <router-link :to="{name: 'tweet', params: {id:tweets.id}}">
+    <div class="tweetcard">
+      <router-link :to="{name: 'user-tweets', params: {id:tweets.id}}">
+        <img class="tweetcard-avator" 
+          :src="tweets.user.avator" 
+          width="50rem" 
+          height="50rem" 
+        />
+      </router-link>
+      <div class="tweetcard-right">
+        <div class="tweetcard-title">
+          {{tweets.user.name}}
+          <span class="tweetcard-account">
+            {{tweets.user.account}}
+            ．{{tweets.created_at | fromNow}}
+          </span>
+        </div>
+        <div class="tweetcard-content">{{tweets.description}}</div>
+        <div class="tweetcard-icon">
+          <button type="button">
+            <img src="./../assets/tweet.png" alt />
+          </button>
+          {{tweets.commentCount}}
+          <button type="button">
+            <img src="./../assets/like.png" alt />
+          </button>
+          {{tweets.likeCount}}
+        </div>
       </div>
     </div>
-  </div>
+  </router-link>
 </template>
 
 <script>
-import { fromNowFilter } from './../utils/mixins'
+import { fromNowFilter } from "./../utils/mixins";
 
 export default {
-  mixins:[ fromNowFilter ],
+  mixins: [fromNowFilter],
   props: {
     initialUserTweet: {
       type: Object,
       required: true
-    },
-  },
-  data () {
-    return {
-      tweets: this.initialUserTweet,
     }
+  },
+  data() {
+    return {
+      tweets: this.initialUserTweet
+    };
   },
   watch: {
     initialUserTweet(newValue) {
-      this.tweet=newValue
+      this.tweet = newValue;
     }
   },
-  created () {
-  
-  },
-  methods: {
-    
-  }
+  created() {},
+  methods: {}
 };
 </script>
 
@@ -72,5 +80,7 @@ export default {
   width: 1rem;
   height: 1rem;
 }
-
+.tweetcard-icon {
+  color: var(--twitter-post-text-color-grey)
+}
 </style>
