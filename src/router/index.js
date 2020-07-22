@@ -39,6 +39,16 @@ Vue.use(VueRouter)
     component: () => import('../views/UserProfilePage.vue')
   },
   {
+    path: '/users/:id/follower',
+    name: 'user-follower',
+    component: () => import('../views/UserFollower.vue')
+  },
+  {
+    path: '/users/:id/following',
+    name: 'user-following',
+    component: () => import('../views/UserFollowing.vue')
+  },
+  {
     path: '/tweets/:id',
     name: 'tweet',
     component: () => import('../views/Tweet.vue')
