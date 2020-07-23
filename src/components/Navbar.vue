@@ -41,7 +41,7 @@
     </div>
     <div class="sidebar__logout">
         <router-link to="/" class="sidebar__logout--link">
-          <img src="./../assets/logout.png" alt="logout">
+          <img class="sidebar__logout-icon img-icon" src="./../assets/logout.png" alt="logout">
           <p>登出</p>
         </router-link>
     </div>
@@ -121,18 +121,18 @@ export default {
   flex-direction: column;
   width: 210px;
   height: 100%;
-  border: 1px solid var(--border-light-grey);
-  padding: 30px 0;
+  /* border-right: 1px solid var(--border-light-grey); */
+  padding: 30px 10px;
 }
 
 .sidebar__icon {
   margin-bottom: 20px;
   display: block;
-  padding: 0 20px;
+  padding: 0 .625rem;
 }
 .sidebar .sidebar__menu__link {
   display: block;
-  padding: 20px;
+  padding: 10px;
   margin-bottom: 10px;
   cursor: pointer;
 }
@@ -155,10 +155,13 @@ export default {
   color: var(--orange);
 }
 
-
-.icon, .img-icon {
-  width: 30px;
-  height: 30px;
+.icon {
+  width: 1.5rem;
+  height: 1.5rem;
+}
+.img-icon {
+  width: 1.25rem;
+  height: 1.25rem;
 }
 
 button {

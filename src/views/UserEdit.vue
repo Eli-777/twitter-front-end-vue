@@ -208,6 +208,9 @@ export default {
 </script>
 
 <style scoped>
+.center-area {
+  border-left: 1px solid var(--border-light-grey)
+}
 .form-title {
   margin-bottom: 40px;
   border-bottom: 1px solid var(--border-light-grey);

@@ -1,5 +1,5 @@
 <template>
-  <div class="right-area col-3 mt-5">
+  <div class="right-area col-3 pt-5">
     <div class="card" style="width: 18rem;">
       <div class="card-header">跟隨誰</div>
       <ul class="list-group list-group-flush">

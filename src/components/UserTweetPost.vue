@@ -1,6 +1,6 @@
 <template>
   <div class="header">
-    <div class="header-text mr-3 mt-3 mb-3">
+    <div class="header-text mr-3 ">
       <p class="header-name">首頁</p>
     </div>
 
@@ -78,8 +78,17 @@ export default {
   height: 170px;
   z-index: 999;
 } */
+.header-text{
+  border-left: 1px solid var(--border-light-grey);
+  border-right: 1px solid var(--border-light-grey);
+  width: 100%;
+  height: 100%;
+  line-height: 3.4375rem;
+}
 .header-name{
   font-weight: 500;
+  font-size: 1.125rem;
+  padding-left: .3rem;
 }
 .card {
   display: flex;
