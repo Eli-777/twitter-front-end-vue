@@ -15,7 +15,7 @@
               class="form-control"
               rows="3"
               placeholder="有什麼新鮮事？"
-              maxlength="160"
+              maxlength="140"
             />
             <div>
               <button

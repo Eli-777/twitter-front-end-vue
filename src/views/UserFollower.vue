@@ -4,12 +4,14 @@
     <UserFollowerCards 
       :initial-followers="followers"
     />
+    <MostFollowerUserRecommend />
   </div>
 </template>
 
 <script>
 import Navbar from "./../components/Navbar";
 import UserFollowerCards from "./../components/UserFollowerCards";
+import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
 
 const dummyData = [
    {
@@ -71,7 +73,8 @@ const dummyData = [
 export default {
   components: {
     Navbar,
-    UserFollowerCards
+    UserFollowerCards,
+    MostFollowerUserRecommend
   },
   data () {
     return {

@@ -9,6 +9,7 @@
       :tweet="tweet"
       @after-create-replied="afterCreateReplied"
     />
+    <MostFollowerUserRecommend />
   </div>
 </template>
 
@@ -16,6 +17,7 @@
 import Navbar from './../components/Navbar'
 import TweetCardDetail from './../components/TweetCardDetail'
 import RepliedModal from "./../components/RepliedModal"
+import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
 
 const dummyData = {
   tweet: {
@@ -52,7 +54,8 @@ export default {
   components: {
     Navbar,
     TweetCardDetail,
-    RepliedModal
+    RepliedModal,
+    MostFollowerUserRecommend
   },
   data () {
     return {

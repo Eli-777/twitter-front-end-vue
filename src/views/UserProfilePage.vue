@@ -2,6 +2,7 @@
   <div class="container">
     <Navbar :initial-now-page="nowPage" />
     <UserCard :user="User"/>
+    <MostFollowerUserRecommend />
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit :user="User" @after-submit="handleAfterSubmit"/>
     
@@ -14,6 +15,7 @@ import Navbar from "./../components/Navbar";
 import UserCard from "./../components/UserCard"
 import UserPageEdit from "./../components/UserPageEdit"
 import TweetCreate from "./../components/TweetCreate"
+import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend' 
 import { Toast } from './../utils/helpers'
 
 const dummyData = {
@@ -41,7 +43,8 @@ export default {
     Navbar,
     UserCard,
     UserPageEdit,
-    TweetCreate
+    TweetCreate,
+    MostFollowerUserRecommend
   },
   data () {
     return {

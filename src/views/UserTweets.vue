@@ -15,6 +15,8 @@
       </div>
     </div>
 
+    <MostFollowerUserRecommend />
+    
     <TweetCreate />
     <RepliedModal />
   </div>
@@ -27,6 +29,7 @@
 import Navbar from './../components/Navbar'
 import UserTweetPost from './../components/UserTweetPost'
 import TweetCards from './../components/TweetCards'
+import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
 import TweetCreate from './../components/TweetCreate'
 import RepliedModal from './../components/RepliedModal'
 
@@ -308,7 +311,8 @@ export default {
     UserTweetPost,
     TweetCards,
     TweetCreate,
-    RepliedModal
+    RepliedModal,
+    MostFollowerUserRecommend
   },
   data() {
     return {
