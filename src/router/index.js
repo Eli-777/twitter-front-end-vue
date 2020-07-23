@@ -4,6 +4,7 @@ import NotFound from './../views/NotFound.vue'
 import SignIn from './../views/SignIn.vue'
 import AdminSignIn from './../views/AdminSignIn.vue'
 import UserTweets from './../views/UserTweets.vue'
+import AdminTweets from './../views/AdminTweets.vue'
 
 Vue.use(VueRouter)
 
@@ -57,6 +58,11 @@ Vue.use(VueRouter)
     path: '/admin/signin',
     name: 'admin-sign-in',
     component: AdminSignIn
+  },
+  {
+    path: '/admin/tweets',
+    name: 'admin-tweets',
+    component: AdminTweets
   },
   {
     path: '*',

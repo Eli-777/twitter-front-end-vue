@@ -75,7 +75,8 @@ export default {
 
       // TODO: 向後端驗證使用者登入資訊是否合法
       console.log('data', data)
-      this.$router.push("/users/tweets")
+      if (this.isAdmin) return this.$router.push("/admin/tweets")
+      return this.$router.push("/users/tweets")
     }
   }
 }
