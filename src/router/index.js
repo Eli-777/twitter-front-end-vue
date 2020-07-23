@@ -70,6 +70,11 @@ Vue.use(VueRouter)
     component: () => import('../views/AdminUserList.vue')
   },
   {
+    path: '/admin/edit',
+    name: 'admin-edit',
+    component: () => import('../views/AdminUserEdit.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound

@@ -99,7 +99,7 @@ export default {
         this.homeImg = this.img.isNotHome
         this.userImg = this.img.isNotUser
         this.settingImg = this.img.isSetting
-        this.$router.push('/users/1/edit')
+        this.$router.push('/admin/edit')
       }
       
     }
