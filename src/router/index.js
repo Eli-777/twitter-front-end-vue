@@ -65,6 +65,11 @@ Vue.use(VueRouter)
     component: AdminTweets
   },
   {
+    path: '/admin/users',
+    name: 'admin-users',
+    component: () => import('../views/AdminUserList.vue')
+  },
+  {
     path: '*',
     name: 'not-found',
     component: NotFound

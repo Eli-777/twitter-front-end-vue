@@ -17,7 +17,7 @@
         />
         推文清單
       </div>
-      <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isUser}" @click="showLight('profile')">
+      <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isUser}" @click="showLight('users')">
         <img
           class="img-icon"
           :src="userImg"
@@ -33,11 +33,6 @@
         />
         設定   
       </div>
-      <button
-        class="mb-5 action bottom-text-big"
-        data-toggle="modal" 
-        data-target="#tweet-create-modal"
-      >推文</button>
     </div>
     <div class="sidebar__logout">
         <router-link to="/" class="sidebar__logout--link">
@@ -50,12 +45,12 @@
 
 <script>
 export default {
-  // props: {
-  //   initialNowPage: {
-  //     typr: Object,
-  //     require: true
-  //   }
-  // },
+  props: {
+    initialNowPage: {
+      typr: Object,
+      require: true
+    }
+  },
   data () {
     return {
       img: {
@@ -75,40 +70,40 @@ export default {
       isSetting: false
     }
   },
-  // created () {
-  //   this.showLight(this.initialNowPage)
-  // },
-  // methods: {
-  //   showLight (slect) {
-  //     this.nowPage = slect
-  //     if (this.nowPage === 'home'){
-  //       this.isHome = true
-  //       this.isUser = false
-  //       this.isSetting = false
-  //       this.homeImg = this.img.isHome
-  //       this.userImg = this.img.isNotUser
-  //       this.settingImg = this.img.isNotSetting
-  //       this.$router.push('/admin/tweets')
-  //     } else if (this.nowPage === 'profile') {
-  //       this.isHome = false
-  //       this.isUser = true
-  //       this.isSetting = false
-  //       this.homeImg = this.img.isNotHome
-  //       this.userImg = this.img.isUser
-  //       this.settingImg = this.img.isNotSetting
-  //       this.$router.push('/users/1/tweets')
-  //     } else if (this.nowPage === 'setting') {
-  //       this.isHome = false
-  //       this.isUser = false
-  //       this.isSetting = true
-  //       this.homeImg = this.img.isNotHome
-  //       this.userImg = this.img.isNotUser
-  //       this.settingImg = this.img.isSetting
-  //       this.$router.push('/users/1/edit')
-  //     }
+  created () {
+    this.showLight(this.initialNowPage)
+  },
+  methods: {
+    showLight (slect) {
+      this.nowPage = slect
+      if (this.nowPage === 'home'){
+        this.isHome = true
+        this.isUser = false
+        this.isSetting = false
+        this.homeImg = this.img.isHome
+        this.userImg = this.img.isNotUser
+        this.settingImg = this.img.isNotSetting
+        this.$router.push('/admin/tweets')
+      } else if (this.nowPage === 'users') {
+        this.isHome = false
+        this.isUser = true
+        this.isSetting = false
+        this.homeImg = this.img.isNotHome
+        this.userImg = this.img.isUser
+        this.settingImg = this.img.isNotSetting
+        this.$router.push('/admin/users')
+      } else if (this.nowPage === 'setting') {
+        this.isHome = false
+        this.isUser = false
+        this.isSetting = true
+        this.homeImg = this.img.isNotHome
+        this.userImg = this.img.isNotUser
+        this.settingImg = this.img.isSetting
+        this.$router.push('/users/1/edit')
+      }
       
-  //   }
-  // }
+    }
+  }
 }
 </script>
 
@@ -121,7 +116,7 @@ export default {
   flex-direction: column;
   width: 210px;
   height: 100%;
-  /* border-right: 1px solid var(--border-light-grey); */
+  border-right: 1px solid var(--border-light-grey);
   padding: 30px 10px;
 }
 
@@ -164,10 +159,7 @@ export default {
   height: 1.25rem;
 }
 
-button {
-  width: 100%;
-  height: 2.81rem;
-}
+
 
 
 </style>

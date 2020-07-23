@@ -56,7 +56,7 @@ export default {
 .tweetcard {
   display: flex;
   align-items: center;
-  border: 1px solid var(--border-light-grey);
+  border-bottom: 1px solid var(--border-light-grey);
   border-top: none;
   position: relative;
 }

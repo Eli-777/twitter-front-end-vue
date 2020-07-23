@@ -1,6 +1,7 @@
 /*reset */
 html {
   box-sizing: border-box;
+  font-size: 16px;
 }
 
 *,
@@ -57,6 +58,7 @@ a:focus {
   --button-disabled-color: #f59453;
   --button-hover-color: #ff3c01;
   --border-light-grey: #E6ECF0;
+  --card-body-grey: #F6F7F8;
 }
 
 html {

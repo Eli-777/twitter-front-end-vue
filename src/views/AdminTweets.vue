@@ -317,7 +317,7 @@ export default {
 
 <style scoped>
 .header-text {
-  border: 1px solid var(--border-light-grey);
+  border-bottom: 1px solid var(--border-light-grey);
   width: 100%;
   height: 100%;
   line-height: 3.4375rem;
