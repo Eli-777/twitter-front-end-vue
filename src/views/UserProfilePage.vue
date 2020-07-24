@@ -1,10 +1,10 @@
 <template>
   <div class="container">
     <Navbar :initial-now-page="nowPage" />
-    <UserCard :user="User"/>
+    <UserCard :initial-user="User"/>
     <MostFollowerUserRecommend />
     <!-- modal 編輯使用者資料 -->
-    <UserPageEdit :user="User" @after-submit="handleAfterSubmit"/>
+    <UserPageEdit :initial-user="User" @after-submit="handleAfterSubmit"/>
     
     <TweetCreate />
   </div>
@@ -31,6 +31,8 @@ const dummyData = {
     "followerCount": '20',
     "tweetCount": '10',
     "isAdmin": false,
+    "isFollowed": false,
+    "isBelled": false,
     "created_at": "2009-10-31T01:48:52Z",
     "updated_at": "2009-10-31T01:48:52Z"
   }
@@ -50,18 +52,19 @@ export default {
     return {
       User: {},
       isProcessing: false,
-      nowPage: 'profile'
+      nowPage: 'profile',
     }
   },
   created () {
-    this.fetchFeeds()
+    const { id } = this.$route.params
+    this.fetchUser(id)
   },
   methods: {
-    async fetchFeeds () {
+    async fetchUser (userId) {
       try {
         // const response = dummyData
         // const { user } = response.User
-        console.log('user',dummyData)
+        console.log('fetchUser id:', userId)
         this.User = dummyData.User
       } catch (error) {
         console.log('error', error)
@@ -75,6 +78,9 @@ export default {
       try {
         this.isProcessing = true
         console.log('formdata',formData)
+        for (let [name, value] of formData.entries()) {
+        console.log(name + ': ' + value)
+      }
         // const { data } = await adminAPI.restaurants.update({ 
         //   restaurantId: this.restaurant.id, formData 
         // })
@@ -86,8 +92,7 @@ export default {
           icon: 'success',
           title: '更新成功'
         })
-
-        this.$router.push({ name: 'user-tweets' })
+        // this.$router.push({ name: 'user-tweets' })
       } catch (error) {
         this.isProcessing = false
         console.log('error', error)

@@ -131,8 +131,59 @@ input {
 .center-area {
   margin-left: 210px;
   width: 100%;
+  overflow-y: auto;
+  scrollbar-width: none;
+}
+.right-area {
+  border-left: 1px solid var(--border-light-grey);
+}
+.left-area {
+  border-right: 1px solid var(--border-light-grey);
 }
 
+/*** scrollbar ***/
+ /* width */
+ ::-webkit-scrollbar {
+  width: 0;
+}
+
+
+.button-none{
+  background-color: transparent;
+  border: none;
+  outline: none;
+}
+
+.button-x{
+  background-color: transparent;
+  border: none;
+  outline: none;
+  font-weight: bold;
+  font-size: 1.5rem;
+  line-height: 1.5rem;
+  color: var(--orange)
+}
+.button-transparent {
+  outline: none;
+  background-color: transparent;
+  border: 1px solid var(--orange);
+  border-radius: 50%;
+  color: var(--orange);
+  padding: 5px;
+}
+.button-transparent-active {
+  outline: none;
+  background-color: var(--orange);
+  border: 1px solid var(--orange);
+  border-radius: 50%;
+  color: var(--orange);
+  padding: 5px;
+}
+.button-transparent img, .button-transparent-active img {
+  width: 30px;
+  height: 30px;
+
+}
 
 /* * {
   border: black 1px solid;

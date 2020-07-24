@@ -1,7 +1,7 @@
 <template>
   <div class="container"> 
     <Navbar />
-    <div class="center col-6 center-area" style="width: 18rem;">
+    <div class="center scrollbar col-6 center-area" style="width: 18rem;">
       <UserTweetPost 
         :user="user"
         @after-create-tweet="afterCreateTweet"
@@ -355,6 +355,6 @@ export default {
   position: relative;
   max-height: 100%;
   /* margin-top: 170px; */
-  /* overflow: auto; */
+  /* overflow: scroll; */
 }
 </style>

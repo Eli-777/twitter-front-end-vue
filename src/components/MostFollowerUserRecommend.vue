@@ -1,5 +1,5 @@
 <template>
-  <div class="right-area col-3 pt-5">
+  <div class="right-area col-3 pt-3">
     <div class="card" style="width: 18rem;">
       <div class="card-header">跟隨誰</div>
       <ul class="list-group list-group-flush">
@@ -280,28 +280,35 @@ export default {
 .card {
   border-radius: 14px 14px 0 0;
   border: 0px;
+  position: fixed;
 }
 .card-header {
   background-color: var(--form-background-color);
   border-radius: 14px 14px 0 0;
   font-weight: bold;
+  padding: 7px 20px;
 }
 .card-footer {
   border-radius: 0 0 14px 14px;
   background-color: var(--form-background-color);
   color: var(--orange) !important;
   cursor: pointer;
+  padding: 7px 20px;
 }
 .list-group-item {
   display: flex;
   justify-content: space-around;
   align-items: center;
   background-color: var(--form-background-color);
+  padding: 7px 20px;
 }
 .card-avator {
-  width: 50px;
-  height: 50px;
+  width: 40px;
+  height: 40px;
   border-radius: 50%;
+}
+.card-text{
+  font-size: .875rem;
 }
 .card-text span {
   color: var(--form-text-color);

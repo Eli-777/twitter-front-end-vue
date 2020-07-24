@@ -168,6 +168,6 @@ export default {
 }
 .user-cards{
   display: grid;
-  grid-template-columns: 25% 25% 25% 25%;
+  grid-template-columns: repeat(auto-fill, minmax(185px, 1fr))
 }
 </style>

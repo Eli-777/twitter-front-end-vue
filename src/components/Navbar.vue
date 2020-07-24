@@ -1,5 +1,5 @@
 <template>
-  <nav class="sidebar col-3">
+  <nav class="left-area sidebar col-3">
     <div class="sidebar__icon">
       <router-link
         to="/"

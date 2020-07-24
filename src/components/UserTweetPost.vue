@@ -9,7 +9,7 @@
       <form @submit.stop.prevent="handleSubmit">
         <textarea 
           v-model="text"
-          class="form-control" 
+          class="form-control " 
           rows="3" 
           placeholder="有什麼新鮮事？" 
           maxlength="160"
@@ -75,7 +75,7 @@ export default {
 <style scoped>
 /* .header {
   position: fixed;
-  height: 170px;
+  width: 61.7vh;
   z-index: 999;
 } */
 .header-text{
@@ -107,8 +107,10 @@ form {
 }
 textarea {
   resize: none;
-  border: transparent;
+  border: 0px solid transparent;
+  outline: none;  
 }
+
 .card button {
   width: max-content;
   margin-top: 100%;
