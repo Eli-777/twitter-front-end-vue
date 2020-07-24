@@ -1,8 +1,8 @@
 <template>
   <div class="container py-5">
-    <form class="w-100">
+    
       <Login :is-admin="isAdmin"/>
-    </form>
+    
   </div>
 </template>
 

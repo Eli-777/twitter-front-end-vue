@@ -106,6 +106,7 @@ const dummyData = [
     description: "貼文內容",
     commentCount: 10,
     likeCount: 20,
+    isliked: true,
     created_at: "2009-10-31T01:48:52Z",
     updated_at: "2009-10-31T01:48:52Z",
     user: {
@@ -129,9 +130,10 @@ const dummyData = [
   {
     id: 2,
     UserId: 2,
-    description: "貼文內容",
+    description: "貼文內容2",
     commentCount: 20,
     likeCount: 30,
+    isliked: false,
     created_at: "2020-10-31T01:48:52Z",
     updated_at: "2020-10-31T01:48:52Z",
     user: {
@@ -246,6 +248,9 @@ export default {
   line-height: 0.8125rem;
   font-weight: 500;
   color: var(--form-text-color);
+}
+.card-img-top {
+  border-radius: 0;
 }
 .card-body {
   position: relative;

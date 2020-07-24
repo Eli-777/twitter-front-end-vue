@@ -22,8 +22,11 @@
             <img src="./../assets/tweet.png" alt />
           </button>
           {{tweets.commentCount}}
-          <button type="button">
+          <button type="button" v-if="!tweets.isliked" @click.stop.prevent="addLike">
             <img src="./../assets/like.png" alt />
+          </button>
+          <button type="button" v-else @click.stop.prevent="deleteLike">
+            <img src="./../assets/heart-red.png" alt />
           </button>
           {{tweets.likeCount}}
         </div>
@@ -50,11 +53,20 @@ export default {
   },
   watch: {
     initialUserTweet(newValue) {
-      this.tweet = newValue;
+      this.tweets = newValue;
     }
   },
   created() {},
-  methods: {}
+  methods: {
+    addLike () {
+      this.tweets.isliked = true
+      this.tweets.likeCount = this.tweets.likeCount +1 
+    },
+    deleteLike () {
+      this.tweets.isliked = false
+      this.tweets.likeCount = this.tweets.likeCount -1 
+    }
+  }
 };
 </script>
 
@@ -62,7 +74,10 @@ export default {
 .tweetcard {
   display: flex;
   align-items: center;
-  border: 1px solid var(--border-light-grey);
+  border-bottom: 1px solid var(--border-light-grey);
+}
+.tweetcard:first-child {
+  border-top: 1px solid var(--border-light-grey);
 }
 .tweetcard-avator {
   border-radius: 50%;

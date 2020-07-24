@@ -1,7 +1,7 @@
 <template>
   <div class="container"> 
     <Navbar />
-    <div class="center scrollbar col-6 center-area" style="width: 18rem;">
+    <div class="center scrollbar  center-area" style="width: 33rem;" >
       <UserTweetPost 
         :user="user"
         @after-create-tweet="afterCreateTweet"

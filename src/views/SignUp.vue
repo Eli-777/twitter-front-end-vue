@@ -1,6 +1,6 @@
 <template>
   <div class="container py-5">
-    <form class="w-100">
+    <form class="w-100" @submit.stop.prevent="handleSubmit">
       <div class="form-width col-10 col-sm-6">
         <div class="text-center mb-4">
           <img class="icon" src="./../../public/acIcon@2x.png" />
@@ -77,7 +77,6 @@
           class="mb-3 action bottom-text-big"
           :disabled="isProcessing"
           type="submit"
-          @click.stop.prevent="handleSubmit"
         >{{ isProcessing ? '處理中...' : '註冊'}}</button>
 
         <div class="router text-center mb-3">
@@ -94,6 +93,7 @@
 
 
 <script>
+import authorizationAPI from './../apis/authorization'
 import { Toast } from './../utils/helpers'
 
 export default {
@@ -127,27 +127,26 @@ export default {
           this.passwordCheck = ''
           return
         } 
-        const data = JSON.stringify({
+        // const data2 = JSON.stringify({
+        //   account: this.account,
+        //   name: this.name,
+        //   email: this.email,
+        //   password: this.password,
+        //   passwordCheck: this.passwordCheck
+        // })
+        // console.log('data', data2)
+        
+        const {data} = await authorizationAPI.signUp({ 
           account: this.account,
           name: this.name,
           email: this.email,
           password: this.password,
-          passwordCheck: this.passwordCheck
-        })
-
-        // TODO: 向後端驗證使用者登入資訊是否合法
+         })
         console.log('data', data)
-        /* const {data} = await authorizationAPI.signUp({ 
-          account: this.account,
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          passwordCheck: this.passwordCheck
-         }) */
 
-        // if (data.status !== 'success'){
-        //   throw new Error(data.message)
-        // }
+        if (data.status !== 'success'){
+          throw new Error(data.message)
+        }
 
         Toast.fire({
           icon: 'success',
@@ -191,6 +190,9 @@ input {
 button {
   width: 100%;
   height: 3.125rem;
+}
+a, a:hover {
+  color: blue;
 }
 
 

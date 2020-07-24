@@ -134,6 +134,9 @@ input {
   overflow-y: auto;
   scrollbar-width: none;
 }
+.center-area:hover {
+  scrollbar-width: auto;
+}
 .right-area {
   border-left: 1px solid var(--border-light-grey);
 }
@@ -143,9 +146,11 @@ input {
 
 /*** scrollbar ***/
  /* width */
- ::-webkit-scrollbar {
-  width: 0;
-}
+/* ::-webkit-scrollbar {
+  width: 6px;
+  visibility: visible;
+} */
+
 
 
 .button-none{
@@ -184,6 +189,8 @@ input {
   height: 30px;
 
 }
+
+
 
 /* * {
   border: black 1px solid;

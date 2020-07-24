@@ -1,12 +1,12 @@
 <template>
-  <div class="center-area col-6" style="width: 18rem;">
+  <div class="center-area " style="width: 33rem;">
     <div class="header m-3">
       <button type="button" class="header-button" @click="$router.back()">&larr;</button>
       <p class="header-text">推文</p>
     </div>
 
-    <div class="card-body">
-      <div class="card-body-user">
+    <div class="card-body pt-2">
+      <div class="card-body-user pl-3">
         <router-link :to="{name: 'user-tweets', params: {id:tweet.user.id}}">
           <img
             :src="tweet.user.avator | emptyImage"
@@ -15,36 +15,35 @@
             width="140px"
           />
         </router-link>
-        <div class="card-body-username">
+        <div class="card-body-username ">
           <h5 class="card-body-name">{{tweet.user.name}}</h5>
           <p class="card-body-account">{{tweet.user.account}}</p>
         </div>
       </div>
 
-      <p class="card-body-description">{{tweet.description}}</p>
-      <p class="card-body-time">{{tweet.created_at | fromNow }}</p>
-      <div class="card-body-follow">
+      <p class="card-body-description pl-3">{{tweet.description}}</p>
+      <p class="card-body-time pl-3">{{tweet.created_at | fromNow }}</p>
+      <div class="card-body-follow pl-3">
         {{tweet.commentCount}}
         <p>回覆</p>
         {{tweet.likeCount}}
         <p>喜歡次數</p>
       </div>
-      <div class="card-icon">
+      <div class="card-icon pl-3 pb-2">
         <button type="button mr-5" data-toggle="modal" data-target="#tweet-replied-modal">
           <img src="./../assets/tweet.png" alt />
         </button>
-        <button type="button">
+        <button type="button" v-if="!tweet.isLiked" @click.stop.prevent="addLike">
           <img src="./../assets/like.png" alt />
+        </button>
+        <button type="button" v-else @click.stop.prevent="deleteLike">
+          <img src="./../assets/heart-red.png" alt />
         </button>
       </div>
     </div>
 
     <!-- 回覆留言區 -->
-    <RepliedCards 
-      v-for="replied in replieds" 
-      :key="replied.id" 
-      :initial-replied="replied" 
-    />
+    <RepliedCards v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
   </div>
 </template>
 
@@ -61,6 +60,8 @@ const dummyData = [
     TweetId: 99,
     isLiked: false,
     comment: "回覆內容",
+    commentCount: 5,
+    likeCount: 1,
     created_at: "2009-10-31T01:48:52Z",
     updated_at: "2009-10-31T01:48:52Z",
     user: {
@@ -87,6 +88,8 @@ const dummyData = [
     TweetId: 88,
     isLiked: false,
     comment: "回覆內容12123",
+    commentCount: 4,
+    likeCount: 2,
     created_at: "2009-10-31T01:48:52Z",
     updated_at: "2009-10-31T01:48:52Z",
     user: {
@@ -134,6 +137,12 @@ export default {
       const data = dummyData;
       this.tweet = this.initialTweet;
       this.replieds = data;
+    },
+    addLike() {
+      this.tweet.isLiked = true;
+    },
+    deleteLike() {
+      this.tweet.isLiked = false;
     }
   }
 };
@@ -156,7 +165,8 @@ export default {
 }
 
 .card-body {
-  padding: 0 20px;
+  padding: 0 0px;
+  border-top: 1px solid var(--border-light-grey);
 }
 
 .card-body-user {
@@ -174,7 +184,7 @@ export default {
   margin: 0.3rem;
 }
 .card-body-account,
-.card-body-time {
+.card-body-time, {
   color: var(--twitter-post-text-color-grey);
 }
 .card-body-text {
@@ -197,6 +207,7 @@ export default {
 .card-icon {
   display: flex;
   margin: 0.5rem 0;
+  border-bottom: 1px solid var(--border-light-grey);
 }
 .card-icon button {
   background-color: white;

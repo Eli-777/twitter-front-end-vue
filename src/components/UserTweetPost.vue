@@ -79,11 +79,10 @@ export default {
   z-index: 999;
 } */
 .header-text{
-  border-left: 1px solid var(--border-light-grey);
-  border-right: 1px solid var(--border-light-grey);
   width: 100%;
   height: 100%;
   line-height: 3.4375rem;
+  border-bottom: 1px solid var(--border-light-grey)
 }
 .header-name{
   font-weight: 500;
@@ -93,6 +92,8 @@ export default {
 .card {
   display: flex;
   flex-direction: row;
+  border-radius: 0;
+  border: 0;
 }
 .card img {
   width: 2rem;
