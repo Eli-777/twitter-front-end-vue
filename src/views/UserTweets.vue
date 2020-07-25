@@ -32,6 +32,7 @@ import TweetCards from './../components/TweetCards'
 import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
 import TweetCreate from './../components/TweetCreate'
 import RepliedModal from './../components/RepliedModal'
+import { mapState } from 'vuex'
 
 
 const dummyData = {
@@ -322,6 +323,9 @@ export default {
       },
       tweets: []
     }
+  },
+  computed: {
+    ...mapState(['currentUser'])
   },
   created () {
     this.fetchUser()

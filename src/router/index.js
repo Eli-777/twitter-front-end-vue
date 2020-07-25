@@ -5,6 +5,7 @@ import SignIn from './../views/SignIn.vue'
 import AdminSignIn from './../views/AdminSignIn.vue'
 import UserTweets from './../views/UserTweets.vue'
 import AdminTweets from './../views/AdminTweets.vue'
+import store from './../store/index'
 
 Vue.use(VueRouter)
 
@@ -83,6 +84,35 @@ Vue.use(VueRouter)
 
 const router = new VueRouter({
   routes
+})
+
+router.beforeEach( async(to, from, next) => {
+  // const token = localStorage.getItem('token')
+  // let isAuthenticated = false
+
+  const tokenInLocalStorage = localStorage.getItem('token')
+  const tokenInStore = store.state.token
+  let isAuthenticated = store.state.isAuthenticated
+
+  // 比較 localStorage 和 store 中的 token 是否一樣
+  if (tokenInLocalStorage && tokenInLocalStorage !== tokenInStore) {
+    isAuthenticated = await store.dispatch('fetchCurrentUser')
+  }
+
+  // 對於不需要驗證 token 的頁面
+  const pathsWithoutAuthentication = ['sign-up', 'sign-in']
+  
+  // 如果 token 無效則轉址到登入頁
+  if (!isAuthenticated && !pathsWithoutAuthentication.includes(to.name)) {
+    next('/signin')
+    return
+  }
+  // 如果 token 有效則轉址到首頁
+  if (isAuthenticated && pathsWithoutAuthentication.includes(to.name)) {
+    next('/users/tweets')
+    return
+  }
+  next()
 })
 
 export default router

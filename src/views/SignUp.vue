@@ -127,14 +127,6 @@ export default {
           this.passwordCheck = ''
           return
         } 
-        // const data2 = JSON.stringify({
-        //   account: this.account,
-        //   name: this.name,
-        //   email: this.email,
-        //   password: this.password,
-        //   passwordCheck: this.passwordCheck
-        // })
-        // console.log('data', data2)
         
         const {data} = await authorizationAPI.signUp({ 
           account: this.account,

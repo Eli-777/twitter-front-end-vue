@@ -82,31 +82,38 @@ export default {
           })
           return
         }
-
+        this.isProcessing = true
         const response = await authorizationAPI.signIn({
           email: this.email,
           password: this.password
         })
-        console.log('response', response)
 
         const { data } = response
         if (data.status !== "success") {
           throw new Error(data.message)
         }
-        localStorage.setItem('token', data.token)
-        if (this.isAdmin){
+        
+        // 登入成功後就拿 token 並存入 Vuex 中
+        const login = () => {
+          // 將資料轉到 Vuex 中
+          this.$store.commit('setCurrentUser', data.user)
+          localStorage.setItem("token", data.token)
+        }
+
+        //進入前台頁面並且不是管理員身份才可進入
+        if (!this.isAdmin && !data.user.isAdmin) {
+          login()
+          this.$router.push('/users/tweets')
+        } else if (this.isAdmin && data.user.isAdmin) {
+          //進入後台頁面並且是管理員身份才可進入
+          login()
           this.$router.push('/admin/tweets')
         } else {
-          this.$router.push('/users/tweets')
+          throw new Error()
         }
-        // 將資料轉到 Vuex 中
-        // this.$store.commit('setCurrentUser', data.user)
-
-        // localStorage.setItem("token", data.token)
-        // this.$router.push("/restaurants")
 
       } catch (error) {
-
+        this.isProcessing = false
         this.password = "";
         Toast.fire({
           icon: "warning",

@@ -40,10 +40,14 @@
       >推文</button>
     </div>
     <div class="sidebar__logout">
-        <router-link to="/" class="sidebar__logout--link">
+        <button 
+          type="button"
+          class="sidebar__logout--link"
+          @click="logout"
+        >
           <img class="sidebar__logout-icon img-icon" src="./../assets/logout.png" alt="logout">
           <p>登出</p>
-        </router-link>
+        </button>
     </div>
   </nav>
 </template>
@@ -106,15 +110,16 @@ export default {
         this.settingImg = this.img.isSetting
         this.$router.push('/users/1/edit')
       }
-      
+    },
+    logout () {
+      this.$store.commit('revokeAuthentication')
+      this.$router.push('/signin')
     }
   }
 }
 </script>
 
 <style scoped>
-
-
 .sidebar {
   display: flex;
   position: fixed;
@@ -149,6 +154,9 @@ export default {
   color: var(--black);
   font-weight: bold;
   font-size: 18px;
+  width: 100px;
+  background-color: transparent;
+  border: none;
 }
 
 .sidebarMenuLinkActive {
