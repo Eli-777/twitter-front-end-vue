@@ -98,6 +98,7 @@ export default {
           // 將資料轉到 Vuex 中
           this.$store.commit('setCurrentUser', data.user)
           localStorage.setItem("token", data.token)
+          console.log('data=',data)
         }
 
         //進入前台頁面並且不是管理員身份才可進入

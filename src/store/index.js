@@ -34,8 +34,12 @@ export default new Vuex.Store({
   actions: {
     async fetchCurrentUser ({commit}) {
       try {
-        const { currentUser } = this.state
-        const userId = currentUser.id
+        const tokenInLocalStorage =localStorage.getItem('token')
+        let payload = tokenInLocalStorage.split('.').slice(1,2)
+        let decodedData = window.atob(payload);
+        let payloadObject = JSON.parse(decodedData)
+        let userId = payloadObject.id
+
         const {data} = await usersAPI.get({userId})
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -49,7 +53,6 @@ export default new Vuex.Store({
         })
         return true
       } catch (error) {
-        // console.error(error.message)
         console.error('can not fetch user information')
         commit('revokeAuthentication')
         return false
