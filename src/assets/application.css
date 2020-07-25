@@ -79,7 +79,8 @@ body, #alphitter {
 .container {
   display: flex;
   flex-direction: row;
-  width: 85%;
+  /* width: 85%; */
+  max-width: 1300;
   margin: 0 auto 0 auto;
   height: 100%;
 }

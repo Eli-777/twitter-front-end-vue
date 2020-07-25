@@ -69,19 +69,10 @@ export default {
     return {
       email: "",
       password: "",
-      isProcessing: false
+      isProcessing: false,
     };
   },
   methods: {
-    // handleSubmit () {
-      // authorizationAPI.signIn({
-      //   email: this.email,
-      //   password: this.password
-      // }).then(response => {
-        // TODO: 取得 API 請求後的資料
-        // console.log('response', response)
-      // })
-    // },
      async handleSubmit() {
       try {
         if (!this.email || !this.password) {
@@ -91,14 +82,6 @@ export default {
           })
           return
         }
-
-        this.isProcessing = true;
-
-        const da = JSON.stringify({
-          email: this.email,
-          password: this.password
-        })
-        console.log('data=',da)
 
         const response = await authorizationAPI.signIn({
           email: this.email,
@@ -111,7 +94,11 @@ export default {
           throw new Error(data.message)
         }
         localStorage.setItem('token', data.token)
-        this.$router.push('/users/tweets')
+        if (this.isAdmin){
+          this.$router.push('/admin/tweets')
+        } else {
+          this.$router.push('/users/tweets')
+        }
         // 將資料轉到 Vuex 中
         // this.$store.commit('setCurrentUser', data.user)
 

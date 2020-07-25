@@ -19,11 +19,6 @@ import Swal from 'sweetalert2'
   export const apiHelper = axiosInstance
 
 
-// const baseURL = 'https://simple-twitter-jez.herokuapp.com/'
-
-// export const apiHelper = axios.create({
-//   baseURL
-// })
 
 	export const Toast = Swal.mixin({
   toast: true,

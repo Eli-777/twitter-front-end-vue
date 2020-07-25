@@ -159,7 +159,7 @@ export default {
         console.error(error.message)
         Toast.fire({
           icon: 'error',
-          title: '無法新增帳號，請稍後再試'
+          title: error.message
         })
       }
     }
