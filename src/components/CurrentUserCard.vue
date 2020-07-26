@@ -139,25 +139,16 @@ export default {
   },
   created() {
     this.fetchUser()
-    const { id } = this.$route.params
-    this.fetchUserTweets(id);
+    this.fetchUserTweets();
     this.showtweets(this.nowPage);
-  },
-  beforeRouteUpdate (to, from, next) {
-    console.log('to', to)
-    console.log('from', from)
-    const { id: userId } = to.params
-    console.log('gogogo')
-    this.fetchUser()
-    this.fetchUserTweets(userId)
-    next()
   },
   methods: {
     async fetchUser () {
       this.user = this.initialUser
     },
-    async fetchUserTweets(userId) {
+    async fetchUserTweets() {
       try {
+        const userId = this.currentUser.id
         const {data} = await usersAPI.getUserTweets({userId})
         this.tweets = data
         this.userTweets = data

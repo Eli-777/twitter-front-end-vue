@@ -1,7 +1,7 @@
 <template>
   <router-link :to="{name: 'tweet', params: {id:tweet.id}}">
     <div class="tweetcard">
-      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}">
+      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}" >
         <img class="tweetcard-avator" 
           :src="tweet.User.avator | emptyImage" 
           width="50rem" 
@@ -54,7 +54,10 @@ export default {
   },
   watch: {
     initialUserTweet(newValue) {
-      this.tweet = newValue;
+      this.tweet = {
+        ...this.initialUserTweet,
+        ...newValue
+      }
     }
   },
   created() {
@@ -80,6 +83,7 @@ export default {
       } = User
       this.tweet = {
         id,
+        User,
         createdAt,
         description,
         commentCount,
@@ -92,7 +96,6 @@ export default {
         name,
         account
       }
-
     },
     addLike () {
       this.tweet.isLikedByLoginUser = true

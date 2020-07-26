@@ -1,7 +1,7 @@
 <template>
   <div class="container">
-    <Navbar :initial-now-page="nowPage" />
-    <CurrentUserCard :initial-user="User"/>
+    <Navbar  />
+    <UserCard :initial-user="User"/>
     <MostFollowerUserRecommend />
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit :initial-user="User" @after-submit="handleAfterSubmit"/>
@@ -13,13 +13,12 @@
 <script>
 import Navbar from "./../components/Navbar";
 // import UserCard from "./../components/UserCard"
-import CurrentUserCard from "./../components/CurrentUserCard"
-import UserPageEdit from "./../components/UserPageEdit"
+import UserCard from "./../components/UserCard"
 import TweetCreate from "./../components/TweetCreate"
+import UserPageEdit from "./../components/UserPageEdit"
 import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend' 
 import { Toast } from './../utils/helpers'
 import usersAPI from './../apis/users'
-import { mapState } from 'vuex'
 
 
 
@@ -27,9 +26,9 @@ import { mapState } from 'vuex'
 export default {
   components: {
     Navbar,
-    CurrentUserCard,
-    UserPageEdit,
+    UserCard,
     TweetCreate,
+    UserPageEdit,
     MostFollowerUserRecommend
   },
   data () {
@@ -39,36 +38,23 @@ export default {
       nowPage: 'profile',
     }
   },
-  computed: {
-    ...mapState(['currentUser'])
-  },
   created () {
-    console.log(234234)
-    this.fetchUser()
+    const { id } = this.$route.params
+    this.fetchUser(id)
   },
-  // watch: {
-  //   currentUser (newValue) {
-  //     this.currentUser = {
-  //       ...this.currentUser,
-  //       ...newValue
-  //     }
-  //   },
-  // },
   methods: {
-    async fetchUser () {
+    async fetchUser (userId) {
       try {
-        console.log('current123',this.currentUser.id)
-        const userId = this.currentUser.id
         const { data } = await usersAPI.get({userId})
         this.User = data
       
-        console.log('fetchUser id123:', data)
+        console.log('fetchUser id:', data)
 
       } catch (error) {
         console.log('error', error)
         Toast.fire({
           icon: 'error',
-          title: '無法取得資料，請稍後再試'
+          title: '無法取得餐廳資料，請稍後再試'
         })
       }
     },

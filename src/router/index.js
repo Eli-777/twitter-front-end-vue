@@ -51,6 +51,12 @@ Vue.use(VueRouter)
     beforeEnter: authorizeIsNotAdmin
   },
   {
+    path: '/users/self/tweets',
+    name: 'user-profile',
+    component: () => import('../views/UserProfilePage.vue'),
+    beforeEnter: authorizeIsNotAdmin
+  },
+  {
     path: '/users/:id/edit',
     name: 'user-edit',
     component: () => import('../views/UserEdit.vue'),
@@ -59,7 +65,7 @@ Vue.use(VueRouter)
   {
     path: '/users/:id/tweets',
     name: 'user-tweets',
-    component: () => import('../views/UserProfilePage.vue'),
+    component: () => import('../views/UserOtherPage.vue'),
     beforeEnter: authorizeIsNotAdmin
   },
   {
