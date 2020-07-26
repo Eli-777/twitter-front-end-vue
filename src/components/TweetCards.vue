@@ -18,7 +18,7 @@
         </div>
         <div class="tweetcard-content">{{tweet.description}}</div>
         <div class="tweetcard-icon">
-          <button type="button" data-toggle="modal" data-target="#tweet-replied-modal">
+          <button type="button" class="tweet-button" data-toggle="modal" data-target="#tweet-replied-modal">
             <img src="./../assets/tweet.png" alt />
           </button>
           {{tweet.commentCount}}
@@ -109,7 +109,7 @@ export default {
 <style scoped>
 .tweetcard {
   display: flex;
-  align-items: center;
+  align-items: flex-start;
   border-bottom: 1px solid var(--border-light-grey);
 }
 .tweetcard:first-child {
@@ -118,6 +118,7 @@ export default {
 .tweetcard-avator {
   border-radius: 50%;
   margin: 1rem;
+  margin-top: .5rem;
 }
 .tweetcard-account {
   color: var(--form-text-color);
@@ -127,11 +128,28 @@ export default {
   border: none;
   outline: none;
 }
+.tweet-button {
+  padding-left: 0;
+}
 .tweetcard-icon button img {
   width: 1rem;
   height: 1rem;
 }
 .tweetcard-icon {
   color: var(--twitter-post-text-color-grey)
+}
+
+.tweetcard-right{
+  margin-top: .2rem;
+}
+
+.tweetcard-content{
+  white-space: pre-wrap;
+  word-break: break-all;
+  /* overflow-wrap: break-word; */
+  overflow:hidden;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 3;
+  display: -webkit-box;
 }
 </style>

@@ -46,6 +46,20 @@ export default {
   methods: {
     async handleSubmit () {
       try {
+        if (this.text.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文字數要在140以內唷'
+          })
+          return
+        }
+        if (this.text.trim().length === 0) {
+          Toast.fire({
+            icon: 'warning',
+            title: '你的推文沒內容耶'
+          })
+          return
+        }
         const { data } = await tweetsAPI.create({  description: this.text })
         this.isProcessing = true
         console.log('creat',data)
