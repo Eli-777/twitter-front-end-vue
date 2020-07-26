@@ -146,7 +146,6 @@ export default {
 .tweetcard-content{
   white-space: pre-wrap;
   word-break: break-all;
-  /* overflow-wrap: break-word; */
   overflow:hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;

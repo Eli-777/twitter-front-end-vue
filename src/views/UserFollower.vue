@@ -5,6 +5,7 @@
       :initial-followers="followers"
     />
     <MostFollowerUserRecommend />
+    <TweetCreate />
   </div>
 </template>
 
@@ -12,6 +13,7 @@
 import Navbar from "./../components/Navbar";
 import UserFollowerCards from "./../components/UserFollowerCards";
 import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
+import TweetCreate from './../components/TweetCreate'
 
 const dummyData = [
    {
@@ -74,7 +76,8 @@ export default {
   components: {
     Navbar,
     UserFollowerCards,
-    MostFollowerUserRecommend
+    MostFollowerUserRecommend,
+    TweetCreate
   },
   data () {
     return {

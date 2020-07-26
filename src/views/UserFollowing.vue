@@ -5,6 +5,7 @@
       :initial-followings="followings"
     />
     <MostFollowerUserRecommend />
+    <TweetCreate />
   </div>
 </template>
 
@@ -12,6 +13,7 @@
 import Navbar from "./../components/Navbar";
 import UserFollowingCards from "./../components/UserFollowingCards";
 import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
+import TweetCreate from './../components/TweetCreate'
 
 
 
@@ -73,7 +75,8 @@ export default {
   components: {
     Navbar,
     UserFollowingCards,
-    MostFollowerUserRecommend
+    MostFollowerUserRecommend,
+    TweetCreate
   },
   data () {
     return {

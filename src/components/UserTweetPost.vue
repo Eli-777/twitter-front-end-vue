@@ -62,7 +62,12 @@ export default {
         }
         const { data } = await tweetsAPI.create({  description: this.text })
         this.isProcessing = true
-        console.log('creat',data)
+        if (data.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: '新增成功！'
+          })
+        }
         if (data.status !== 'success') {
           throw Error(data.message)
         }
@@ -124,6 +129,7 @@ textarea {
   resize: none;
   border: 0px solid transparent;
   outline: none;  
+  box-shadow: none !important;
 }
 
 .card button {

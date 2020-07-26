@@ -279,6 +279,7 @@ export default {
   border-color: var(--orange);
   border-radius: 50px;
   background-color: transparent;
+  box-shadow: none;
 }
 .edit-profile-button:hover,
 .edit-profile-button:active, .button-following {

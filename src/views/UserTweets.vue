@@ -16,7 +16,7 @@
 
     <MostFollowerUserRecommend />
     
-    <TweetCreate />
+    <TweetCreate @after-create-tweet="afterCreateTweet"/>
     <RepliedModal />
   </div>
 

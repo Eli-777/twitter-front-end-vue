@@ -8,7 +8,7 @@
           </button>
         </div>
         <div class="modal-body">
-          <img :src="user.avatar" />
+          <img :src="currentUser.avatar | emptyImage" />
           <form @submit.stop.prevent="handleSubmit">
             <textarea
               v-model="text"
@@ -33,58 +33,57 @@
 
 <script>
 import { Toast } from './../utils/helpers'
+import { emptyImageFilter } from './../utils/mixins'
+import tweetsAPI from './../apis/tweets'
+import { mapState } from 'vuex'
+import $ from "jquery";
 
-const dummyData = {
-  'User': {
-    "id": 1,
-    "account": "使用者帳號",
-    "name": "使用者姓名",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '10',
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  }
-}
+
 
 export default {
+  mixins: [ emptyImageFilter ],
   data () {
     return {
-      user: {
-        id: -1,
-        avatar: ''
-      },
       text: '',
-      isProcessing: false
+      isProcessing: false,
     }
   },
-  created (){
-    this.fetchUser()
+  computed: {
+    ...mapState(['currentUser'])
   },
+
   methods: {
-    fetchUser () {
-      const response = dummyData
-      this.user.id = response.User.id
-      this.user.avatar = response.User.avatar
-    },
     async handleSubmit () {
       try {
-        // const { data } = await commentsAPI.create({ restaurantId: this.restaurantId, text: this.text })
+        if (this.text.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '推文字數要在140以內唷'
+          })
+          return
+        }
+        if (this.text.trim().length === 0) {
+          Toast.fire({
+            icon: 'warning',
+            title: '你的推文沒內容耶'
+          })
+          return
+        }
+        const { data } = await tweetsAPI.create({  description: this.text })
         this.isProcessing = true
-        const data = {
-          status: 'success'
+        if (data.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: '新增成功！'
+          })
+          $('#tweet-create-modal').modal('hide')
         }
         if (data.status !== 'success') {
           throw Error(data.message)
         }
         this.$emit('after-create-tweet', {
-          restaurantId: data.restaurantId,
-          text: this.text
+          tweetId: data.id,
+          description: this.text
         })
         this.text = '' // 將表單內的資料清空
         this.isProcessing = false
@@ -103,15 +102,19 @@ export default {
 </script>
 
 <style scoped>
+.modal-header{
+  display: flex;
+  justify-content: flex-start
+}
 .modal-body {
   display: flex;
   flex-direction: row;
 }
 .modal-body img{
-  width: 2rem;
-  height: 2rem;
+  width: 3rem;
+  height: 3rem;
   border-radius: 50%;
-  margin: 0.3rem;
+  margin: 0 0.3rem;
 }
 form {
   display: flex; 
@@ -121,9 +124,16 @@ form {
 textarea {
   resize: none;
   border: transparent;
+  box-shadow: none !important;
 }
 .modal-body button {
   width: max-content;
   margin-top: 100%;
 }
+.close span {
+  color: var(--orange)
+}
+
+
+
 </style>
