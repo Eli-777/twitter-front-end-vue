@@ -10,6 +10,7 @@ export default new Vuex.Store({
       id: -1,
       name: '',
       email: '',
+      avatar: '',
       isAdmin: false
     },
     isAuthenticated: false,
@@ -44,12 +45,14 @@ export default new Vuex.Store({
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        const { id, name, email, isAdmin } = data
+        console.log('current',data)
+        const { id, name, email, isAdmin, avatar } = data
         commit('setCurrentUser', {
           id,
           name,
           email,
-          isAdmin
+          isAdmin,
+          avatar
         })
         return true
       } catch (error) {

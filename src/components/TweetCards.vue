@@ -1,34 +1,34 @@
 <template>
-  <router-link :to="{name: 'tweet', params: {id:tweets.id}}">
+  <router-link :to="{name: 'tweet', params: {id:tweet.id}}">
     <div class="tweetcard">
-      <router-link :to="{name: 'user-tweets', params: {id:tweets.id}}">
+      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}">
         <img class="tweetcard-avator" 
-          :src="tweets.user.avator" 
+          :src="tweet.User.avator | emptyImage" 
           width="50rem" 
           height="50rem" 
         />
       </router-link>
       <div class="tweetcard-right">
         <div class="tweetcard-title">
-          {{tweets.user.name}}
+          {{tweet.User.name}}
           <span class="tweetcard-account">
-            {{tweets.user.account}}
-            ．{{tweets.created_at | fromNow}}
+            {{tweet.User.account}}
+            ．{{tweet.createdAt | fromNow}}
           </span>
         </div>
-        <div class="tweetcard-content">{{tweets.description}}</div>
+        <div class="tweetcard-content">{{tweet.description}}</div>
         <div class="tweetcard-icon">
           <button type="button" data-toggle="modal" data-target="#tweet-replied-modal">
             <img src="./../assets/tweet.png" alt />
           </button>
-          {{tweets.commentCount}}
-          <button type="button" v-if="!tweets.isliked" @click.stop.prevent="addLike">
+          {{tweet.commentCount}}
+          <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike">
             <img src="./../assets/like.png" alt />
           </button>
           <button type="button" v-else @click.stop.prevent="deleteLike">
             <img src="./../assets/heart-red.png" alt />
           </button>
-          {{tweets.likeCount}}
+          {{tweet.likeCount}}
         </div>
       </div>
     </div>
@@ -37,9 +37,10 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from './../utils/mixins'
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     initialUserTweet: {
       type: Object,
@@ -48,23 +49,58 @@ export default {
   },
   data() {
     return {
-      tweets: this.initialUserTweet
+      tweet: {}
     };
   },
   watch: {
     initialUserTweet(newValue) {
-      this.tweets = newValue;
+      this.tweet = newValue;
     }
   },
-  created() {},
+  created() {
+    this.fetchTweet ()
+  },
   methods: {
+    fetchTweet () {
+      const  data  = this.initialUserTweet
+      const { 
+        id, 
+        User, 
+        createdAt, 
+        description, 
+        commentCount, 
+        likeCount,
+        isLikedByLoginUser, 
+      } = data
+      const {
+        id:userId,
+        avatar,
+        name,
+        account, 
+      } = User
+      this.tweet = {
+        id,
+        createdAt,
+        description,
+        commentCount,
+        likeCount,
+        isLikedByLoginUser
+      }
+      this.tweet.User = {
+        userId,
+        avatar,
+        name,
+        account
+      }
+
+    },
     addLike () {
-      this.tweets.isliked = true
-      this.tweets.likeCount = this.tweets.likeCount +1 
+      this.tweet.isLikedByLoginUser = true
+      this.tweet.likeCount = this.tweet.likeCount +1 
     },
     deleteLike () {
-      this.tweets.isliked = false
-      this.tweets.likeCount = this.tweets.likeCount -1 
+      this.tweet.isLikedByLoginUser = false
+      this.tweet.likeCount = this.tweet.likeCount -1 
     }
   }
 };

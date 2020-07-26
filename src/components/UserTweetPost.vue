@@ -5,14 +5,14 @@
     </div>
 
     <div class="card">
-      <img :src="user.avatar" />
+      <img :src="currentUser.avatar | emptyImage" />
       <form @submit.stop.prevent="handleSubmit">
         <textarea 
           v-model="text"
           class="form-control " 
           rows="3" 
           placeholder="有什麼新鮮事？" 
-          maxlength="160"
+          maxlength="140"
         />
         <div>
           <button
@@ -28,13 +28,14 @@
 
 <script>
 import { Toast } from './../utils/helpers'
+import { emptyImageFilter } from './../utils/mixins'
+import { mapState } from 'vuex'
+import tweetsAPI from './../apis/tweets'
 
 export default {
-  props: {
-    user: { 
-      type: Object,
-      required: true
-    }
+  mixins: [ emptyImageFilter ],
+  computed: {
+    ...mapState(['currentUser'])
   },
   data () {
     return {
@@ -45,17 +46,15 @@ export default {
   methods: {
     async handleSubmit () {
       try {
-        // const { data } = await commentsAPI.create({ restaurantId: this.restaurantId, text: this.text })
+        const { data } = await tweetsAPI.create({  description: this.text })
         this.isProcessing = true
-        const data = {
-          status: 'success'
-        }
+        console.log('creat',data)
         if (data.status !== 'success') {
           throw Error(data.message)
         }
         this.$emit('after-create-tweet', {
-          restaurantId: data.restaurantId,
-          text: this.text
+          tweetId: data.id,
+          description: this.text
         })
         this.text = '' // 將表單內的資料清空
         this.isProcessing = false
@@ -64,7 +63,7 @@ export default {
         console.error(error.message)
         Toast.fire({
           icon: 'error',
-          title: '無法新增評論，請稍後再試'
+          title: '無法新增推文，請稍後再試'
         })
       } 
     }
@@ -94,6 +93,7 @@ export default {
   flex-direction: row;
   border-radius: 0;
   border: 0;
+  border-bottom: 1px solid var(--border-light-grey)
 }
 .card img {
   width: 2rem;
