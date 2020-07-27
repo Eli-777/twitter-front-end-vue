@@ -12,7 +12,6 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-// import UserCard from "./../components/UserCard"
 import UserCard from "./../components/UserCard"
 import TweetCreate from "./../components/TweetCreate"
 import UserPageEdit from "./../components/UserPageEdit"
@@ -42,6 +41,12 @@ export default {
     const { id } = this.$route.params
     this.fetchUser(id)
   },
+   beforeRouteUpdate (to, from, next) {
+    const { id: userId } = to.params
+    this.fetchUser(userId)
+    
+    next()
+  },
   methods: {
     async fetchUser (userId) {
       try {
@@ -54,7 +59,7 @@ export default {
         console.log('error', error)
         Toast.fire({
           icon: 'error',
-          title: '無法取得餐廳資料，請稍後再試'
+          title: '無法取得使用者資料，請稍後再試'
         })
       }
     },

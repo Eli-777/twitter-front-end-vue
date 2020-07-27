@@ -143,15 +143,6 @@ export default {
     this.fetchUserTweets(id);
     this.showtweets(this.nowPage);
   },
-  beforeRouteUpdate (to, from, next) {
-    console.log('to', to)
-    console.log('from', from)
-    const { id: userId } = to.params
-    console.log('gogogo')
-    this.fetchUser()
-    this.fetchUserTweets(userId)
-    next()
-  },
   methods: {
     async fetchUser () {
       this.user = this.initialUser

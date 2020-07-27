@@ -46,24 +46,12 @@ export default {
     console.log(234234)
     this.fetchUser()
   },
-  // watch: {
-  //   currentUser (newValue) {
-  //     this.currentUser = {
-  //       ...this.currentUser,
-  //       ...newValue
-  //     }
-  //   },
-  // },
   methods: {
     async fetchUser () {
       try {
-        console.log('current123',this.currentUser.id)
         const userId = this.currentUser.id
         const { data } = await usersAPI.get({userId})
         this.User = data
-      
-        console.log('fetchUser id123:', data)
-
       } catch (error) {
         console.log('error', error)
         Toast.fire({
