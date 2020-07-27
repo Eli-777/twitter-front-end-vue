@@ -1,34 +1,34 @@
 <template>
-  <div class="tweetcard">
-    <router-link :to="{name: 'user-tweets', params: {id:tweets.user.id}}">
+  <div class="tweetcard" v-if="replied">
+    <router-link :to="{name: 'user-tweets', params: {id:replied.User.id}}">
       <img 
-        class="tweetcard-avator" 
-        :src="tweets.user.avator" 
+        class="tweetcard-avatar" 
+        :src="replied.User.avatar | emptyImage" 
         width="50rem" 
         height="50rem" 
       />
     </router-link>
     <div class="tweetcard-right">
       <div class="tweetcard-title">
-        {{tweets.user.name}}
+        {{replied.User.name}}
         <span class="tweetcard-account">
-          {{tweets.user.account}}
-          ．{{tweets.created_at | fromNow}}
+          {{replied.User.account}}
+          ．{{replied.createdAt | fromNow}}
         </span>
       </div>
-      <div class="tweetcard-content">{{tweets.comment}}</div>
+      <div class="tweetcard-content">{{replied.comment}}</div>
       <div class="tweetcard-icon">
         <button type="button">
           <img src="./../assets/tweet.png" alt />
         </button>
-        {{tweets.commentCount}}
-        <button type="button" v-if="!tweets.isLiked" @click.stop.prevent="addLike">
+        {{replied.commentCount | numberNotNull }}
+        <button type="button" v-if="!replied.isLiked" @click.stop.prevent="addLike">
           <img src="./../assets/like.png" alt />
         </button>
         <button type="button" v-else @click.stop.prevent="deleteLike">
           <img src="./../assets/heart-red.png" alt />
         </button>
-        {{tweets.likeCount}}
+        {{replied.likeCount| numberNotNull }}
       </div>
     </div>
   </div>
@@ -36,9 +36,10 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
-  mixins: [fromNowFilter],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
     initialReplied: {
       type: Object,
@@ -47,23 +48,48 @@ export default {
   },
   data() {
     return {
-      tweets: this.initialReplied
+      replied: {
+        id: -1,
+        comment: '',
+        createdAt: '',
+        likedCount: 0,
+        isLiked: false,
+        User: {
+          id: -1,
+          name: '',
+          account: '',
+          avatar: '',
+
+        }
+
+      }
     };
   },
   watch: {
     initialReplied(newValue) {
-      this.tweets = newValue;
+      this.replied = {
+        ...this.replied,
+        ...newValue
+      }
     }
   },
-  created() {},
+  created() {
+    this.replied = this.initialReplied
+  },
   methods: {
     addLike () {
-      this.tweets.isLiked = true
-      this.tweets.likeCount = this.tweets.likeCount +1 
+      console.log(3343,this.initialReplied)
+      this.replied.isLiked = true
+      this.replied.likeCount = this.replied.likedCount +1 
     },
     deleteLike () {
-      this.tweets.isLiked = false
-      this.tweets.likeCount = this.tweets.likeCount -1 
+      this.replied.isLiked = false
+      this.replied.likeCount = this.replied.likedCount -1 
+    }
+  },
+  filters: {
+    numberNotNull (n) {
+      return n ? n:0
     }
   }
 };
@@ -75,7 +101,7 @@ export default {
   align-items: center;
   border-bottom: 1px solid var(--border-light-grey);
 }
-.tweetcard-avator {
+.tweetcard-avatar {
   border-radius: 50%;
   margin: 1rem;
 }

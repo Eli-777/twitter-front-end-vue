@@ -40,7 +40,7 @@
           @click.stop.prevent="addFollow(user.id)"
         >跟隨</button>
         <button
-          v-if="user.isFollowed && !(currentUser.id === this.user.id)"
+          
           class="btn button-following"
           @click.stop.prevent="deleteFollow(user.id)"
         >正在跟隨</button>
@@ -130,17 +130,24 @@ export default {
           followerCount: this.user.followerCount + 1
         };
       } catch (error) {
+        console.log(error.message)
         Toast.fire({
           icon: 'error',
-          title: '無法追蹤使用者稍後再試'
+          title: error.message
         })
       }
     },
     async deleteFollow(userId) {
       try {
         const {data} = await usersAPI. deleteFollowing({userId})
-        if ( data.status !== 'success') {
+        if ( data.status === 'error') {
           throw new Error(data.message)
+        }
+        if ( data.status === 'success') {
+          Toast.fire({
+          icon: 'success',
+          title: '取消追蹤！'
+        })
         }
         this.user = {
           ...this.user,
@@ -148,6 +155,7 @@ export default {
           followerCount: this.user.followerCount - 1
         };
       } catch (error) {
+        console.log(error.message)
         Toast.fire({
           icon: 'error',
           title: '無法取消追蹤使用者稍後再試'

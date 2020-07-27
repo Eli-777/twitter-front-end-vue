@@ -1,89 +1,132 @@
 <template>
   <div class="container">
     <Navbar />
-    <TweetCardDetail 
-      :initial-tweet="tweet"
-    />
-
-    <RepliedModal 
-      :tweet="tweet"
-      @after-create-replied="afterCreateReplied"
-    />
+    <div class="center-area" style="width: 33rem;">
+      <TweetCardDetail :initial-tweet="tweet" />
+      <!-- 回覆留言區 -->
+      <RepliedCards 
+        v-for="replied in replieds" 
+        :key="replied.id" 
+        :initial-replied="replied" 
+      />
+    <div v-if="!replieds">沒有留言</div>
+    </div>
+    <RepliedModal :tweet="tweet" @after-create-replied="afterCreateReplied" />
     <MostFollowerUserRecommend />
   </div>
 </template>
 
 <script>
-import Navbar from './../components/Navbar'
-import TweetCardDetail from './../components/TweetCardDetail'
-import RepliedModal from "./../components/RepliedModal"
-import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
-
-const dummyData = {
-  tweet: {
-    "id": 99,
-    "UserId": 1,
-    "isLiked": true,
-    "commentCount": 20,
-    "likeCount": 15,
-    "description": "貼文內容",
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z",
-    "user": {
-      "id": 1,
-      "account": "使用者帳號",
-      "name": "使用者姓名",
-      "email": "使用者的電子信箱",
-      "password": "使用者的登入密碼",
-      "introduction": "使用者的自介",
-      "avator": "https://i.imgur.com/Q14p2le.jpg",
-      "backgroundImage": "http://example.com/backgroundImage/1",
-      "isAdmin": false,
-      "tweetCount": 30,
-      "likeCount": 40,
-      "followerCount": 10,
-      "followingCount": 25,
-      "created_at": "2009-10-31T01:48:52Z",
-      "updated_at": "2009-10-31T01:48:52Z"
-    }
-  }
-}
-
+import Navbar from "./../components/Navbar";
+import TweetCardDetail from "./../components/TweetCardDetail";
+import RepliedCards from "./../components/RepliedCards";
+import RepliedModal from "./../components/RepliedModal";
+import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
+import tweetsAPI from "./../apis/tweets";
+import { Toast } from "./../utils/helpers";
+import { mapState } from 'vuex'
 
 export default {
   components: {
     Navbar,
     TweetCardDetail,
+    RepliedCards,
     RepliedModal,
-    MostFollowerUserRecommend
+    MostFollowerUserRecommend,
   },
-  data () {
+  data() {
     return {
-      tweet: {}
-    }
+      tweet: {
+        id: -1,
+        description: "",
+        commentCount: 0,
+        likeCount: 0,
+        isLikedByLoginUser: false,
+        createdAt: "",
+        updatedAt: "",
+        User: {
+          id: -1,
+          name: "",
+          avatar: "",
+          account: "",
+        },
+      },
+      replieds: [],
+    };
   },
-  created () {
-    this.fetchTweet()
+  computed: {
+    ...mapState(['currentUser'])
+  },
+  created() {
+    const { id } = this.$route.params;
+    console.log("id", id);
+    this.fetchTweet(id);
+    this.fetchReplies(id);
   },
   methods: {
-    fetchTweet () {
-      const response = dummyData.tweet
-      this.tweet = response
+    async fetchTweet(tweetId) {
+      try {
+        const { data } = await tweetsAPI.getTweet({ tweetId });
+        const {
+          id,
+          description,
+          commentCount,
+          likeCount,
+          isLikedByLoginUser,
+          createdAt,
+          User,
+        } = data;
+        this.tweet = {
+          id,
+          description,
+          commentCount,
+          likeCount,
+          isLikedByLoginUser,
+          createdAt,
+          User,
+        };
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        console.log("tweet", data);
+      } catch (error) {
+        console.log(error.message);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得該推文資料，請稍後再試",
+        });
+      }
     },
-    afterCreateReplied (payload) {
-      const { repliedId, tweetId, text } = payload
-      this.tweet.push({
-        id: repliedId,
-        UserId: tweetId,
+    async fetchReplies(tweetId) {
+      try {
+        const { data } = await tweetsAPI.getTweetReplies({ tweetId });
+        this.replieds = data
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+
+      } catch (error) {
+        console.log(error.message);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得該留言資料，請稍後再試",
+        });
+      }
+    },
+    afterCreateReplied(payload) {
+      const {  text } = payload;
+      this.replieds.unshift({
         User: {
           id: this.currentUser.id,
-          name: this.currentUser.name
+          name: this.currentUser.name,
+          account: this.currentUser.account,
+          avatar: this.currentUser.avatar
         },
-        text,
-        createdAt: new Date()
-      })
-    }
-  }
-  
-}
+        comment: text,
+        createdAt: new Date(),
+      });
+    },
+  },
+};
 </script>

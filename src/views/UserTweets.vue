@@ -10,6 +10,7 @@
           v-for="tweet in tweets"
           :key="tweet.id"
           :initial-user-tweet="tweet"
+          @after-click-tweet="afterClickTweet"
         />
       </div>
     </div>
@@ -17,7 +18,7 @@
     <MostFollowerUserRecommend />
     
     <TweetCreate @after-create-tweet="afterCreateTweet"/>
-    <RepliedModal />
+    <RepliedModal :tweet="replyTweet"/>
   </div>
 
 </template>
@@ -50,7 +51,8 @@ export default {
   },
   data() {
     return {
-      tweets: []
+      tweets: [],
+      replyTweet: {}
     }
   },
   computed: {
@@ -89,6 +91,10 @@ export default {
         likeCount: 0,
         createdAt: new Date()
       })
+    },
+    afterClickTweet(payload) {
+      const { tweet } = payload
+      this.replyTweet = tweet
     }
   }
 }

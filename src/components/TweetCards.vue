@@ -18,7 +18,13 @@
         </div>
         <div class="tweetcard-content">{{tweet.description}}</div>
         <div class="tweetcard-icon">
-          <button type="button" class="tweet-button" data-toggle="modal" data-target="#tweet-replied-modal">
+          <button 
+            type="button" 
+            class="tweet-button" 
+            data-toggle="modal" 
+            data-target="#tweet-replied-modal"
+            @click.stop.prevent="handleSubmit"
+          >
             <img src="./../assets/tweet.png" alt />
           </button>
           {{tweet.commentCount}}
@@ -62,7 +68,6 @@ export default {
     }
   },
   created() {
-    console.log('twwet')
     this.fetchTweet ()
   },
   methods: {
@@ -106,6 +111,11 @@ export default {
     deleteLike () {
       this.tweet.isLikedByLoginUser = false
       this.tweet.likeCount = this.tweet.likeCount -1 
+    },
+    handleSubmit () {
+      this.$emit('after-click-tweet',{
+        tweet: this.tweet
+      })
     }
   }
 };

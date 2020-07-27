@@ -9,14 +9,19 @@
         </div>
         <div class="modal-body">
           <div class="tweet-original mb-3">
-            <img :src="tweet.user.avator | emptyImage" />
+            <img :src="tweet.User.avator | emptyImage" />
             <div class="tweet-original-right">
               <p>
-                {{tweet.user.name}}   <span>{{tweet.user.account}}．{{tweet.created_at | fromNow}}</span>
+                {{tweet.User.name}}
+                <span>{{tweet.User.account}}．{{tweet.created_at | fromNow}}</span>
               </p>
-              <p>{{tweet.description}}</p>
-              <p class="tweet-original-right-replyTo"><span>回覆給</span> {{tweet.user.account}}</p>
-              
+              <div class="tweet-original-right-description">
+                <p>{{tweet.description}}</p>
+                <p class="tweet-original-right-replyTo">
+                  <span>回覆給</span>
+                  {{tweet.User.account}}
+                </p>
+              </div>
             </div>
           </div>
           <div class="current-user">
@@ -27,11 +32,11 @@
                 class="form-control"
                 rows="3"
                 placeholder="推你的回覆？"
-                maxlength="160"
+                maxlength="140"
               />
               <div class="reply-button">
                 <button
-                  class="  action bottom-text-big"
+                  class="action bottom-text-big"
                   :disabled="isProcessing"
                   type="submit"
                 >{{ isProcessing ? '處理中...' : '回覆'}}</button>
@@ -45,72 +50,82 @@
 </template>
 
 <script>
-import { fromNowFilter } from './../utils/mixins'
-import { emptyImageFilter } from './../utils/mixins'
-
-const dummyUser = {
-  currentUser: {
-    id: 1,
-    name: '管理者',
-    email: 'root@example.com',
-    avator: 'https://i.pravatar.cc/300',
-    isAdmin: true
-  },
-  isAuthenticated: true
-}
+import { fromNowFilter } from "./../utils/mixins";
+import { emptyImageFilter } from "./../utils/mixins";
+import { mapState } from "vuex";
+import { Toast } from './../utils/helpers'
+import repliedsAPI from './../apis/replieds'
 
 export default {
-  mixins: [ fromNowFilter, emptyImageFilter ],
+  mixins: [fromNowFilter, emptyImageFilter],
   props: {
-    tweet:{
+    tweet: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
-  data () {
+  data() {
     return {
-      text: '',
-      currentUser:{
-        id: -1,
-        avator: ''
-      },
-      isProcessing: false
-    }
+      text: "",
+      isProcessing: false,
+    };
   },
-  created () {
-    this.fetchCurrentUser()
+  computed: {
+    ...mapState(["currentUser"]),
   },
   methods: {
-    fetchCurrentUser () {
-      const data = dummyUser
-      this.currentUser.id = data.currentUser.id
-      this.currentUser.avator = data.currentUser.avator
+    async handleSubmit() {
+      try {
+        if (this.text.length > 140) {
+          Toast.fire({
+            icon: 'warning',
+            title: '回覆字數要在140以內唷'
+          })
+          return
+        }
+        if (this.text.trim().length === 0) {
+          Toast.fire({
+            icon: 'warning',
+            title: '你的回覆沒內容耶'
+          })
+          return
+        }
+        console.log("submit");
+        console.log('this tweet id', this.tweet.id,'this text',this.text)
+        const {data} = await repliedsAPI.create({tweetId: this.tweet.id, comment: this.text})
+        if (data.status === 'error') {
+          throw Error(data.message)
+        }
+        this.$emit("after-create-replied", {
+          text: this.text,
+        });
+        this.text = ""; // 將表單內的資料清空
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法回復推文，請稍後再試'
+        })
+      }
     },
-    handleSubmit () {
-      console.log('submit')
-      // TODO: 向 API 發送 POST 請求
-      // 伺服器新增 Comment 成功後...
-      this.$emit('after-create-replied', {
-        repliedId: 1, // 尚未串接 API 暫時使用隨機的 id
-        tweetId: this.tweet.UserId,
-        text: this.text
-      })
-      this.text = '' // 將表單內的資料清空
-    }
-  }
-}
+  },
+};
 </script>
 
 <style scoped>
-.tweet-original, .current-user {
+.tweet-original,
+.current-user {
   display: flex;
   flex-direction: row;
 }
-.tweet-original-right{
+.tweet-original-right {
   display: flex;
   flex-direction: column;
+  white-space: pre-wrap;
+  word-break: break-all;
 }
-.tweet-original img, .current-user img {
+.tweet-original img,
+.current-user img {
   width: 2rem;
   height: 2rem;
   border-radius: 50%;
@@ -118,23 +133,26 @@ export default {
 }
 
 .tweet-original-right p span {
-  color: var(--twitter-post-text-color-grey)
+  color: var(--twitter-post-text-color-grey);
 }
 .tweet-original-right-replyTo {
   color: var(--orange);
-  font-size: .8125rem;
+  font-size: 0.8125rem;
+}
+.tweet-original-right-description{
+  padding-left: 6px;
 }
 form {
   width: 100%;
 }
-textarea {
+textarea, textarea:focus {
   resize: none;
   border: transparent;
+  box-shadow: none;
 }
-.reply-button{
+.reply-button {
   width: max-content;
   margin-left: 100%;
   transform: translateX(-100%);
 }
-
 </style>

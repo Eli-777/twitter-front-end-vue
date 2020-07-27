@@ -1,5 +1,5 @@
 <template>
-  <div class="center-area " style="width: 33rem;">
+  <div>
     <div class="header m-3">
       <button type="button" class="header-button" @click="$router.back()">&larr;</button>
       <p class="header-text">推文</p>
@@ -7,22 +7,22 @@
 
     <div class="card-body pt-2">
       <div class="card-body-user pl-3">
-        <router-link :to="{name: 'user-tweets', params: {id:tweet.user.id}}">
+        <router-link :to="{name: 'user-tweets', params: {id:tweet.User.id}}">
           <img
-            :src="tweet.user.avator | emptyImage"
+            :src="tweet.User.avator | emptyImage"
             class="card-img-avatar"
             height="140px"
             width="140px"
           />
         </router-link>
         <div class="card-body-username ">
-          <h5 class="card-body-name">{{tweet.user.name}}</h5>
-          <p class="card-body-account">{{tweet.user.account}}</p>
+          <h5 class="card-body-name">{{tweet.User.name}}</h5>
+          <p class="card-body-account">{{tweet.User.account}}</p>
         </div>
       </div>
 
       <p class="card-body-description pl-3">{{tweet.description}}</p>
-      <p class="card-body-time pl-3">{{tweet.created_at | fromNow }}</p>
+      <p class="card-body-time pl-3">{{tweet.createdAt | fromNow }}</p>
       <div class="card-body-follow pl-3">
         {{tweet.commentCount}}
         <p>回覆</p>
@@ -33,7 +33,7 @@
         <button type="button mr-5" data-toggle="modal" data-target="#tweet-replied-modal">
           <img src="./../assets/tweet.png" alt />
         </button>
-        <button type="button" v-if="!tweet.isLiked" @click.stop.prevent="addLike">
+        <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike">
           <img src="./../assets/like.png" alt />
         </button>
         <button type="button" v-else @click.stop.prevent="deleteLike">
@@ -42,8 +42,7 @@
       </div>
     </div>
 
-    <!-- 回覆留言區 -->
-    <RepliedCards v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
+    
   </div>
 </template>
 
@@ -51,72 +50,13 @@
 <script>
 import { emptyImageFilter } from "./../utils/mixins";
 import { fromNowFilter } from "./../utils/mixins";
-import RepliedCards from "./../components/RepliedCards";
 
-const dummyData = [
-  {
-    id: 1,
-    UserId: 1,
-    TweetId: 99,
-    isLiked: false,
-    comment: "回覆內容",
-    commentCount: 5,
-    likeCount: 1,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage: "http://example.com/backgroundImage/1",
-      isAdmin: false,
-      tweetCount: 30,
-      likeCount: 40,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 2,
-    UserId: 2,
-    TweetId: 88,
-    isLiked: false,
-    comment: "回覆內容12123",
-    commentCount: 4,
-    likeCount: 2,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 2,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage: "http://example.com/backgroundImage/1",
-      isAdmin: false,
-      tweetCount: 60,
-      likeCount: 80,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  }
-];
+
+
+
 
 export default {
   mixins: [emptyImageFilter, fromNowFilter],
-  components: {
-    RepliedCards
-  },
   props: {
     initialTweet: {
       type: Object,
@@ -125,24 +65,50 @@ export default {
   },
   data() {
     return {
-      tweet: {},
+      tweet: {
+        id: -1,
+        description: "",
+        commentCount: 0,
+        likeCount: 0,
+        isLikedByLoginUser: false,
+        createdAt: "",
+        updatedAt: "",
+        User: {
+          id: -1,
+          name: "",
+          avatar: '',
+          account: ''
+        }
+      },
       replieds: []
     };
   },
+  watch: {
+    initialTweet (newValue) {
+      this.tweet = {
+        ...this.tweet,
+        ...newValue
+      }
+    }
+  },
   created() {
     this.fetchTweet();
+    
   },
   methods: {
     fetchTweet() {
-      const data = dummyData;
-      this.tweet = this.initialTweet;
-      this.replieds = data;
+      this.tweet = {
+        ...this.tweet,
+        ...this.initialTweet
+      }
     },
     addLike() {
-      this.tweet.isLiked = true;
+      this.tweet.isLikedByLoginUser = true;
+      this.tweet.likeCount = this.tweet.likeCount + 1 
     },
     deleteLike() {
-      this.tweet.isLiked = false;
+      this.tweet.isLikedByLoginUser = false;
+      this.tweet.likeCount = this.tweet.likeCount -1 
     }
   }
 };
@@ -184,11 +150,15 @@ export default {
   margin: 0.3rem;
 }
 .card-body-account,
-.card-body-time, {
+.card-body-time {
   color: var(--twitter-post-text-color-grey);
 }
 .card-body-text {
   padding-top: 75px;
+}
+.card-body-description{
+  white-space: pre-wrap;
+  word-break: break-all;
 }
 
 .card-body-time,
