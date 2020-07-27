@@ -1,5 +1,5 @@
 <template>
-  <div class="center-area" style="width: 33rem;">
+  <div>
     <div class="header">
       <button type="button" class="header-button" @click="$router.back()">&larr;</button>
       <div class="header-text m-3">
@@ -7,35 +7,43 @@
         <p class="header-userTweets">{{user.tweetCount}}推文</p>
       </div>
     </div>
-    <img
-      :src=" user.cover | emptyImage"
-      class="card-img-top backgroundImage"
-      height="150px"
-    />
+    <img :src=" user.cover | emptyImage" class="card-img-top backgroundImage" height="150px" />
     <div class="card-body">
       <img :src=" user.avatar | emptyImage" class="card-img-avatar" height="140px" width="140px" />
       <div class="card-body-button">
         <button
           v-if="currentUser.id === this.user.id"
-          class="btn  edit-profile-button"
+          class="btn edit-profile-button"
           data-toggle="modal"
           data-target="#user-edit-modal"
         >編輯個人資料</button>
         <button class="button-transparent" v-else>
           <img src="./../assets/messege-button@2x.png" />
         </button>
-        <button v-if="user.isBelled && !(currentUser.id === this.user.id)" class="button-transparent-active" @click.stop.prevent="deleteBell">
+        <button
+          v-if="user.isBelled && !(currentUser.id === this.user.id)"
+          class="button-transparent-active"
+          @click.stop.prevent="deleteBell"
+        >
           <img src="./../assets/isbell.png" />
         </button>
-        <button v-if="!user.isBelled &&!(currentUser.id === this.user.id)" class="button-transparent" @click.stop.prevent="addBell" >
+        <button
+          v-if="!user.isBelled &&!(currentUser.id === this.user.id)"
+          class="button-transparent"
+          @click.stop.prevent="addBell"
+        >
           <img src="./../assets/notbell.png" />
         </button>
-        <button v-if="!user.isFollowed && !(currentUser.id === this.user.id)" class="btn button-follow" @click.stop.prevent="addFollow">
-          跟隨
-        </button>
-        <button v-if="user.isFollowed && !(currentUser.id === this.user.id)" class="btn button-following" @click.stop.prevent="deleteFollow">
-          正在跟隨
-        </button>
+        <button
+          v-if="!user.isFollowed && !(currentUser.id === this.user.id)"
+          class="btn button-follow"
+          @click.stop.prevent="addFollow"
+        >跟隨</button>
+        <button
+          v-if="user.isFollowed && !(currentUser.id === this.user.id)"
+          class="btn button-following"
+          @click.stop.prevent="deleteFollow"
+        >正在跟隨</button>
       </div>
       <div class="card-body-text">
         <h5 class="card-body-name">{{user.name}}</h5>
@@ -53,68 +61,22 @@
         </router-link>
       </div>
     </div>
-
-    <ul class="nav nav-pills" id="nav-tab" role="tablist">
-      <li class="nav-item" @click="showtweets('userTweet')">
-        <router-link
-          class="nav-link active"
-          to="#"
-          data-toggle="tab"
-          href="#nav-home"
-          role="tab"
-          aria-controls="nav-home"
-          aria-selected="true"
-        >推文</router-link>
-      </li>
-      <li class="nav-item" @click="showtweets('replied')">
-        <router-link
-          class="nav-link"
-          data-toggle="tab"
-          href="#nav-profile"
-          role="tab"
-          aria-controls="nav-profile"
-          aria-selected="false"
-          to="#"
-        >推文和回覆</router-link>
-      </li>
-      <li class="nav-item" @click="showtweets('liked')">
-        <router-link
-          class="nav-link"
-          data-toggle="tab"
-          href="#nav-contact"
-          role="tab"
-          aria-controls="nav-contact"
-          aria-selected="false"
-          to="#"
-        >喜歡的內容</router-link>
-      </li>
-    </ul>
-    <!-- 推文 -->
-    <div class="tweet-cards">
-      <TweetCards v-for="tweet in tweets" :key="tweet.id" :initial-user-tweet="tweet" />
-    </div>
   </div>
 </template>
 
 <script>
-import TweetCards from "./../components/TweetCards";
-import usersAPI from './../apis/users'
+import usersAPI from "./../apis/users";
 import { emptyImageFilter } from "./../utils/mixins";
-import { Toast } from './../utils/helpers'
-import { mapState } from 'vuex'
-
-
+import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
 export default {
   mixins: [emptyImageFilter],
-  components: {
-    TweetCards
-  },
   props: {
     initialUser: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -123,78 +85,68 @@ export default {
       userTweets: [],
       replied: [],
       liked: [],
-      nowPage: "userTweet"
+      nowPage: "userTweet",
     };
   },
   watch: {
-    initialUser (newValue) {
+    initialUser(newValue) {
       this.user = {
         ...this.user,
-        ...newValue
-      }
+        ...newValue,
+      };
     },
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   created() {
-    this.fetchUser()
-    const { id } = this.$route.params
+    this.fetchUser();
+    const { id } = this.$route.params;
     this.fetchUserTweets(id);
     this.showtweets(this.nowPage);
   },
   methods: {
-    async fetchUser () {
-      this.user = this.initialUser
+    async fetchUser() {
+      this.user = this.initialUser;
     },
     async fetchUserTweets(userId) {
       try {
-        const {data} = await usersAPI.getUserTweets({userId})
-        this.tweets = data
-        this.userTweets = data
+        const { data } = await usersAPI.getUserTweets({ userId });
+        this.tweets = data;
+        this.userTweets = data;
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         Toast.fire({
-          icon: 'error',
-          title: '無法取得使用者推文，請稍後再試'
-        })
-      }
-    },
-    showtweets(page) {
-      this.nowPage = page;
-      if (page === "userTweet") {
-        this.tweets = this.userTweets;
-      } else if (page === "replied") {
-        this.tweets = this.replied;
-      } else if (page === "liked") {
-        this.tweets = this.liked;
+          icon: "error",
+          title: "無法取得使用者推文，請稍後再試",
+        });
       }
     },
     addFollow() {
       this.user = {
         ...this.user,
-        isFollowed: true
-      }
+        isFollowed: true,
+      };
     },
     deleteFollow() {
       this.user = {
         ...this.user,
-        isFollowed: false
-      }
+        isFollowed: false,
+      };
     },
     addBell() {
       this.user = {
         ...this.user,
-        isBelled: true
-      }
+        isBelled: true,
+      };
     },
     deleteBell() {
       this.user = {
         ...this.user,
-        isBelled: false
-      }
-    }
-  }
+        isBelled: false,
+      };
+    },
+  },
 };
 </script>
 
@@ -238,7 +190,7 @@ export default {
 .card-body-text {
   padding-top: 30px;
 }
-.card-body-account{
+.card-body-account {
   color: var(--form-text-color);
 }
 .card-body-button {
@@ -249,7 +201,9 @@ export default {
 .card-body-button button {
   margin-left: 5px;
 }
-.edit-profile-button, .button-follow, .button-following {
+.edit-profile-button,
+.button-follow,
+.button-following {
   color: var(--orange);
   border-color: var(--orange);
   border-radius: 50px;
@@ -257,7 +211,8 @@ export default {
   box-shadow: none;
 }
 .edit-profile-button:hover,
-.edit-profile-button:active, .button-following {
+.edit-profile-button:active,
+.button-following {
   background: var(--orange) !important;
   color: var(--form-background-color);
 }
@@ -269,15 +224,5 @@ export default {
 .card-body-follow span {
   color: var(--form-text-color);
   margin-right: 1.2rem;
-}
-
-.nav-item .active {
-  background: transparent;
-  color: var(--orange);
-  border-bottom: 2px solid var(--orange);
-  border-radius: 0;
-}
-.tweet-cards {
-  max-height: 50%;
 }
 </style>
