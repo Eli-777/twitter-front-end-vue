@@ -1,147 +1,119 @@
 <template>
-  <div class="center-area col-6" style="width: 18rem;">
-    <div class="header">
-      <button type="button" class="header-button" @click="$router.back()">&larr;</button>
-      <div class="header-text m-3">
-        <p class="header-name">name</p>
-        <p class="header-userTweets">25推文</p>
-      </div>
-    </div>
-
-    <ul class="nav nav-pills" id="nav-tab" role="tablist">
-      <li class="nav-item" >
-        <router-link
-          class="nav-link active"
-          :to="{name: 'user-follower', params:{ id: followers[0].follower.id}}"
-          data-toggle="tab"
-          href="#nav-home"
-          role="tab"
-          aria-controls="nav-home"
-          aria-selected="true"
-        >跟隨者</router-link>
-      </li>
-      <li class="nav-item" >
-        <router-link
-          class="nav-link"
-          data-toggle="tab"
-          href="#nav-profile"
-          role="tab"
-          aria-controls="nav-profile"
-          aria-selected="false"
-          :to="{name: 'user-following', params:{ id: followers[0].follower.id}}"
-        >正在跟隨</router-link>
-      </li>
-    </ul>
-
-    <div class="tweet-cards overflow-auto">
-      <div class="tweetcard" v-for="follower in followers" :key="follower.id">
-        <router-link :to="{name: 'user-tweets', params: {id:follower.follower.id}}">
-          <img
-            class="tweetcard-avator"
-            :src="follower.follower.avator | emptyImage"
-            width="50rem"
-            height="50rem"
-          />
-        </router-link>
-        <div class="tweetcard-right mt-2 mb-2">
-          <div class="tweetcard-right-top">
-            <div class="tweetcard-title">
-              {{follower.follower.name}}
-              <br/>
-              <span class="tweetcard-account">
-                {{follower.follower.account}}
-              </span>
-            </div>
-            <div class="tweetcard-icon mr-3">
-              <button 
-                v-if="follower.isFollowed"
-                type="submit" 
-                class="tweetcard-button" 
-                :class="{isFollowed: follower.isFollowed}"
-                @click.stop.prevent="deleteFollow(follower.follower.id)"
-              >
-                正在跟隨
-              </button>
-              <button 
-                v-else
-                type="submit" 
-                class="tweetcard-button" 
-                :class="{isFollowed: follower.isFollowed}"
-                @click.stop.prevent="addFollow(follower.follower.id)"
-              >
-                跟隨
-              </button>
-            </div>
-          </div>
-          <div class="tweetcard-content">{{follower.follower.introduction}}</div>
+  <div class="tweetcard">
+    <router-link :to="{name: 'user-tweets', params: {id:follower.followerId}}">
+      <img
+        class="tweetcard-avator"
+        :src="follower.avator | emptyImage"
+        width="50rem"
+        height="50rem"
+      />
+    </router-link>
+    <div class="tweetcard-right mt-2 mb-2">
+      <div class="tweetcard-right-top">
+        <div class="tweetcard-title">
+          {{follower.name}}
+          <br />
+          <span class="tweetcard-account">{{follower.account}}</span>
+        </div>
+        <div class="tweetcard-icon mr-3" v-if="currentUser.id !== follower.followerId">
+          <button
+            v-if="follower.isFollowedByLoginUser"
+            type="submit"
+            class="tweetcard-button isFollowed"
+            :class="{isFollowed: follower.isFollowed}"
+            @click.stop.prevent="deleteFollow(follower.followerId)"
+          >正在跟隨</button>
+          <button
+            v-else
+            type="submit"
+            class="tweetcard-button"
+            :class="{isFollowed: follower.isFollowed}"
+            @click.stop.prevent="addFollow(follower.followerId)"
+          >跟隨</button>
         </div>
       </div>
+      <div class="tweetcard-content">{{follower.introduction}}</div>
     </div>
   </div>
 </template>
 
 <script>
 import { emptyImageFilter } from "./../utils/mixins";
+import { Toast } from "./../utils/helpers";
+import usersAPI from "./../apis/users";
+import { mapState } from 'vuex'
 
 export default {
   mixins: [emptyImageFilter],
   props: {
-    initialFollowers: {
-      type: Array,
-      required: true
+    initialFollower: {
+      type: Object,
+      required: true,
     },
   },
   data() {
     return {
-      followers: [],
+      follower: [],
     };
   },
+  computed: {
+    ...mapState(['currentUser'])
+  },
   created() {
-    this.fetchFollowers()
+    this.fetchFollower();
   },
   methods: {
-    fetchFollowers() {
-      this.followers = this.initialFollowers;
+    fetchFollower() {
+      this.follower = this.initialFollower;
     },
-  }
+    async addFollow(userId) {
+      try {
+        const id = userId.toString()
+        const {data} = await usersAPI.addFollowing({id})
+        if ( data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.followerr = {
+          ...this.follower,
+          isFollowedByLoginUser: true,
+        };
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法追蹤使用者稍後再試'
+        })
+      }
+    },
+    async deleteFollow(userId) {
+      try {
+        const {data} = await usersAPI. deleteFollowing({userId})
+        if ( data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.follower = {
+          ...this.follower,
+          isFollowedByLoginUser: false,
+        };
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤使用者稍後再試'
+        })
+      }
+    },
+  },
 };
 </script>
 
 
 <style scoped>
-.header {
-  display: flex;
-  align-items: center;
-}
-
-.header-button {
-  border: none;
-  outline: none;
-  background-color: white;
-}
-
-.header .header-name {
-  font-size: 1.1875rem;
-  line-height: 1.1878rem;
-  font-weight: 900;
-}
-.header .header-userTweets {
-  font-size: 0.8125rem;
-  line-height: 0.8125rem;
-  font-weight: 500;
-  color: var(--form-text-color);
-}
-
-.nav-item .active {
-  background: var(--form-background-color);
-  color: var(--orange);
-}
-
 
 .tweetcard {
   display: flex;
   align-items: flex-start;
-  border: 1px solid var(--border-light-grey);
+  width: 100%;
 }
 
 .tweetcard-avator {
@@ -170,7 +142,7 @@ export default {
 .tweetcard-right {
   width: 100%;
 }
-.tweetcard-right-top{
+.tweetcard-right-top {
   display: flex;
   align-items: center;
   justify-content: space-between;

@@ -37,12 +37,12 @@
         <button
           v-if="!user.isFollowed && !(currentUser.id === this.user.id)"
           class="btn button-follow"
-          @click.stop.prevent="addFollow"
+          @click.stop.prevent="addFollow(user.id)"
         >跟隨</button>
         <button
           v-if="user.isFollowed && !(currentUser.id === this.user.id)"
           class="btn button-following"
-          @click.stop.prevent="deleteFollow"
+          @click.stop.prevent="deleteFollow(user.id)"
         >正在跟隨</button>
       </div>
       <div class="card-body-text">
@@ -65,10 +65,11 @@
 </template>
 
 <script>
-import usersAPI from "./../apis/users";
+// import usersAPI from "./../apis/users";
 import { emptyImageFilter } from "./../utils/mixins";
 import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import usersAPI from "./../apis/users";
 
 export default {
   mixins: [emptyImageFilter],
@@ -81,11 +82,6 @@ export default {
   data() {
     return {
       user: {},
-      tweets: [],
-      userTweets: [],
-      replied: [],
-      liked: [],
-      nowPage: "userTweet",
     };
   },
   watch: {
@@ -101,38 +97,62 @@ export default {
   },
   created() {
     this.fetchUser();
-    const { id } = this.$route.params;
-    this.fetchUserTweets(id);
-    this.showtweets(this.nowPage);
+    // const { id } = this.$route.params;
+    // this.fetchUserTweets(id);
   },
   methods: {
     async fetchUser() {
       this.user = this.initialUser;
     },
-    async fetchUserTweets(userId) {
+    // async fetchUserTweets(userId) {
+    //   try {
+    //     const { data } = await usersAPI.getUserTweets({ userId });
+    //     this.tweets = data;
+    //     this.userTweets = data;
+    //   } catch (error) {
+    //     console.log(error.message);
+    //     Toast.fire({
+    //       icon: "error",
+    //       title: "無法取得使用者推文，請稍後再試",
+    //     });
+    //   }
+    // },
+    async addFollow(userId) {
       try {
-        const { data } = await usersAPI.getUserTweets({ userId });
-        this.tweets = data;
-        this.userTweets = data;
+        const id = userId.toString()
+        const {data} = await usersAPI.addFollowing({id})
+        if ( data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.user = {
+          ...this.user,
+          isFollowed: true,
+          followerCount: this.user.followerCount + 1
+        };
       } catch (error) {
-        console.log(error.message);
         Toast.fire({
-          icon: "error",
-          title: "無法取得使用者推文，請稍後再試",
-        });
+          icon: 'error',
+          title: '無法追蹤使用者稍後再試'
+        })
       }
     },
-    addFollow() {
-      this.user = {
-        ...this.user,
-        isFollowed: true,
-      };
-    },
-    deleteFollow() {
-      this.user = {
-        ...this.user,
-        isFollowed: false,
-      };
+    async deleteFollow(userId) {
+      try {
+        const {data} = await usersAPI. deleteFollowing({userId})
+        if ( data.status !== 'success') {
+          throw new Error(data.message)
+        }
+        this.user = {
+          ...this.user,
+          isFollowed: false,
+          followerCount: this.user.followerCount - 1
+        };
+      } catch (error) {
+        Toast.fire({
+          icon: 'error',
+          title: '無法取消追蹤使用者稍後再試'
+        })
+      }
     },
     addBell() {
       this.user = {

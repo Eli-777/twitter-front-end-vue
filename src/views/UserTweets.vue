@@ -63,7 +63,6 @@ export default {
     async fetchTweets () {
       try {
         const { data } = await tweetsAPI.getFeeds()
-        console.log('data', data)
         this.tweets = data
       } catch (error) {
         console.error(error.message)

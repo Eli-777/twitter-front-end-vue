@@ -97,6 +97,7 @@ export default {
     async fetchUser(userId) {
       try {
         const { data } = await usersAPI.get({ userId });
+        console.log('user',data)
         this.User = data;
       } catch (error) {
         console.log("error", error);

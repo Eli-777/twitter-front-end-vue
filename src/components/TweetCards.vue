@@ -39,6 +39,7 @@
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from './../utils/mixins'
 
+
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
   props: {

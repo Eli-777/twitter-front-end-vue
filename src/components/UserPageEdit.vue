@@ -24,7 +24,7 @@
           <div class="modal-body">
             <div class="form-group image-input">
               <img
-                :src="user.backgroundImage | emptyImage"
+                :src="user.cover | emptyImage"
                 class="background-image"
                 alt="background-image"
                 width="100%"
@@ -103,7 +103,7 @@ export default {
         name: '',
         introduction: '',
         avatar: '',
-        backgroundImage: '',
+        cover: '',
       })
     }
   },
@@ -113,10 +113,18 @@ export default {
         name: "",
         introduction: "",
         avatar: "",
-        backgroundImage: "",
+        cover: "",
       },
       isProcessing: false
     };
+  },
+  watch: {
+    initialUser (newValue) {
+      this.user = {
+        ...this.user,
+        ...newValue
+      }
+    }
   },
   created() {
     this.fetchUser();
@@ -128,7 +136,7 @@ export default {
       this.user.name = this.initialUser.name;
       this.user.introduction = this.initialUser.introduction;
       this.user.avatar = this.initialUser.avatar;
-      this.user.backgroundImage = this.initialUser.backgroundImage;
+      this.user.backgroundImage = this.initialUser.cover;
     },
     handleFileChangeBImg(e) {
       // const files = e.target.files; // = filefist

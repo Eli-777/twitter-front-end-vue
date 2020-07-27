@@ -1,9 +1,46 @@
 <template>
   <div class="container">
     <Navbar />
-    <UserFollowingCards 
-      :initial-followings="followings"
-    />
+    <div class="center-area" style="width: 33rem;">
+      <div class="header">
+        <button type="button" class="header-button" @click="$router.back()">&larr;</button>
+        <div class="header-text m-3">
+          <p class="header-name">{{user.name}}</p>
+          <p class="header-userTweets">{{user.tweetCount}}推文</p>
+        </div>
+      </div>
+
+      <ul class="nav nav-pills" id="nav-tab" role="tablist">
+        <li class="nav-item">
+          <router-link
+            class="nav-link"
+            :to="{name: 'user-follower', params:{ id: user.id}}"
+            data-toggle="tab"
+            href="#nav-home"
+            role="tab"
+            aria-controls="nav-home"
+            aria-selected="true"
+          >跟隨者</router-link>
+        </li>
+        <li class="nav-item">
+          <router-link
+            class="nav-link active"
+            data-toggle="tab"
+            href="#nav-profile"
+            role="tab"
+            aria-controls="nav-profile"
+            aria-selected="false"
+            :to="{name: 'user-following', params:{ id: user.id}}"
+          >正在跟隨</router-link>
+        </li>
+      </ul>
+
+      <div class="tweet-cards overflow-auto">
+        <div class="tweetcard" v-for="following in followings" :key="following.id">
+          <UserFollowingCards :initial-following="following" />
+        </div>
+      </div>
+    </div>
     <MostFollowerUserRecommend />
     <TweetCreate />
   </div>
@@ -12,85 +49,109 @@
 <script>
 import Navbar from "./../components/Navbar";
 import UserFollowingCards from "./../components/UserFollowingCards";
-import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
-import TweetCreate from './../components/TweetCreate'
-
-
-
-const dummydataFollowing = [
-  {
-     "id": 1,
-     "followingId": 2,
-     "followerId": 11,
-     "created_at": "2009-10-31T01:48:52Z",
-     "updated_at": "2009-10-31T01:48:52Z",
-     "isFollowed": true,
-     "following": {
-       "id": 2,
-       "account": "使用者帳號3",
-       "name": "使用者姓名3",
-       "email": "使用者的電子信箱",
-       "password": "使用者的登入密碼",
-       "introduction": "使用者的自介",
-       "avator": "https://i.imgur.com/Q14p2le.jpg",
-       "backgroundImage": "http://example.com/backgroundImage/1",
-       "isAdmin": false,
-       "tweetCount": 30,
-       "likeCount": 40,
-       "followerCount": 10,
-       "followingCount": 25,
-       "created_at": "2009-10-31T01:48:52Z",
-       "updated_at": "2009-10-31T01:48:52Z"
-     }
-   },
-   {
-    "id": 2,
-     "followingId": 3,
-     "followerId": 11,
-     "created_at": "2009-10-31T01:48:52Z",
-     "updated_at": "2009-10-31T01:48:52Z",
-     "isFollowed": true,
-     "following": {
-       "id": 2,
-       "account": "使用者帳號4",
-       "name": "使用者姓名4",
-       "email": "使用者的電子信箱",
-       "password": "使用者的登入密碼",
-       "introduction": "使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介使用者的自介",
-       "avator": "",
-       "backgroundImage": "http://example.com/backgroundImage/1",
-       "isAdmin": false,
-       "tweetCount": 30,
-       "likeCount": 40,
-       "followerCount": 10,
-       "followingCount": 25,
-       "created_at": "2009-10-31T01:48:52Z",
-       "updated_at": "2009-10-31T01:48:52Z"
-     }
-   },
-]
-
+import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
+import TweetCreate from "./../components/TweetCreate";
+import { Toast } from "./../utils/helpers";
+import usersAPI from "./../apis/users";
 
 export default {
   components: {
     Navbar,
     UserFollowingCards,
     MostFollowerUserRecommend,
-    TweetCreate
+    TweetCreate,
   },
-  data () {
+  data() {
     return {
-      followings: []
-    }
+      user: {},
+      followings: [],
+    };
   },
-  created (){
-    this.fetchFollowing()
+  created () {
+    const { id: userId } = this.$route.params;
+    this.fetchUser(userId);
+    this.fetchFollowing(userId);
+  },
+  beforeRouteUpdate(to, from, next) {
+    const { id: userId } = to.params;
+    this.fetchUser(userId);
+    this.fetchFollowing(userId);
+    next();
   },
   methods: {
-    fetchFollowing () {
-      const data = dummydataFollowing
-      this.followings = data
-    }
-  }
-}
+    async fetchUser(userId) {
+      try {
+        const { data } = await usersAPI.get({ userId });
+        this.user = data;
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者者資料，請稍後再試",
+        });
+      }
+    },
+    async fetchFollowing(userId) {
+      try {
+        const { data } = await usersAPI.getFollowing({ userId });
+        this.followings = data;
+        this.followings = this.followings.sort((a, b) => {
+          a = new Date(a.created_at)
+          b = new Date(b.created_at)
+          return b - a
+        })
+        
+
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: "error",
+          title: "無法取得正在跟隨者資料，請稍後再試",
+        });
+      }
+    },
+  },
+};
 </script>
+
+<style scoped>
+.header {
+  display: flex;
+  align-items: center;
+}
+
+.header-button {
+  border: none;
+  outline: none;
+  background-color: white;
+}
+
+.header .header-name {
+  font-size: 1.1875rem;
+  line-height: 1.1878rem;
+  font-weight: 900;
+}
+.header .header-userTweets {
+  font-size: 0.8125rem;
+  line-height: 0.8125rem;
+  font-weight: 500;
+  color: var(--form-text-color);
+}
+
+.nav-item .active {
+  background: transparent;
+  color: var(--orange);
+  border-bottom: 2px solid var(--orange);
+  border-radius: 0;
+}
+.tweetcard {
+  display: flex;
+  align-items: flex-start;
+  border-bottom: 1px solid var(--border-light-grey);
+  border-top: 1px solid var(--border-light-grey);
+}
+
+</style>
