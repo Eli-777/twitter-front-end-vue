@@ -1,7 +1,7 @@
 <template>
   <div class="container">
     <Navbar :initial-now-page="nowPage"/>
-    <form class="center-area w-100">
+    <form class="center-area w-100" @submit.stop.prevent="handleSubmit">
       <div class="form-width col-12 ">
         <div class="form-title  mt-4">
           <h3 class="title">帳戶設定</h3>
@@ -77,7 +77,7 @@
           class="submit-button mb-3 action bottom-text-big"
           :disabled="isProcessing"
           type="submit"
-          @click.stop.prevent="handleSubmit"
+          
         >
           {{ isProcessing ? '處理中...' : '儲存'}}
         </button>
@@ -93,6 +93,7 @@
 <script>
 import Navbar from "./../components/Navbar";
 import TweetCreate from "./../components/TweetCreate"
+import usersAPI from './../apis/users'
 import { Toast } from "./../utils/helpers"
 import { mapState } from "vuex";
 
@@ -155,34 +156,25 @@ export default {
           this.User.passwordCheck = ''
           return
         } 
-        const data = JSON.stringify({
+        
+
+        const {data} = await usersAPI.update({ 
+          userId: this.currentUser.id,
           account: this.User.account,
           name: this.User.name,
           email: this.User.email,
-          password: this.User.password,
-          passwordCheck: this.User.passwordCheck
+          password: this.User.password
         })
 
-        // TODO: 向後端驗證使用者登入資訊是否合法
-        console.log('data', data)
-        /* const {data} = await authorizationAPI.signUp({ 
-          account: this.account,
-          name: this.name,
-          email: this.email,
-          password: this.password,
-          passwordCheck: this.passwordCheck
-         }) */
-
-        // if (data.status !== 'success'){
-        //   throw new Error(data.message)
-        // }
+        if (data.status !== 'success'){
+          throw new Error(data.message)
+        }
 
         Toast.fire({
           icon: 'success',
           title: '儲存成功！'
         })
-
-        this.$router.push({name: 'user-tweets'})
+        this.isProcessing = false
       } catch (error) {
         this.isProcessing = false
         console.error(error.message)

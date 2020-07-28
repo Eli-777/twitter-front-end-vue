@@ -4,8 +4,14 @@ export default {
   get ({ userId }) {
     return apiHelper.get(`/api/users/${userId}`)
   },
+  update({ userId, account, name, email, password }){
+    return apiHelper.put(`/api/users/${userId}/settings`, {account, name, email, password})
+  },
   getUserTweets ({userId}) {
     return apiHelper.get(`/api/users/${userId}/tweets`)
+  },
+  getRepliedTweets (userId) {
+    return apiHelper.get(`/api/users/${userId}/replied_tweets`)
   },
   getFollowing ({userId}) {
     return apiHelper.get(`/api/users/${userId}/followings`)
