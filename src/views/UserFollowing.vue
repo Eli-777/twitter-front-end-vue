@@ -42,7 +42,7 @@
           <UserFollowingCards :initial-following="following" />
         </div>
       </div>
-      <div v-if="!hasFollowing" class="noFollowing">尚無跟隨其他使用者</div>
+      <div v-if="followings.length<1" class="noFollowing">尚無跟隨其他使用者</div>
       </template>
     </div>
     <MostFollowerUserRecommend />
@@ -72,7 +72,6 @@ export default {
       user: {},
       followings: [],
       isLoading: true,
-      hasFollowing: true,
     };
   },
   created () {
@@ -114,9 +113,6 @@ export default {
           throw new Error(data.message);
         }
 
-        if (data) {
-          this.hasFollowing = false;
-        }
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;

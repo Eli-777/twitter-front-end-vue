@@ -42,7 +42,7 @@
             <UserFollowerCards :initial-follower="follower" />
           </div>
         </div>
-        <div v-if="!hasFollower" class="noFollower">尚無跟隨者</div>
+        <div v-if="followers.length<1" class="noFollower">尚無跟隨者</div>
       </template>
     </div>
     <MostFollowerUserRecommend />
@@ -72,7 +72,6 @@ export default {
       user: {},
       followers: [],
       isLoading: true,
-      hasFollower: true,
     };
   },
   created() {
@@ -112,9 +111,7 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        if (data) {
-          this.hasFollower = false;
-        }
+
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
