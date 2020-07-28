@@ -110,7 +110,6 @@ export default {
       this.tweet.likeCount = this.tweet.likeCount - 1;
     },
     handleSubmit() {
-      console.log("submit to father", this.tweet);
       this.$emit("after-click-tweet", {
         tweet: this.tweet,
       });

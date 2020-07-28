@@ -55,6 +55,7 @@ import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 import { Toast } from './../utils/helpers'
 import repliedsAPI from './../apis/replieds'
+import $ from "jquery";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -96,7 +97,15 @@ export default {
         if (data.status === 'error') {
           throw Error(data.message)
         }
+        if (data.status === 'success') {
+          Toast.fire({
+            icon: 'success',
+            title: '新增成功！'
+          })
+          $('#tweet-replied-modal').modal('hide')
+        }
         this.$emit("after-create-replied", {
+          tweetId: this.tweet.id,
           text: this.text,
         });
         this.text = ""; // 將表單內的資料清空

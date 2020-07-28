@@ -19,7 +19,8 @@
     <MostFollowerUserRecommend />
 
     <TweetCreate @after-create-tweet="afterCreateTweet" />
-    <RepliedModal :tweet="replyTweet" />
+    
+    <RepliedModal :tweet="replyTweet" @after-create-replied="afterCreateReplied" />
   </div>
 </template>
 
@@ -68,8 +69,6 @@ export default {
           throw new Error(data.message);
         }
         this.tweets = data;
-        // const wait = await window.setTimeout(()=>this.isLoading = false, 1000);
-        // console.log(wait)
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -82,7 +81,6 @@ export default {
     },
     afterCreateTweet(payload) {
       const { tweetId, description } = payload;
-      console.log("payload", payload);
       this.tweets.unshift({
         id: tweetId,
         User: {
@@ -101,7 +99,9 @@ export default {
     afterClickTweet(payload) {
       const { tweet } = payload;
       this.replyTweet = tweet;
-      console.log("replyTweet", this.replyTweet);
+    },
+    afterCreateReplied() {
+      this.fetchTweets();
     },
   },
 };
