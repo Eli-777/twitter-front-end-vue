@@ -1,5 +1,5 @@
 <template>
- <div class="container">
+  <div class="container">
     <Navbar />
     <div class="center-area" style="width: 33rem;">
       <div class="header">
@@ -24,7 +24,7 @@
         </li>
         <li class="nav-item">
           <router-link
-            class="nav-link "
+            class="nav-link"
             data-toggle="tab"
             href="#nav-profile"
             role="tab"
@@ -35,11 +35,15 @@
         </li>
       </ul>
 
-      <div class="tweet-cards overflow-auto">
-        <div class="tweetcard" v-for="follower in followers" :key="follower.id">
-          <UserFollowerCards :initial-follower="follower" />
+      <Spinner v-if="isLoading" />
+      <template v-else>
+        <div class="tweet-cards overflow-auto">
+          <div class="tweetcard" v-for="follower in followers" :key="follower.id">
+            <UserFollowerCards :initial-follower="follower" />
+          </div>
         </div>
-      </div>
+        <div v-if="!hasFollower" class="noFollower">尚無跟隨者</div>
+      </template>
     </div>
     <MostFollowerUserRecommend />
     <TweetCreate />
@@ -49,30 +53,29 @@
 <script>
 import Navbar from "./../components/Navbar";
 import UserFollowerCards from "./../components/UserFollowerCards";
-import MostFollowerUserRecommend from './../components/MostFollowerUserRecommend'
-import TweetCreate from './../components/TweetCreate'
+import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
+import TweetCreate from "./../components/TweetCreate";
+import Spinner from "./../components/Spinner";
 import { Toast } from "./../utils/helpers";
 import usersAPI from "./../apis/users";
-
-
-
-
-
 
 export default {
   components: {
     Navbar,
     UserFollowerCards,
     MostFollowerUserRecommend,
-    TweetCreate
+    TweetCreate,
+    Spinner,
   },
-  data () {
+  data() {
     return {
       user: {},
       followers: [],
-    }
+      isLoading: true,
+      hasFollower: true,
+    };
   },
-  created () {
+  created() {
     const { id: userId } = this.$route.params;
     this.fetchUser(userId);
     this.fetchFollower(userId);
@@ -89,7 +92,7 @@ export default {
         const { data } = await usersAPI.get({ userId });
         this.user = data;
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者者資料，請稍後再試",
@@ -101,16 +104,21 @@ export default {
         const { data } = await usersAPI.getFollower({ userId });
         this.followers = data;
         this.followers = this.followers.sort((a, b) => {
-          a = new Date(a.created_at)
-          b = new Date(b.created_at)
-          return b - a
-        })
+          a = new Date(a.created_at);
+          b = new Date(b.created_at);
+          return b - a;
+        });
 
         if (data.status === "error") {
           throw new Error(data.message);
         }
+        if (data) {
+          this.hasFollower = false;
+        }
+        this.isLoading = false;
       } catch (error) {
-        console.log(error.message)
+        this.isLoading = false;
+        console.log(error.message);
         Toast.fire({
           icon: "error",
           title: "無法取得正在跟隨者資料，請稍後再試",
@@ -118,7 +126,7 @@ export default {
       }
     },
   },
-}
+};
 </script>
 
 <style scoped>
@@ -158,4 +166,11 @@ export default {
   border-top: 1px solid var(--border-light-grey);
 }
 
+.noFollower {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--form-text-color);
+  margin: 2rem;
+}
 </style>

@@ -35,11 +35,15 @@
         </li>
       </ul>
 
+      <Spinner v-if="isLoading" />
+      <template v-else>
       <div class="tweet-cards overflow-auto">
         <div class="tweetcard" v-for="following in followings" :key="following.id">
           <UserFollowingCards :initial-following="following" />
         </div>
       </div>
+      <div v-if="!hasFollowing" class="noFollowing">尚無跟隨其他使用者</div>
+      </template>
     </div>
     <MostFollowerUserRecommend />
     <TweetCreate />
@@ -51,6 +55,7 @@ import Navbar from "./../components/Navbar";
 import UserFollowingCards from "./../components/UserFollowingCards";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
 import TweetCreate from "./../components/TweetCreate";
+import Spinner from "./../components/Spinner";
 import { Toast } from "./../utils/helpers";
 import usersAPI from "./../apis/users";
 
@@ -60,11 +65,14 @@ export default {
     UserFollowingCards,
     MostFollowerUserRecommend,
     TweetCreate,
+    Spinner
   },
   data() {
     return {
       user: {},
       followings: [],
+      isLoading: true,
+      hasFollowing: true,
     };
   },
   created () {
@@ -105,7 +113,13 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
+
+        if (data) {
+          this.hasFollowing = false;
+        }
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log(error.message)
         Toast.fire({
           icon: "error",
@@ -154,4 +168,11 @@ export default {
   border-top: 1px solid var(--border-light-grey);
 }
 
+.noFollowing {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--form-text-color);
+  margin: 2rem;
+}
 </style>

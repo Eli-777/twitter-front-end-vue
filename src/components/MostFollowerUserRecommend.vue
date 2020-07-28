@@ -27,6 +27,7 @@
 </template>
 <script>
 import { emptyImageFilter } from "./../utils/mixins";
+import { Toast } from './../utils/helpers'
 
 const dummyData = [
   {
@@ -241,14 +242,22 @@ export default {
     this.fetchMostFollowerUser(5);
   },
   methods: {
-    fetchMostFollowerUser(userNumber) {
-      const data = dummyData;
-      this.users = data
-        .sort((a, b) => {
-          return b.followerCount - a.followerCount;
+    async fetchMostFollowerUser(userNumber) {
+      try {
+        const data = dummyData;
+        this.users = data
+          .sort((a, b) => {
+            return b.followerCount - a.followerCount;
+          })
+          .slice(0, userNumber);
+        this.isShowAll = !this.isShowAll
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得使用者資訊，請稍後再試'
         })
-        .slice(0, userNumber);
-      this.isShowAll = !this.isShowAll
+      }
     },
     addFollow(userId) {
       this.users = this.users.map(user => {

@@ -1,11 +1,12 @@
 <template>
   <router-link :to="{name: 'tweet', params: {id:tweet.id}}">
     <div class="tweetcard">
-      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}" >
-        <img class="tweetcard-avator" 
-          :src="tweet.User.avator | emptyImage" 
-          width="50rem" 
-          height="50rem" 
+      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}">
+        <img
+          class="tweetcard-avator"
+          :src="tweet.User.avator | emptyImage"
+          width="50rem"
+          height="50rem"
         />
       </router-link>
       <div class="tweetcard-right">
@@ -18,16 +19,18 @@
         </div>
         <div class="tweetcard-content">{{tweet.description}}</div>
         <div class="tweetcard-icon">
-          <button 
-            type="button" 
-            class="tweet-button" 
-            data-toggle="modal" 
-            data-target="#tweet-replied-modal"
-            @click="handleSubmit"
-          >
-            <img src="./../assets/tweet.png" alt />
-          </button>
-          {{tweet.commentCount}}
+          <router-link to>
+            <button
+              type="button"
+              class="tweet-button"
+              data-toggle="modal"
+              data-target="#tweet-replied-modal"
+              @click="handleSubmit"
+            >
+              <img src="./../assets/tweet.png" alt />
+            </button>
+            {{tweet.commentCount}}
+          </router-link>
           <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike">
             <img src="./../assets/like.png" alt />
           </button>
@@ -43,51 +46,45 @@
 
 <script>
 import { fromNowFilter } from "./../utils/mixins";
-import { emptyImageFilter } from './../utils/mixins'
-
+import { emptyImageFilter } from "./../utils/mixins";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
   props: {
     initialUserTweet: {
       type: Object,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
-      tweet: {}
+      tweet: {},
     };
   },
   watch: {
     initialUserTweet(newValue) {
       this.tweet = {
         ...this.initialUserTweet,
-        ...newValue
-      }
-    }
+        ...newValue,
+      };
+    },
   },
   created() {
-    this.fetchTweet ()
+    this.fetchTweet();
   },
   methods: {
-    fetchTweet () {
-      const  data  = this.initialUserTweet
-      const { 
-        id, 
-        User, 
-        createdAt, 
-        description, 
-        commentCount, 
-        likeCount,
-        isLikedByLoginUser, 
-      } = data
+    fetchTweet() {
+      const data = this.initialUserTweet;
       const {
-        id:userId,
-        avatar,
-        name,
-        account, 
-      } = User
+        id,
+        User,
+        createdAt,
+        description,
+        commentCount,
+        likeCount,
+        isLikedByLoginUser,
+      } = data;
+      const { id: userId, avatar, name, account } = User;
       this.tweet = {
         id,
         User,
@@ -95,30 +92,30 @@ export default {
         description,
         commentCount,
         likeCount,
-        isLikedByLoginUser
-      }
+        isLikedByLoginUser,
+      };
       this.tweet.User = {
         userId,
         avatar,
         name,
-        account
-      }
+        account,
+      };
     },
-    addLike () {
-      this.tweet.isLikedByLoginUser = true
-      this.tweet.likeCount = this.tweet.likeCount +1 
+    addLike() {
+      this.tweet.isLikedByLoginUser = true;
+      this.tweet.likeCount = this.tweet.likeCount + 1;
     },
-    deleteLike () {
-      this.tweet.isLikedByLoginUser = false
-      this.tweet.likeCount = this.tweet.likeCount -1 
+    deleteLike() {
+      this.tweet.isLikedByLoginUser = false;
+      this.tweet.likeCount = this.tweet.likeCount - 1;
     },
-    handleSubmit () {
-      console.log('submit to father',this.tweet)
-      this.$emit('after-click-tweet',{
-        tweet: this.tweet
-      })
-    }
-  }
+    handleSubmit() {
+      console.log("submit to father", this.tweet);
+      this.$emit("after-click-tweet", {
+        tweet: this.tweet,
+      });
+    },
+  },
 };
 </script>
 
@@ -134,7 +131,7 @@ export default {
 .tweetcard-avator {
   border-radius: 50%;
   margin: 1rem;
-  margin-top: .5rem;
+  margin-top: 0.5rem;
 }
 .tweetcard-account {
   color: var(--form-text-color);
@@ -151,18 +148,19 @@ export default {
   width: 1rem;
   height: 1rem;
 }
-.tweetcard-icon {
-  color: var(--twitter-post-text-color-grey)
+.tweetcard-icon, 
+.tweetcard-icon a {
+  color: var(--twitter-post-text-color-grey);
 }
 
-.tweetcard-right{
-  margin-top: .2rem;
+.tweetcard-right {
+  margin-top: 0.2rem;
 }
 
-.tweetcard-content{
+.tweetcard-content {
   white-space: pre-wrap;
   word-break: break-all;
-  overflow:hidden;
+  overflow: hidden;
   -webkit-box-orient: vertical;
   -webkit-line-clamp: 3;
   display: -webkit-box;

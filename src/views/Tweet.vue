@@ -3,13 +3,12 @@
     <Navbar />
     <div class="center-area" style="width: 33rem;">
       <TweetCardDetail :initial-tweet="tweet" />
-      <!-- 回覆留言區 -->
-      <RepliedCards 
-        v-for="replied in replieds" 
-        :key="replied.id" 
-        :initial-replied="replied" 
-      />
-    <div v-if="!hasReplied">沒有留言</div>
+      <Spinner v-if="isLoading" />
+      <template v-else>
+        <!-- 回覆留言區 -->
+        <RepliedCards v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
+        <div v-if="!hasReplied" class="noReply">此推文還沒有人留言唷</div>
+      </template>
     </div>
     <RepliedModal :tweet="tweet" @after-create-replied="afterCreateReplied" />
     <MostFollowerUserRecommend />
@@ -22,9 +21,10 @@ import TweetCardDetail from "./../components/TweetCardDetail";
 import RepliedCards from "./../components/RepliedCards";
 import RepliedModal from "./../components/RepliedModal";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
+import Spinner from "./../components/Spinner";
 import tweetsAPI from "./../apis/tweets";
 import { Toast } from "./../utils/helpers";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -33,6 +33,7 @@ export default {
     RepliedCards,
     RepliedModal,
     MostFollowerUserRecommend,
+    Spinner,
   },
   data() {
     return {
@@ -52,11 +53,12 @@ export default {
         },
       },
       replieds: [],
-      hasReplied: true
+      hasReplied: true,
+      isLoading: true,
     };
   },
   computed: {
-    ...mapState(['currentUser'])
+    ...mapState(["currentUser"]),
   },
   created() {
     const { id } = this.$route.params;
@@ -102,15 +104,16 @@ export default {
     async fetchReplies(tweetId) {
       try {
         const { data } = await tweetsAPI.getTweetReplies({ tweetId });
-        this.replieds = data
+        this.replieds = data;
         if (data.status === "error") {
           throw new Error(data.message);
         }
         if (data.message === "推文尚未有任何回覆") {
-          this.hasReplied =  false
+          this.hasReplied = false;
         }
-
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log(error.message);
         Toast.fire({
           icon: "error",
@@ -119,13 +122,13 @@ export default {
       }
     },
     afterCreateReplied(payload) {
-      const {  text } = payload;
+      const { text } = payload;
       this.replieds.unshift({
         User: {
           id: this.currentUser.id,
           name: this.currentUser.name,
           account: this.currentUser.account,
-          avatar: this.currentUser.avatar
+          avatar: this.currentUser.avatar,
         },
         comment: text,
         createdAt: new Date(),
@@ -134,3 +137,13 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.noReply {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--form-text-color);
+  margin: 2rem;
+}
+</style>

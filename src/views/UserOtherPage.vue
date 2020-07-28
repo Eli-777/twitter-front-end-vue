@@ -38,10 +38,13 @@
           >喜歡的內容</router-link>
         </li>
       </ul>
+      <Spinner v-if="isLoading" />
+    <template v-else>
       <!-- 推文 -->
       <div class="tweet-cards" v-if="nowPage==='userTweet'">
         <TweetCards v-for="tweet in userTweets" :key="tweet.id" :initial-user-tweet="tweet" />
       </div>
+       </template>
     </div>
 
     <MostFollowerUserRecommend />
@@ -58,6 +61,7 @@ import UserCard from "./../components/UserCard";
 import TweetCards from "./../components/TweetCards";
 import TweetCreate from "./../components/TweetCreate";
 import UserPageEdit from "./../components/UserPageEdit";
+import Spinner from './../components/Spinner'
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
 import { Toast } from "./../utils/helpers";
 import usersAPI from "./../apis/users";
@@ -70,6 +74,7 @@ export default {
     TweetCreate,
     UserPageEdit,
     MostFollowerUserRecommend,
+    Spinner
   },
   data() {
     return {
@@ -80,6 +85,7 @@ export default {
       userTweets: [],
       replied: [],
       liked: [],
+      isLoading: true,
     };
   },
   created() {
@@ -110,8 +116,13 @@ export default {
     async fetchUserTweets(userId) {
       try {
         const { data } = await usersAPI.getUserTweets({ userId });
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
         this.userTweets = data;
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log(error.message);
         Toast.fire({
           icon: "error",

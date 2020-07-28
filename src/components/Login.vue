@@ -1,5 +1,7 @@
 <template>
   <form class="w-100" @submit.stop.prevent="handleSubmit">
+    <LoginSpinner v-if="isLoading" />
+    <template v-else>
     <div class="form-width col-10 col-sm-6">
       <div class="text-center mb-4">
         <img class="icon" src="./../../public/acIcon@2x.png" />
@@ -50,15 +52,21 @@
 
       <p class="mt-5 mb-3 text-muted text-center">&copy; 2020</p>
     </div>
+    </template>
   </form>
 </template>
 
 
+
 <script>
+import LoginSpinner from "./../components/LoginSpinner";
 import authorizationAPI from './../apis/authorization'
 import { Toast } from "./../utils/helpers";
 
 export default {
+  components: {
+    LoginSpinner,
+  },
   props: {
     isAdmin: {
       type: Boolean,
@@ -70,6 +78,7 @@ export default {
       email: "",
       password: "",
       isProcessing: false,
+      isLoading: false,
     };
   },
   methods: {
@@ -82,6 +91,7 @@ export default {
           })
           return
         }
+        this.isLoading = true
         this.isProcessing = true
         const response = await authorizationAPI.signIn({
           email: this.email,
@@ -113,6 +123,7 @@ export default {
         }
 
       } catch (error) {
+        this.isLoading = false
         this.isProcessing = false
         this.password = "";
         Toast.fire({
