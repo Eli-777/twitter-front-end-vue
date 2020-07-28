@@ -51,11 +51,11 @@
         <p class="card-body-introduction">{{user.introduction}}</p>
       </div>
       <div class="card-body-follow">
-        <router-link :to="{ name: 'user-following', params :{ id: user.id}}">
+        <router-link :to="{ name: 'user-following', params :{ id: $route.params.id}}">
           {{user.followingCount}} 個
           <span>跟隨中</span>
         </router-link>
-        <router-link :to="{ name: 'user-follower', params :{ id: user.id}}">
+        <router-link :to="{ name: 'user-follower', params :{ id: $route.params.id}}">
           {{user.followerCount}} 位
           <span>跟隨者</span>
         </router-link>

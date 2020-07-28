@@ -14,7 +14,7 @@
         <li class="nav-item">
           <router-link
             class="nav-link"
-            :to="{name: 'user-follower', params:{ id: user.id}}"
+            :to="{name: 'user-follower', params:{ id:  $route.params.id}}"
             data-toggle="tab"
             href="#nav-home"
             role="tab"
@@ -30,7 +30,7 @@
             role="tab"
             aria-controls="nav-profile"
             aria-selected="false"
-            :to="{name: 'user-following', params:{ id: user.id}}"
+            :to="{name: 'user-following', params:{ id:  $route.params.id}}"
           >正在跟隨</router-link>
         </li>
       </ul>
