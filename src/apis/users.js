@@ -10,8 +10,11 @@ export default {
   getUserTweets ({userId}) {
     return apiHelper.get(`/api/users/${userId}/tweets`)
   },
-  getRepliedTweets (userId) {
+  getRepliedTweets ({userId}) {
     return apiHelper.get(`/api/users/${userId}/replied_tweets`)
+  },
+  getLikedTweets({ userId }) {
+    return apiHelper.get(`/api/users/${userId}/likes`)
   },
   getFollowing ({userId}) {
     return apiHelper.get(`/api/users/${userId}/followings`)
