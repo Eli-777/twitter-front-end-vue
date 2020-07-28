@@ -23,7 +23,7 @@
             class="tweet-button" 
             data-toggle="modal" 
             data-target="#tweet-replied-modal"
-            @click.stop.prevent="handleSubmit"
+            @click="handleSubmit"
           >
             <img src="./../assets/tweet.png" alt />
           </button>
@@ -113,6 +113,7 @@ export default {
       this.tweet.likeCount = this.tweet.likeCount -1 
     },
     handleSubmit () {
+      console.log('submit to father',this.tweet)
       this.$emit('after-click-tweet',{
         tweet: this.tweet
       })

@@ -94,20 +94,9 @@
 import Navbar from "./../components/Navbar";
 import TweetCreate from "./../components/TweetCreate"
 import { Toast } from "./../utils/helpers"
+import { mapState } from "vuex";
 
-const dummyData = {
-  'User': {
-    'id': 1,
-    'account': '@root',
-    'name': 'root',
-    'email': 'root@example.com',
-    'password': '$2a$10$OJ3jR93XlEMrQtYMWO',
-    'isAdmin': true,
-    'image': 'https://i.imgur.com/58ImzMM.png',
-    'createdAt': '2019-07-30T16:24:54.983Z',
-    'updatedAt': '2019-08-01T10:33:51.095Z',
-  }
-}
+
 
 export default {
   components: {
@@ -128,23 +117,23 @@ export default {
       nowPage: 'setting'
     }
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   created () {
-    const { id } = this.$route.params
-    this.fetchUser(id)
+    this.fetchUser()
   },
   methods: {
-    fetchUser (UserId) {
-      console.log('fetchUser id:', UserId)
-      // todo: 串接使用者 API
-      const { User } = dummyData
+    fetchUser () {
+      const  data = this.currentUser
       this.User = {
         ...this.User,
-        id: User.id,
-        account: User.account,
-        name: User.name,
-        email: User.email,
-        password: User.password,
-        passwordCheck: User.password
+        id: data.id,
+        account: data.account,
+        name: data.name,
+        email: data.email,
+        password: data.password,
+        passwordCheck: data.password
       }
     },
     async handleSubmit () {

@@ -9,11 +9,11 @@
         </div>
         <div class="modal-body">
           <div class="tweet-original mb-3">
-            <img :src="tweet.User.avator | emptyImage" />
+            <img :src="tweet.User.avatar | emptyImage" />
             <div class="tweet-original-right">
               <p>
                 {{tweet.User.name}}
-                <span>{{tweet.User.account}}．{{tweet.created_at | fromNow}}</span>
+                <span>{{tweet.User.account}}．{{tweet.createdAt | fromNow}}</span>
               </p>
               <div class="tweet-original-right-description">
                 <p>{{tweet.description}}</p>

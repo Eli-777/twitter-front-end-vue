@@ -9,7 +9,7 @@
         :key="replied.id" 
         :initial-replied="replied" 
       />
-    <div v-if="!replieds">沒有留言</div>
+    <div v-if="!hasReplied">沒有留言</div>
     </div>
     <RepliedModal :tweet="tweet" @after-create-replied="afterCreateReplied" />
     <MostFollowerUserRecommend />
@@ -52,6 +52,7 @@ export default {
         },
       },
       replieds: [],
+      hasReplied: true
     };
   },
   computed: {
@@ -104,6 +105,9 @@ export default {
         this.replieds = data
         if (data.status === "error") {
           throw new Error(data.message);
+        }
+        if (data.message === "推文尚未有任何回覆") {
+          this.hasReplied =  false
         }
 
       } catch (error) {

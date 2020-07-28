@@ -95,6 +95,7 @@ export default {
     afterClickTweet(payload) {
       const { tweet } = payload
       this.replyTweet = tweet
+      console.log('replyTweet', this.replyTweet)
     }
   }
 }

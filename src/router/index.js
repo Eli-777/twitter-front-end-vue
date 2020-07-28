@@ -50,14 +50,14 @@ Vue.use(VueRouter)
     component: UserTweets,
     beforeEnter: authorizeIsNotAdmin
   },
-  // {
-  //   path: '/users/self/tweets',
-  //   name: 'user-profile',
-  //   component: () => import('../views/UserProfilePage.vue'),
-  //   beforeEnter: authorizeIsNotAdmin
-  // },
   {
-    path: '/users/:id/edit',
+    path: '/users/self/tweets',
+    name: 'user-profile',
+    component: () => import('../views/UserProfilePage.vue'),
+    beforeEnter: authorizeIsNotAdmin
+  },
+  {
+    path: '/users/edit',
     name: 'user-edit',
     component: () => import('../views/UserEdit.vue'),
     beforeEnter: authorizeIsNotAdmin

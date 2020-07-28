@@ -40,7 +40,7 @@
           @click.stop.prevent="addFollow(user.id)"
         >跟隨</button>
         <button
-          
+          v-if="user.isFollowed && !(currentUser.id === this.user.id)"
           class="btn button-following"
           @click.stop.prevent="deleteFollow(user.id)"
         >正在跟隨</button>

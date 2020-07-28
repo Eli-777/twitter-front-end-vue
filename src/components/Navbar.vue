@@ -16,7 +16,7 @@
           首頁
         </div>
       </router-link>
-      <router-link :to="{name: 'user-tweets',params:{id: currentUser.id}}">
+      <router-link :to="{name: 'user-profile'}">
         <div
           class="sidebar__menu__link"
           :class="{sidebarMenuLinkActive: isUser}"
@@ -26,7 +26,7 @@
           個人資料
         </div>
       </router-link>
-      <router-link :to="{name: 'user-edit' ,params: {id: this.currentUser.id}}">
+      <router-link :to="{name: 'user-edit' }">
         <div
           class="sidebar__menu__link"
           :class="{sidebarMenuLinkActive: isSetting}"
