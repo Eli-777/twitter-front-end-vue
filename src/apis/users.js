@@ -7,8 +7,8 @@ export default {
   update({ userId, account, name, email, password }){
     return apiHelper.put(`/api/users/${userId}/settings`, {account, name, email, password})
   },
-  updateProfile({userId, name, account, avatar, cover}) {
-    return apiHelper.put(`/api/users/${userId}`,{name, account, avatar, cover})
+  updateProfile({ userId, formData}) {
+    return apiHelper.put(`/api/users/${userId}`, formData)
   },
   getUserTweets ({userId}) {
     return apiHelper.get(`/api/users/${userId}/tweets`)

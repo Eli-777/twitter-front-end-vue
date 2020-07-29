@@ -35,7 +35,7 @@ import TweetCreate from "./../components/TweetCreate";
 import RepliedModal from "./../components/RepliedModal";
 import Spinner from "./../components/Spinner";
 import tweetsAPI from "./../apis/tweets";
-import { Toast } from "./../utils/mixins";
+import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
 
 export default {

@@ -4,22 +4,26 @@
     <CurrentUserCard :initial-user="User" />
     <MostFollowerUserRecommend />
     <!-- modal 編輯使用者資料 -->
-    <UserPageEdit :initial-user="User" @after-submit="handleAfterSubmit" />
-  
+    <UserPageEdit
+      :initial-user="User"
+      :initial-is-processing="isProcessing"
+      @after-submit="handleAfterSubmit"
+    />
+
     <TweetCreate />
   </div>
 </template>
 
 <script>
 import Navbar from "./../components/Navbar";
-// import UserCard from "./../components/UserCard"
 import CurrentUserCard from "./../components/CurrentUserCard";
 import UserPageEdit from "./../components/UserPageEdit";
 import TweetCreate from "./../components/TweetCreate";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
-import { Toast } from "./../utils/helpers";
 import usersAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
+import $ from "jquery";
 
 export default {
   components: {
@@ -41,7 +45,6 @@ export default {
     ...mapState(["currentUser"]),
   },
   created() {
-    console.log(234234);
     this.fetchUser();
   },
   methods: {
@@ -65,18 +68,23 @@ export default {
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
         }
-        // const { data } = await adminAPI.restaurants.update({
-        //   restaurantId: this.restaurant.id, formData
-        // })
 
-        // if (data.status !== 'success') {
-        //   throw new Error(data.message)
-        // }
+        const { data } = await usersAPI.updateProfile({
+          userId: this.currentUser.id,
+          formData,
+        });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        console.log("updata", data);
         Toast.fire({
           icon: "success",
           title: "更新成功",
         });
-        // this.$router.push({ name: 'user-tweets' })
+        $("#user-edit-modal").modal("hide");
+        this.fetchUser();
+        this.isProcessing = false;
       } catch (error) {
         this.isProcessing = false;
         console.log("error", error);

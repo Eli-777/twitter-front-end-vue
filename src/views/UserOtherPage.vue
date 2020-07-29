@@ -73,7 +73,11 @@
 
     <MostFollowerUserRecommend />
     <!-- modal 編輯使用者資料 -->
-    <UserPageEdit :initial-user="User" @after-submit="handleAfterSubmit" />
+    <UserPageEdit
+      :initial-user="User"
+      :initial-is-processing="isProcessing"
+      @after-submit="handleAfterSubmit"
+    />
 
     <TweetCreate />
   </div>
@@ -87,8 +91,10 @@ import TweetCreate from "./../components/TweetCreate";
 import UserPageEdit from "./../components/UserPageEdit";
 import Spinner from "./../components/Spinner";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
-import { Toast } from "./../utils/helpers";
 import usersAPI from "./../apis/users";
+import { mapState } from "vuex";
+import { Toast } from "./../utils/helpers";
+import $ from "jquery";
 
 export default {
   components: {
@@ -112,20 +118,22 @@ export default {
       isLoading: true,
     };
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   created() {
     const { id } = this.$route.params;
     this.fetchUser(id);
     this.fetchUserTweets(id);
-    this.fetchUserRepliedTweets(id)
-    this.fetchUserLikedTweets(id)
-    
+    this.fetchUserRepliedTweets(id);
+    this.fetchUserLikedTweets(id);
   },
   beforeRouteUpdate(to, from, next) {
     const { id: userId } = to.params;
     this.fetchUser(userId);
     this.fetchUserTweets(userId);
-    this.fetchUserRepliedTweets(userId)
-    this.fetchUserLikedTweets(userId)
+    this.fetchUserRepliedTweets(userId);
+    this.fetchUserLikedTweets(userId);
     next();
   },
   methods: {
@@ -165,7 +173,7 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log('replied',data)
+        console.log("replied", data);
         this.replieds = data;
         this.isLoading = false;
       } catch (error) {
@@ -179,12 +187,12 @@ export default {
     },
     async fetchUserLikedTweets(userId) {
       try {
-        console.log('liked',data)
+        console.log("liked", data);
         const { data } = await usersAPI.getLikedTweets({ userId });
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log('liked',data)
+        console.log("liked", data);
         this.likeds = data;
         this.isLoading = false;
       } catch (error) {
@@ -213,18 +221,23 @@ export default {
         for (let [name, value] of formData.entries()) {
           console.log(name + ": " + value);
         }
-        // const { data } = await adminAPI.restaurants.update({
-        //   restaurantId: this.restaurant.id, formData
-        // })
 
-        // if (data.status !== 'success') {
-        //   throw new Error(data.message)
-        // }
+        const { data } = await usersAPI.updateProfile({
+          userId: this.currentUser.id,
+          formData,
+        });
+
+        if (data.status !== "success") {
+          throw new Error(data.message);
+        }
+        console.log("updata", data);
         Toast.fire({
           icon: "success",
           title: "更新成功",
         });
-        // this.$router.push({ name: 'user-tweets' })
+        $("#user-edit-modal").modal("hide");
+        this.fetchUser(this.currentUser.id);
+        this.isProcessing = false;
       } catch (error) {
         this.isProcessing = false;
         console.log("error", error);

@@ -33,7 +33,7 @@
               <input
                 id="backgroundImage"
                 type="file"
-                name="backgroundImage"
+                name="cover"
                 accept="image/*"
                 class="form-control-file background-image-input"
                 @change="handleFileChangeBImg"
@@ -105,6 +105,10 @@ export default {
         avatar: '',
         cover: '',
       })
+    },
+    initialIsProcessing: {
+      type: Boolean,
+      required: true
     }
   },
   data() {
@@ -124,6 +128,9 @@ export default {
         ...this.user,
         ...newValue
       }
+    },
+    initialIsProcessing (newValue) {
+      this.isProcessing = newValue
     }
   },
   created() {
@@ -131,12 +138,10 @@ export default {
   },
   methods: {
     fetchUser() {
-      // console.log('fetchUser id:', UserId)
-      // todo: 串接使用者 API
       this.user.name = this.initialUser.name;
       this.user.introduction = this.initialUser.introduction;
       this.user.avatar = this.initialUser.avatar;
-      this.user.backgroundImage = this.initialUser.cover;
+      this.user.cover = this.initialUser.cover;
     },
     handleFileChangeBImg(e) {
       // const files = e.target.files; // = filefist
@@ -144,12 +149,13 @@ export default {
       console.log("files", files);
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
-        this.backgroundImage = "";
+        this.user.cover = "";
       } else {
         // 否則產生預覽圖
         const imageURL = window.URL.createObjectURL(files[0]);
-        this.backgroundImage = imageURL;
+        this.user.cover = imageURL;
       }
+      
     },
     handleFileChangePImg(e) {
       // const files = e.target.files; // = filefist
@@ -157,15 +163,15 @@ export default {
       console.log("files", files);
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
-        this.avatar = "";
+        this.user.avatar = "";
       } else {
         // 否則產生預覽圖
         const imageURL = window.URL.createObjectURL(files[0]);
-        this.avatar = imageURL;
+        this.user.avatar = imageURL;
       }
     },
     handleSubmit(e) {
-      if (!this.name) {
+      if (!this.user.name) {
         Toast.fire({
           icon: "error",
           title: "請填寫名稱"
