@@ -54,10 +54,6 @@ export default {
     this.noBackgroundImage()
   },
   methods: {
-    handleDeleteButtonClick(userId) {
-      // TODO: 請求 API 伺服器刪除 id 為 userId 的評論
-      this.$emit("after-delete-user", userId);
-    },
     noBackgroundImage () {
       if (!this.user.cover) {
         return this.user.cover ='https://via.placeholder.com/350x220/DFDFDF?text=No+Image'

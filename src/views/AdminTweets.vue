@@ -20,269 +20,10 @@
 <script>
 import AdminNavbar from "./../components/AdminNavbar";
 import AdminTweetCards from "./../components/AdminTweetCards";
+import adminAPI from './../apis/admin'
+import { Toast } from './../utils/helpers'
 
-const dummyData2 = [
-  {
-    id: 1,
-    UserId: 1,
-    description: "貼文內容",
-    commentCount: 10,
-    likeCount: 20,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 30,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 2,
-    UserId: 2,
-    description: "貼文內容",
-    commentCount: 20,
-    likeCount: 30,
-    created_at: "2020-10-31T01:48:52Z",
-    updated_at: "2020-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱2",
-      password: "使用者的登入密碼2",
-      introduction: "使用者的自介2",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 50,
-      followerCount: 60,
-      followingCount: 27,
-      created_at: "2019-10-31T01:48:52Z",
-      updated_at: "2019-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 3,
-    UserId: 3,
-    description: "貼文內容",
-    commentCount: 10,
-    likeCount: 20,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 30,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 4,
-    UserId: 4,
-    description: "貼文內容",
-    commentCount: 20,
-    likeCount: 30,
-    created_at: "2020-10-31T01:48:52Z",
-    updated_at: "2020-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱2",
-      password: "使用者的登入密碼2",
-      introduction: "使用者的自介2",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 50,
-      followerCount: 60,
-      followingCount: 27,
-      created_at: "2019-10-31T01:48:52Z",
-      updated_at: "2019-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 5,
-    UserId: 5,
-    description: "貼文內容",
-    commentCount: 10,
-    likeCount: 20,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 30,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 6,
-    UserId: 6,
-    description: "貼文內容",
-    commentCount: 20,
-    likeCount: 30,
-    created_at: "2020-10-31T01:48:52Z",
-    updated_at: "2020-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱2",
-      password: "使用者的登入密碼2",
-      introduction: "使用者的自介2",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 50,
-      followerCount: 60,
-      followingCount: 27,
-      created_at: "2019-10-31T01:48:52Z",
-      updated_at: "2019-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 7,
-    UserId: 7,
-    description: "貼文內容",
-    commentCount: 10,
-    likeCount: 20,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 30,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 8,
-    UserId: 8,
-    description: "貼文內容",
-    commentCount: 20,
-    likeCount: 30,
-    created_at: "2020-10-31T01:48:52Z",
-    updated_at: "2020-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱2",
-      password: "使用者的登入密碼2",
-      introduction: "使用者的自介2",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 50,
-      followerCount: 60,
-      followingCount: 27,
-      created_at: "2019-10-31T01:48:52Z",
-      updated_at: "2019-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 9,
-    UserId: 9,
-    description: "貼文內容",
-    commentCount: 10,
-    likeCount: 20,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號",
-      name: "使用者姓名",
-      email: "使用者的電子信箱",
-      password: "使用者的登入密碼",
-      introduction: "使用者的自介",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 30,
-      followerCount: 10,
-      followingCount: 25,
-      created_at: "2009-10-31T01:48:52Z",
-      updated_at: "2009-10-31T01:48:52Z"
-    }
-  },
-  {
-    id: 10,
-    UserId: 10,
-    description: "貼文內容",
-    commentCount: 20,
-    likeCount: 30,
-    created_at: "2020-10-31T01:48:52Z",
-    updated_at: "2020-10-31T01:48:52Z",
-    user: {
-      id: 1,
-      account: "使用者帳號2",
-      name: "使用者姓名2",
-      email: "使用者的電子信箱2",
-      password: "使用者的登入密碼2",
-      introduction: "使用者的自介2",
-      avator: "https://i.imgur.com/Q14p2le.jpg",
-      backgroundImage:
-        "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-      isAdmin: false,
-      tweetCount: 50,
-      followerCount: 60,
-      followingCount: 27,
-      created_at: "2019-10-31T01:48:52Z",
-      updated_at: "2019-10-31T01:48:52Z"
-    }
-  }
-];
+
 
 export default {
   components: {
@@ -298,13 +39,26 @@ export default {
     this.fetchTweets();
   },
   methods: {
-    fetchTweets() {
-      this.tweets = dummyData2;
-      this.tweets = this.tweets.sort((a, b) => {
-        a = new Date(a.created_at)
-        b = new Date(b.created_at)
-        return b - a
-      })
+    async fetchTweets() {
+      try {
+        const { data } = await adminAPI.getTweets()
+        console.log('admintweet',data)
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        this.tweets = data;
+        this.tweets = this.tweets.sort((a, b) => {
+          a = new Date(a.created_at)
+          b = new Date(b.created_at)
+          return b - a
+        })
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法取得推文資訊，請稍後再試'
+        })
+      }
     },
     afterDeleteTweet (tweetId) {
       this.tweets = this.tweets.filter(

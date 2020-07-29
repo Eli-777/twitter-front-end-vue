@@ -40,7 +40,6 @@ export default {
   },
   created() {
     this.fetchUsers();
-    console.log(this.Users)
   },
   methods: {
     async fetchUsers() {
