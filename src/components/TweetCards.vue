@@ -31,10 +31,10 @@
             </button>
             {{tweet.commentCount}}
           </router-link>
-          <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike">
+          <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike(tweet.id)">
             <img src="./../assets/like.png" alt />
           </button>
-          <button type="button" v-else @click.stop.prevent="deleteLike">
+          <button type="button" v-else @click.stop.prevent="deleteLike(tweet.id)">
             <img src="./../assets/heart-red.png" alt />
           </button>
           {{tweet.likeCount}}
@@ -47,6 +47,8 @@
 <script>
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
+import { Toast } from './../utils/helpers'
+import usersAPI from './../apis/users'
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -101,13 +103,40 @@ export default {
         account,
       };
     },
-    addLike() {
-      this.tweet.isLikedByLoginUser = true;
-      this.tweet.likeCount = this.tweet.likeCount + 1;
+    async addLike(tweetId) {
+      try {
+        const { data } = await usersAPI.addliked({tweetId})
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        console.log('add',data)
+        this.tweet.isLikedByLoginUser = true;
+        this.tweet.likeCount = this.tweet.likeCount + 1;
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法對推文按讚，請稍後再試'
+        })
+      }
     },
-    deleteLike() {
-      this.tweet.isLikedByLoginUser = false;
-      this.tweet.likeCount = this.tweet.likeCount - 1;
+    async deleteLike(tweetId) {
+      try {
+        const { data } = await usersAPI.deleteliked({tweetId})
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        console.log('delete',data)
+        this.tweet.isLikedByLoginUser = false;
+        this.tweet.likeCount = this.tweet.likeCount - 1;
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法對推文取消按讚，請稍後再試'
+        })
+      }
+      
     },
     handleSubmit() {
       this.$emit("after-click-tweet", {

@@ -7,6 +7,9 @@ export default {
   update({ userId, account, name, email, password }){
     return apiHelper.put(`/api/users/${userId}/settings`, {account, name, email, password})
   },
+  updateProfile({userId, name, account, avatar, cover}) {
+    return apiHelper.put(`/api/users/${userId}`,{name, account, avatar, cover})
+  },
   getUserTweets ({userId}) {
     return apiHelper.get(`/api/users/${userId}/tweets`)
   },
@@ -27,5 +30,11 @@ export default {
   },
   deleteFollowing({ userId }) {
     return apiHelper.delete(`/api/followships/${userId}`)
+  },
+  addliked({ tweetId }) {
+    return apiHelper.post(`/api/tweets/${tweetId}/like`, null)
+  },
+  deleteliked({ tweetId }) {
+    return apiHelper.post(`/api/tweets/${tweetId}/unlike`, null)
   },
 }
