@@ -26,6 +26,7 @@
   </div>
 </template>
 <script>
+/* import adminAPI from './../apis/admin' */
 import { emptyImageFilter } from "./../utils/mixins";
 import { Toast } from './../utils/helpers'
 
@@ -244,7 +245,9 @@ export default {
   methods: {
     async fetchMostFollowerUser(userNumber) {
       try {
+        /* const { data } = await adminAPI.getUsers() */
         const data = dummyData;
+       /* console.log('data=',data) */
         this.users = data
           .sort((a, b) => {
             return b.followerCount - a.followerCount;
