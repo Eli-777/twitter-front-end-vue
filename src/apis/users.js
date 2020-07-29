@@ -4,6 +4,9 @@ export default {
   get ({ userId }) {
     return apiHelper.get(`/api/users/${userId}`)
   },
+  getTopFollower() {
+    return apiHelper.get('/api/users/top10')
+  },
   update({ userId, account, name, email, password }){
     return apiHelper.put(`/api/users/${userId}/settings`, {account, name, email, password})
   },

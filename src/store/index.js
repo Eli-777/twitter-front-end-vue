@@ -51,7 +51,6 @@ export default new Vuex.Store({
           if (data.status === 'error') {
             throw new Error(data.message)
           }
-          console.log('current',data)
           const { id, name, email, isAdmin, avatar, account } = data
           commit('setCurrentUser', {
             id,

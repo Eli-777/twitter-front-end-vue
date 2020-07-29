@@ -4,239 +4,62 @@
       <div class="card-header">跟隨誰</div>
       <ul class="list-group list-group-flush">
         <li class="list-group-item" v-for="user in users" :key="user.id">
-          <img class="card-avator" :src=" user.avator | emptyImage" />
+          <router-link :to="{ name: 'user-tweets', params: { id: user.id } }">
+            <img class="card-avator" :src="user.avatar | emptyImage" />
+          </router-link>
           <div class="card-text">
-            {{user.name}}
+            {{ user.name }}
             <br />
-            <span>{{user.account}}</span>
+            <span>{{ user.account }}</span>
           </div>
           <div class="card-button-area">
             <button
               class="card-button isFollowed"
               v-if="user.isFollowed"
               @click.stop.prevent="deleteFollow(user.id)"
-            >正在跟隨</button>
-            <button class="card-button" v-else @click.stop.prevent="addFollow(user.id)">跟隨</button>
+            >
+              正在跟隨
+            </button>
+            <button
+              class="card-button"
+              v-else
+              @click.stop.prevent="addFollow(user.id)"
+            >
+              跟隨
+            </button>
           </div>
         </li>
       </ul>
-      <div class="card-footer text-muted"  v-if="isShowAll" @click="fetchMostFollowerUser(10)">顯示更多</div>
-      <div class="card-footer text-muted" v-else @click="fetchMostFollowerUser(5)">顯示更少</div>
+      <div
+        class="card-footer text-muted"
+        v-if="isShowAll"
+        @click="fetchMostFollowerUser(10)"
+      >
+        顯示更多
+      </div>
+      <div
+        class="card-footer text-muted"
+        v-else
+        @click="fetchMostFollowerUser(5)"
+      >
+        顯示更少
+      </div>
     </div>
   </div>
 </template>
 <script>
-/* import adminAPI from './../apis/admin' */
+import usersAPI from "./../apis/users";
 import { emptyImageFilter } from "./../utils/mixins";
-import { Toast } from './../utils/helpers'
+import { Toast } from "./../utils/helpers";
 
-const dummyData = [
-  {
-    id: 1,
-    account: "使用者帳號",
-    name: "使用者姓名",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 999,
-    followingCount: 25,
-    isFollowed: true,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 2,
-    account: "使用者帳號2",
-    name: "使用者姓名2",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 20,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 3,
-    account: "使用者帳號3",
-    name: "使用者姓名3",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 15,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 4,
-    account: "使用者帳號4",
-    name: "使用者姓名4",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 90,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 5,
-    account: "使用者帳號5",
-    name: "使用者姓名5",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 55,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 6,
-    account: "使用者帳號6",
-    name: "使用者姓名6",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 44,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 7,
-    account: "使用者帳號7",
-    name: "使用者姓名7",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 83,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 8,
-    account: "使用者帳號8",
-    name: "使用者姓名8",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 36,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 9,
-    account: "使用者帳號9",
-    name: "使用者姓名9",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 134,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 10,
-    account: "使用者帳號10",
-    name: "使用者姓名10",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 32,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  },
-  {
-    id: 11,
-    account: "使用者帳號11",
-    name: "使用者姓名11",
-    email: "使用者的電子信箱",
-    password: "使用者的登入密碼",
-    introduction: "使用者的自介",
-    avator: "",
-    backgroundImage: "http://example.com/backgroundImage/1",
-    isAdmin: false,
-    tweetCount: 30,
-    likeCount: 40,
-    followerCount: 1,
-    followingCount: 25,
-    isFollowed: false,
-    created_at: "2009-10-31T01:48:52Z",
-    updated_at: "2009-10-31T01:48:52Z"
-  }
-];
+
 
 export default {
   mixins: [emptyImageFilter],
   data() {
     return {
       users: [],
-      isShowAll: false
+      isShowAll: false,
     };
   },
   created() {
@@ -245,46 +68,48 @@ export default {
   methods: {
     async fetchMostFollowerUser(userNumber) {
       try {
-        /* const { data } = await adminAPI.getUsers() */
-        const data = dummyData;
-       /* console.log('data=',data) */
+        const { data } = await usersAPI.getTopFollower();
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        console.log("data=", data);
         this.users = data
           .sort((a, b) => {
             return b.followerCount - a.followerCount;
           })
           .slice(0, userNumber);
-        this.isShowAll = !this.isShowAll
+        this.isShowAll = !this.isShowAll;
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         Toast.fire({
-          icon: 'error',
-          title: '無法取得使用者資訊，請稍後再試'
-        })
+          icon: "error",
+          title: "無法取得使用者資訊，請稍後再試",
+        });
       }
     },
     addFollow(userId) {
-      this.users = this.users.map(user => {
+      this.users = this.users.map((user) => {
         if (user.id === userId) {
           return {
             ...user,
-            isFollowed: true
+            isFollowed: true,
           };
         }
         return user;
       });
     },
     deleteFollow(userId) {
-      this.users = this.users.map(user => {
+      this.users = this.users.map((user) => {
         if (user.id === userId) {
           return {
             ...user,
-            isFollowed: false
+            isFollowed: false,
           };
         }
         return user;
       });
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -319,8 +144,8 @@ export default {
   height: 40px;
   border-radius: 50%;
 }
-.card-text{
-  font-size: .875rem;
+.card-text {
+  font-size: 0.875rem;
 }
 .card-text span {
   color: var(--form-text-color);
