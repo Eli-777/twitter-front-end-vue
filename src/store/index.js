@@ -29,8 +29,8 @@ export default new Vuex.Store({
     revokeAuthentication (state) {
       state.currentUser = {}
       state.isAuthenticated = false
-      state.token = ''
       localStorage.removeItem('token')
+      state.token = ''
     }
   },
   actions: {
@@ -41,21 +41,27 @@ export default new Vuex.Store({
         let decodedData = window.atob(payload);
         let payloadObject = JSON.parse(decodedData)
         let userId = payloadObject.id
+        console.log('userId',userId)
 
-        const {data} = await usersAPI.get({userId})
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        if (userId === 1) {
+          commit('setCurrentUser',{id: 1, name: '我是管理者', isAdmin: true})
+        } else {
+
+          const {data} = await usersAPI.get({userId})
+          if (data.status === 'error') {
+            throw new Error(data.message)
+          }
+          console.log('current',data)
+          const { id, name, email, isAdmin, avatar, account } = data
+          commit('setCurrentUser', {
+            id,
+            name,
+            email,
+            isAdmin,
+            avatar,
+            account
+          })
         }
-        console.log('current',data)
-        const { id, name, email, isAdmin, avatar, account } = data
-        commit('setCurrentUser', {
-          id,
-          name,
-          email,
-          isAdmin,
-          avatar,
-          account
-        })
         return true
       } catch (error) {
         console.error('can not fetch user information')

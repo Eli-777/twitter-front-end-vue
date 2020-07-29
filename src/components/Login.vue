@@ -106,8 +106,8 @@ export default {
         // 登入成功後就拿 token 並存入 Vuex 中
         const login = () => {
           // 將資料轉到 Vuex 中
-          this.$store.commit('setCurrentUser', data.user)
           localStorage.setItem("token", data.token)
+          this.$store.commit('setCurrentUser', data.user)
         }
 
         //進入前台頁面並且不是管理員身份才可進入
@@ -119,7 +119,7 @@ export default {
           login()
           this.$router.push('/admin/tweets')
         } else {
-          throw new Error()
+          throw new Error(data.message)
         }
 
       } catch (error) {

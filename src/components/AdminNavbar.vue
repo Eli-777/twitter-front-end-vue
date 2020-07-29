@@ -9,6 +9,7 @@
 
     </div>
     <div class="sidebar__menu">
+      <router-link :to="{name: 'admin-tweets'}">
       <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isHome}" @click="showLight('home')">
         <img 
           class="img-icon"
@@ -17,6 +18,8 @@
         />
         推文清單
       </div>
+      </router-link>
+      <router-link :to="{name: 'admin-users'}">
       <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isUser}" @click="showLight('users')">
         <img
           class="img-icon"
@@ -25,25 +28,20 @@
         />
         使用者列表
       </div>
-      <div class="sidebar__menu__link" :class="{sidebarMenuLinkActive: isSetting}" @click="showLight('setting')">
-        <img
-          class="img-icon"
-          :src="settingImg"
-          alt="setting"
-        />
-        設定   
-      </div>
+      </router-link>
     </div>
     <div class="sidebar__logout">
-        <router-link to="/" class="sidebar__logout--link">
+        <button class="sidebar__logout--link" @click="logout">
           <img class="sidebar__logout-icon img-icon" src="./../assets/logout.png" alt="logout">
           <p>登出</p>
-        </router-link>
+        </button>
     </div>
   </nav>
 </template>
 
+
 <script>
+import { mapState } from "vuex";
 export default {
   props: {
     initialNowPage: {
@@ -70,6 +68,9 @@ export default {
       isSetting: false
     }
   },
+  computed: {
+    ...mapState(["currentUser"]),
+  },
   created () {
     this.showLight(this.initialNowPage)
   },
@@ -83,7 +84,6 @@ export default {
         this.homeImg = this.img.isHome
         this.userImg = this.img.isNotUser
         this.settingImg = this.img.isNotSetting
-        this.$router.push('/admin/tweets')
       } else if (this.nowPage === 'users') {
         this.isHome = false
         this.isUser = true
@@ -91,18 +91,13 @@ export default {
         this.homeImg = this.img.isNotHome
         this.userImg = this.img.isUser
         this.settingImg = this.img.isNotSetting
-        this.$router.push('/admin/users')
-      } else if (this.nowPage === 'setting') {
-        this.isHome = false
-        this.isUser = false
-        this.isSetting = true
-        this.homeImg = this.img.isNotHome
-        this.userImg = this.img.isNotUser
-        this.settingImg = this.img.isSetting
-        this.$router.push('/admin/edit')
       }
       
-    }
+    },
+    logout() {
+      this.$store.commit("revokeAuthentication");
+      this.$router.push("/admin/signin");
+    },
   }
 }
 </script>
@@ -144,6 +139,9 @@ export default {
   color: var(--black);
   font-weight: bold;
   font-size: 18px;
+  width: 100px;
+  background-color: transparent;
+  border: none;
 }
 
 .sidebarMenuLinkActive {

@@ -2,7 +2,7 @@
   <div class="user-card">
     <div 
       class="background-Image" 
-      :style="{ backgroundImage: `url(${user.backgroundImage } )`}"
+      :style="{ backgroundImage: `url(${user.cover } )`}"
       ></div>
     <div class="card-body">
 
@@ -23,14 +23,13 @@
           {{user.likeCount}}
         </div>
       <div class="card-body-follow">
-        <!-- <router-link :to="{ name: 'user-following', params :{ id: user.id}}"> -->
+        
           {{user.followingCount}} 個
           <span>跟隨中</span>
-        <!-- </router-link> -->
-        <!-- <router-link :to="{ name: 'user-follower', params :{ id: user.id}}"> -->
+      
           {{user.followerCount}} 位
           <span>跟隨者</span>
-        <!-- </router-link> -->
+
       </div>
     </div>
   </div>
@@ -60,8 +59,8 @@ export default {
       this.$emit("after-delete-user", userId);
     },
     noBackgroundImage () {
-      if (!this.user.backgroundImage) {
-        return this.user.backgroundImage ='https://via.placeholder.com/350x220/DFDFDF?text=No+Image'
+      if (!this.user.cover) {
+        return this.user.cover ='https://via.placeholder.com/350x220/DFDFDF?text=No+Image'
       } return
     }
   }
@@ -100,7 +99,8 @@ export default {
   position: absolute;
   left: 50%;
   top: -120%;
-  transform: translateX(-50%)
+  transform: translateX(-50%);
+  border: 2px solid white;
 }
 .card-body-text{
   margin-top: 4rem;
@@ -115,6 +115,9 @@ export default {
 }
 .card-body-icon{
   text-align: center;
+}
+.card-body-icon button:hover{
+  cursor: default;
 }
 .card-body-icon button {
   background-color: transparent;

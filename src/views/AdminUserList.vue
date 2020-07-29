@@ -22,106 +22,10 @@
 <script>
 import AdminNavbar from "./../components/AdminNavbar";
 import AdminUserCards from "./../components/AdminUserCards";
+import adminAPI from './../apis/admin'
+import { Toast } from './../utils/helpers'
 
-const dummyData = [
-  {
-    "id": 1,
-    "account": "使用者帳號",
-    "name": "使用者姓名",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '19',
-    "likeCount": 40,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  },
-  {
-    "id": 2,
-    "account": "使用者帳號2",
-    "name": "使用者姓名2",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '10',
-    "likeCount": 40,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  },
-  {
-    "id": 3,
-    "account": "使用者帳號3",
-    "name": "使用者姓名3",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '50',
-    "likeCount": 40,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  },
-  {
-    "id": 4,
-    "account": "使用者帳號4",
-    "name": "使用者姓名4",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '10',
-    "likeCount": 40,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  },
-  {
-    "id": 5,
-    "account": "使用者帳號5",
-    "name": "使用者姓名5",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '10',
-    "likeCount": 0,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  },
-  {
-    "id": 6,
-    "account": "使用者帳號6",
-    "name": "使用者姓名6",
-    "email": "使用者的電子信箱",
-    "introduction": "使用者的自介",
-    "avatar": "https://i.imgur.com/Q14p2le.jpg",
-    "backgroundImage": "https://loremflickr.com/320/240/restaurant,food/?random=16.407932234411838",
-    "followingCount": '12',
-    "followerCount": '20',
-    "tweetCount": '2',
-    "likeCount": 40,
-    "isAdmin": false,
-    "created_at": "2009-10-31T01:48:52Z",
-    "updated_at": "2009-10-31T01:48:52Z"
-  }
-  
-]
+
 
 export default {
   components: {
@@ -139,11 +43,21 @@ export default {
     console.log(this.Users)
   },
   methods: {
-    fetchUsers() {
-      this.Users = dummyData;
-      this.Users = this.Users.sort((a, b) => {
+    async fetchUsers() {
+      try {
+        const {data} = await adminAPI.getUsers()
+        this.Users = data
+        this.Users = this.Users.sort((a, b) => {
         return b.tweetCount - a.tweetCount
       })
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          titlw: '無法取得使用者資訊，請稍後再試'
+        })
+      }
+      
     },
     afterDeleteUser (UserId) {
       this.Users = this.Users.filter(
