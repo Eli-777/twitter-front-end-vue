@@ -19,7 +19,7 @@
   width: 18px;
   height: 18px;
   background-color: var(--orange);
-  opacity: 50%;
+  opacity: 0.5;
   border-radius: 100%;
   display: inline-block;
   -webkit-animation: sk-bouncedelay 1.4s infinite ease-in-out both;

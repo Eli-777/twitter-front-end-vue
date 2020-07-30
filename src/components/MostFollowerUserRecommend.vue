@@ -72,7 +72,6 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        console.log("data=", data);
         this.users = data
           .sort((a, b) => {
             return b.followerCount - a.followerCount;
