@@ -100,9 +100,30 @@
     <Spinner v-if="isLoading" />
     <template v-else>
       <!-- 推文 -->
-      <div class="tweet-cards">
-        <TweetCards v-for="tweet in tweets" :key="tweet.id" :initial-user-tweet="tweet" />
-      </div>
+      <div class="tweet-cards" v-if="(nowPage === 'userTweet' && userTweets.length > 0)">
+          <TweetCards
+            v-for="tweet in userTweets"
+            :key="tweet.id"
+            :initial-user-tweet="tweet"
+          />
+        </div>
+        <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)" class="nodata-sign">使用者尚無推文</div>
+        <div class="tweet-cards" v-if="(nowPage === 'replied' && replieds.length > 0)">
+          <TweetCards
+            v-for="tweet in replieds"
+            :key="tweet.id"
+            :initial-user-tweet="tweet"
+          />
+        </div>
+        <div v-if="(nowPage === 'replied' && replieds.length === 0)" class="nodata-sign">使用者尚無回覆</div>
+        <div class="tweet-cards" v-if="(nowPage === 'liked' && likeds.length > 0)">
+          <TweetCards
+            v-for="tweet in likeds"
+            :key="tweet.id"
+            :initial-user-tweet="tweet"
+          />
+        </div>
+        <div v-if="(nowPage === 'liked' && likeds.length === 0)" class="nodata-sign">使用者尚無按讚</div>
     </template>
   </div>
 </template>
@@ -130,10 +151,9 @@ export default {
   data() {
     return {
       user: {},
-      tweets: [],
       userTweets: [],
-      replied: [],
-      liked: [],
+      replieds: [],
+      likeds: [],
       nowPage: "userTweet",
       isLoading: true,
     };
@@ -152,6 +172,8 @@ export default {
   created() {
     this.fetchUser();
     this.fetchUserTweets();
+    this.fetchUserRepliedTweets();
+    this.fetchUserLikedTweets();
     this.showtweets(this.nowPage);
   },
   methods: {
@@ -162,10 +184,10 @@ export default {
       try {
         const userId = this.currentUser.id;
         const { data } = await usersAPI.getUserTweets({ userId });
+        console.log('usetTweet',data)
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        this.tweets = data;
         this.userTweets = data;
         this.isLoading = false;
       } catch (error) {
@@ -177,39 +199,53 @@ export default {
         });
       }
     },
-    showtweets(page) {
-      this.nowPage = page;
-      if (page === "userTweet") {
-        this.tweets = this.userTweets;
-      } else if (page === "replied") {
-        this.tweets = this.replied;
-      } else if (page === "liked") {
-        this.tweets = this.liked;
+    async fetchUserRepliedTweets() {
+      try {
+        const userId = this.currentUser.id;
+        const { data } = await usersAPI.getRepliedTweets({ userId });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        if (data.message === "使用者尚未回覆任何推文") {
+          return
+        }
+        console.log("replied", data);
+        this.replieds = data;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log(error.message);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者回覆過的推文，請稍後再試",
+        });
       }
     },
-    addFollow() {
-      this.user = {
-        ...this.user,
-        isFollowed: true,
-      };
+    async fetchUserLikedTweets() {
+      try {
+        const userId = this.currentUser.id;
+        console.log("liked", data);
+        const { data } = await usersAPI.getLikedTweets({ userId });
+        if (data.status === "error") {
+          throw new Error(data.message);
+        }
+        console.log("liked", data);
+        if (data.message === "使用者尚未按任何推文讚") {
+          return
+        }
+        this.likeds = data;
+        this.isLoading = false;
+      } catch (error) {
+        this.isLoading = false;
+        console.log(error.message);
+        Toast.fire({
+          icon: "error",
+          title: "無法取得使用者回覆過的推文，請稍後再試",
+        });
+      }
     },
-    deleteFollow() {
-      this.user = {
-        ...this.user,
-        isFollowed: false,
-      };
-    },
-    addBell() {
-      this.user = {
-        ...this.user,
-        isBelled: true,
-      };
-    },
-    deleteBell() {
-      this.user = {
-        ...this.user,
-        isBelled: false,
-      };
+    showtweets(page) {
+      this.nowPage = page;
     },
   },
 };

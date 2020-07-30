@@ -20,7 +20,8 @@
 
     <TweetCreate @after-create-tweet="afterCreateTweet" />
     
-    <RepliedModal :tweet="replyTweet" @after-create-replied="afterCreateReplied" />
+    <RepliedModal :tweet="replyTweet" @after-create-replied="afterCreateReplied"
+    v-if="isReply" />
   </div>
 </template>
 
@@ -53,6 +54,7 @@ export default {
       tweets: [],
       replyTweet: {},
       isLoading: true,
+      isReply: false
     };
   },
   computed: {
@@ -99,6 +101,7 @@ export default {
     afterClickTweet(payload) {
       const { tweet } = payload;
       this.replyTweet = tweet;
+      this.isReply = true
     },
     afterCreateReplied() {
       this.fetchTweets();

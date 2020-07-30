@@ -191,7 +191,13 @@ input {
 
 }
 
-
+.nodata-sign {
+  display: flex;
+  justify-content: center;
+  font-size: 1.5rem;
+  color: var(--form-text-color);
+  margin: 2rem;
+}
 
 /* * {
   border: black 1px solid;

@@ -51,7 +51,7 @@
             :initial-user-tweet="tweet"
           />
         </div>
-        <div v-if="replieds.length === 0">使用者尚無推文</div>
+        <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)"  class="nodata-sign">使用者尚無推文</div>
         <div class="tweet-cards" v-if="nowPage === 'replied'">
           <TweetCards
             v-for="tweet in replieds"
@@ -59,15 +59,15 @@
             :initial-user-tweet="tweet"
           />
         </div>
-        <div v-if="replieds.length === 0">使用者尚無回覆</div>
-        <div class="tweet-cards" v-if="nowPage === 'liked'">
+        <div v-if="(nowPage === 'replied' && replieds.length === 0)"  class="nodata-sign">使用者尚無回覆</div>
+        <div class="tweet-cards" v-if="(nowPage === 'liked' && likeds.length > 0)">
           <TweetCards
             v-for="tweet in likeds"
             :key="tweet.id"
             :initial-user-tweet="tweet"
           />
         </div>
-        <div v-if="likeds.length === 0">使用者尚無按讚</div>
+        <div v-if="(nowPage === 'liked' && likeds.length === 0)" class="nodata-sign">使用者尚無按讚</div>
       </template>
     </div>
 
@@ -173,6 +173,9 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
+        if (data.message === "使用者尚未回覆任何推文") {
+          return
+        }
         console.log("replied", data);
         this.replieds = data;
         this.isLoading = false;
@@ -193,6 +196,10 @@ export default {
           throw new Error(data.message);
         }
         console.log("liked", data);
+        if (data.message === "使用者尚未按任何推文讚") {
+          this.likeds = []
+          return
+        }
         this.likeds = data;
         this.isLoading = false;
       } catch (error) {
@@ -206,13 +213,6 @@ export default {
     },
     showtweets(page) {
       this.nowPage = page;
-      if (page === "userTweet") {
-        this.tweets = this.userTweets;
-      } else if (page === "replied") {
-        this.tweets = this.replied;
-      } else if (page === "liked") {
-        this.tweets = this.liked;
-      }
     },
     async handleAfterSubmit(formData) {
       try {

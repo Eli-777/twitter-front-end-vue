@@ -52,6 +52,7 @@ export default {
       try {
         const userId = this.currentUser.id;
         const { data } = await usersAPI.get({ userId });
+        console.log('isdata',data)
         this.User = data;
       } catch (error) {
         console.log("error", error);
