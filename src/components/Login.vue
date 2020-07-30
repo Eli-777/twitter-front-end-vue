@@ -99,6 +99,7 @@ export default {
         })
 
         const { data } = response
+        console.log('data',data)
         if (data.status !== "success") {
           throw new Error(data.message)
         }
