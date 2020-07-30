@@ -22,10 +22,10 @@
           <img src="./../assets/tweet.png" alt />
         </button>
         {{replied.commentCount | numberNotNull }}
-        <button type="button" v-if="!replied.isLiked" @click.stop.prevent="addLike">
+        <button type="button" v-if="!replied.isLiked" @click.stop.prevent="addLike(replied.id)">
           <img src="./../assets/like.png" alt />
         </button>
-        <button type="button" v-else @click.stop.prevent="deleteLike">
+        <button type="button" v-else @click.stop.prevent="deleteLike(replied.id)">
           <img src="./../assets/heart-red.png" alt />
         </button>
         {{replied.likeCount| numberNotNull }}
@@ -37,6 +37,8 @@
 <script>
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
+import usersAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -75,16 +77,43 @@ export default {
   },
   created() {
     this.replied = this.initialReplied
+    console.log('inititla',this.initialReplied)
   },
   methods: {
-    addLike () {
-      console.log(3343,this.initialReplied)
-      this.replied.isLiked = true
-      this.replied.likeCount = this.replied.likedCount +1 
+    async addLike (replyId) {
+      try {
+        const {data} = await usersAPI.addReplyLiked({replyId})
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        console.log(3343,this.initialReplied)
+        this.replied.isLiked = true
+        this.replied.likeCount = this.replied.likedCount +1 
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法對回覆按讚，請稍後再試'
+        })
+      }
+
     },
-    deleteLike () {
-      this.replied.isLiked = false
-      this.replied.likeCount = this.replied.likedCount -1 
+    async deleteLike (replyId) {
+      try {
+        const {data} = await usersAPI.deleteReplyLiked({replyId})
+        if (data.status === 'error') {
+          throw new Error(data.message)
+        }
+        console.log(3343,this.initialReplied)
+        this.replied.isLiked = false
+        this.replied.likeCount = this.replied.likedCount -1
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: '無法對回覆按讚，請稍後再試'
+        })
+      }
     }
   },
   filters: {

@@ -1,7 +1,7 @@
 <template>
-  <router-link :to="{name: 'tweet', params: {id:tweet.id}}">
-    <div class="tweetcard">
-      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.userId}}">
+  <router-link :to="{name: 'tweet', params: {id:tweet.tweetId}}">
+    <div class="tweetcard" >
+      <router-link :to="{name: 'user-tweets', params: {id:tweet.User.id}}">
         <img
           class="tweetcard-avatar"
           :src="tweet.User.avatar | emptyImage"
@@ -10,7 +10,7 @@
         />
       </router-link>
       <div class="tweetcard-right">
-        <div class="tweetcard-title">
+        <div class="tweetcard-title" >
           {{tweet.User.name}}
           <span class="tweetcard-account">
             @{{tweet.User.account}}
@@ -31,10 +31,14 @@
             </button>
             {{tweet.commentCount}}
           </router-link>
-          <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike(tweet.id)">
+          <button
+            type="button"
+            v-if="!tweet.isLikedByLoginUser"
+            @click.stop.prevent="addLike(tweet.tweetId)"
+          >
             <img src="./../assets/like.png" alt />
           </button>
-          <button type="button" v-else @click.stop.prevent="deleteLike(tweet.id)">
+          <button type="button" v-else @click.stop.prevent="deleteLike(tweet.tweetId)">
             <img src="./../assets/heart-red.png" alt />
           </button>
           {{tweet.likeCount}}
@@ -47,8 +51,8 @@
 <script>
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
-import { Toast } from './../utils/helpers'
-import usersAPI from './../apis/users'
+import { Toast } from "./../utils/helpers";
+import usersAPI from "./../apis/users";
 
 export default {
   mixins: [fromNowFilter, emptyImageFilter],
@@ -60,7 +64,14 @@ export default {
   },
   data() {
     return {
-      tweet: {},
+      tweet: {
+        User:{},
+        commentCount: '',
+        likeCount: -1,
+        description: '',
+        isLikedByLoginUser: false,
+        createdAt: ''
+      },
     };
   },
   watch: {
@@ -77,68 +88,64 @@ export default {
   methods: {
     fetchTweet() {
       const data = this.initialUserTweet;
+
       const {
-        id,
+        id: tweetId,
         User,
-        createdAt,
-        description,
         commentCount,
         likeCount,
+        description,
         isLikedByLoginUser,
-      } = data;
-      const { id: userId, avatar, name, account } = User;
+        createdAt,
+      } = data.Tweet;
+      
       this.tweet = {
-        id,
+        tweetId,
         User,
-        createdAt,
-        description,
         commentCount,
         likeCount,
+        description,
         isLikedByLoginUser,
-      };
-      this.tweet.User = {
-        userId,
-        avatar,
-        name,
-        account,
+        createdAt,
       };
     },
     async addLike(tweetId) {
       try {
-        const { data } = await usersAPI.addliked({tweetId})
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        console.log('tweetId',tweetId)
+        const { data } = await usersAPI.addliked({ tweetId });
+        if (data.status === "error") {
+          throw new Error(data.message);
         }
-        console.log('add', data,tweetId)
+        // console.log("add", data,tweetId);
+        this.$emit("after-add-like", tweetId);
         this.tweet.isLikedByLoginUser = true;
         this.tweet.likeCount = this.tweet.likeCount + 1;
-        this.$emit("after-add-like", tweetId);
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         Toast.fire({
-          icon: 'error',
-          title: '無法對推文按讚，請稍後再試'
-        })
+          icon: "error",
+          title: "無法對推文按讚，請稍後再試",
+        });
       }
     },
     async deleteLike(tweetId) {
       try {
-        const { data } = await usersAPI.deleteliked({tweetId})
-        if (data.status === 'error') {
-          throw new Error(data.message)
+        console.log('tweetId',tweetId)
+        const { data } = await usersAPI.deleteliked({ tweetId });
+        if (data.status === "error") {
+          throw new Error(data.message);
         }
-        console.log('delete', data,tweetId)
+        // console.log("delete", data);
+        this.$emit("after-delete-like", tweetId);
         this.tweet.isLikedByLoginUser = false;
         this.tweet.likeCount = this.tweet.likeCount - 1;
-        this.$emit("after-delete-like", tweetId);
       } catch (error) {
-        console.log(error.message)
+        console.log(error.message);
         Toast.fire({
-          icon: 'error',
-          title: '無法對推文取消按讚，請稍後再試'
-        })
+          icon: "error",
+          title: "無法對推文取消按讚，請稍後再試",
+        });
       }
-      
     },
     handleSubmit() {
       this.$emit("after-click-tweet", {
@@ -178,7 +185,7 @@ export default {
   width: 1rem;
   height: 1rem;
 }
-.tweetcard-icon, 
+.tweetcard-icon,
 .tweetcard-icon a {
   color: var(--twitter-post-text-color-grey);
 }

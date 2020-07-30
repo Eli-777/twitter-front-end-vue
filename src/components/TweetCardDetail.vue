@@ -9,7 +9,7 @@
       <div class="card-body-user pl-3">
         <router-link :to="{name: 'user-tweets', params: {id:tweet.User.id}}">
           <img
-            :src="tweet.User.avator | emptyImage"
+            :src="tweet.User.avatar | emptyImage"
             class="card-img-avatar"
             height="140px"
             width="140px"

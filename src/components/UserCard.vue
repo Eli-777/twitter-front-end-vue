@@ -35,12 +35,12 @@
           <img src="./../assets/notbell.png" />
         </button>
         <button
-          v-if="!user.isFollowed && !(currentUser.id === this.user.id)"
+          v-if="!user.isFollowedByLoginUser && !(currentUser.id === this.user.id)"
           class="btn button-follow"
           @click.stop.prevent="addFollow(user.id)"
         >跟隨</button>
         <button
-          v-if="user.isFollowed && !(currentUser.id === this.user.id)"
+          v-if="user.isFollowedByLoginUser && !(currentUser.id === this.user.id)"
           class="btn button-following"
           @click.stop.prevent="deleteFollow(user.id)"
         >正在跟隨</button>
@@ -101,6 +101,7 @@ export default {
   methods: {
     async fetchUser() {
       this.user = this.initialUser;
+      console.log(333,this.user)
     },
     async addFollow(userId) {
       try {
@@ -111,7 +112,7 @@ export default {
         }
         this.user = {
           ...this.user,
-          isFollowed: true,
+          isFollowedByLoginUser: true,
           followerCount: this.user.followerCount + 1
         };
       } catch (error) {
@@ -136,7 +137,7 @@ export default {
         }
         this.user = {
           ...this.user,
-          isFollowed: false,
+          isFollowedByLoginUser: false,
           followerCount: this.user.followerCount - 1
         };
       } catch (error) {

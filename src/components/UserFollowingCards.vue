@@ -2,8 +2,8 @@
   <div class="tweetcard">
     <router-link :to="{name: 'user-tweets', params: {id:following.followingId}}">
       <img
-        class="tweetcard-avator"
-        :src="following.avator | emptyImage"
+        class="tweetcard-avatar"
+        :src="following.avatar | emptyImage"
         width="50rem"
         height="50rem"
       />
@@ -116,7 +116,7 @@ export default {
   width: 100%;
 }
 
-.tweetcard-avator {
+.tweetcard-avatar {
   border-radius: 50%;
   margin: 1rem;
 }

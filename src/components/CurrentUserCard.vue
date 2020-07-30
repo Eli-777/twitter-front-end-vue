@@ -63,7 +63,7 @@
     </div>
 
     <ul class="nav nav-pills" id="nav-tab" role="tablist">
-      <li class="nav-item" @click="showtweets('userTweet')">
+      <li class="nav-item" @click="showtweets('userTweet')" >
         <router-link
           class="nav-link active"
           to="#"
@@ -74,7 +74,7 @@
           aria-selected="true"
         >推文</router-link>
       </li>
-      <li class="nav-item" @click="showtweets('replied')">
+      <li class="nav-item" @click="showtweets('replied')" >
         <router-link
           class="nav-link"
           data-toggle="tab"
@@ -85,7 +85,7 @@
           to="#"
         >推文和回覆</router-link>
       </li>
-      <li class="nav-item" @click="showtweets('liked')">
+      <li class="nav-item" @click="showtweets('liked')" >
         <router-link
           class="nav-link"
           data-toggle="tab"
@@ -105,22 +105,28 @@
             v-for="tweet in userTweets"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)" class="nodata-sign">使用者尚無推文</div>
         <div class="tweet-cards" v-if="(nowPage === 'replied' && replieds.length > 0)">
-          <TweetCards
+          <RepliedLikedTweetCards
             v-for="tweet in replieds"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'replied' && replieds.length === 0)" class="nodata-sign">使用者尚無回覆</div>
         <div class="tweet-cards" v-if="(nowPage === 'liked' && likeds.length > 0)">
-          <TweetCards
+          <RepliedLikedTweetCards
             v-for="tweet in likeds"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'liked' && likeds.length === 0)" class="nodata-sign">使用者尚無按讚</div>
@@ -130,6 +136,7 @@
 
 <script>
 import TweetCards from "./../components/TweetCards";
+import RepliedLikedTweetCards from "./../components/RepliedLikedTweetCards";
 import Spinner from "./../components/Spinner";
 import usersAPI from "./../apis/users";
 import { emptyImageFilter } from "./../utils/mixins";
@@ -141,6 +148,7 @@ export default {
   components: {
     TweetCards,
     Spinner,
+    RepliedLikedTweetCards
   },
   props: {
     initialUser: {
@@ -156,6 +164,7 @@ export default {
       likeds: [],
       nowPage: "userTweet",
       isLoading: true,
+      isLoad: false
     };
   },
   watch: {
@@ -189,6 +198,11 @@ export default {
           throw new Error(data.message);
         }
         this.userTweets = data;
+        this.userTweets = this.userTweets.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -211,6 +225,11 @@ export default {
         }
         console.log("replied", data);
         this.replieds = data;
+        this.replieds = this.replieds.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -234,6 +253,11 @@ export default {
           return
         }
         this.likeds = data;
+        this.likeds = this.likeds.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -247,6 +271,17 @@ export default {
     showtweets(page) {
       this.nowPage = page;
     },
+    afterAddLike () {
+      this.fetchUserTweets();
+      this.fetchUserRepliedTweets();
+      this.fetchUserLikedTweets();
+
+    },
+    afterDeleteLike () {
+      this.fetchUserTweets();
+      this.fetchUserRepliedTweets();
+      this.fetchUserLikedTweets();
+    }
   },
 };
 </script>

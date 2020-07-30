@@ -52,8 +52,8 @@ export default {
         }
         this.tweets = data;
         this.tweets = this.tweets.sort((a, b) => {
-          a = new Date(a.created_at);
-          b = new Date(b.created_at);
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
           return b - a;
         });
         this.isLoading = false;

@@ -49,22 +49,28 @@
             v-for="tweet in userTweets"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)"  class="nodata-sign">使用者尚無推文</div>
         <div class="tweet-cards" v-if="nowPage === 'replied'">
-          <TweetCards
+          <RepliedLikedTweetCards
             v-for="tweet in replieds"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'replied' && replieds.length === 0)"  class="nodata-sign">使用者尚無回覆</div>
         <div class="tweet-cards" v-if="(nowPage === 'liked' && likeds.length > 0)">
-          <TweetCards
+          <RepliedLikedTweetCards
             v-for="tweet in likeds"
             :key="tweet.id"
             :initial-user-tweet="tweet"
+            @after-add-like="afterAddLike"
+            @after-delete-like="afterDeleteLike"
           />
         </div>
         <div v-if="(nowPage === 'liked' && likeds.length === 0)" class="nodata-sign">使用者尚無按讚</div>
@@ -91,6 +97,7 @@ import TweetCreate from "./../components/TweetCreate";
 import UserPageEdit from "./../components/UserPageEdit";
 import Spinner from "./../components/Spinner";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
+import RepliedLikedTweetCards from "./../components/RepliedLikedTweetCards";
 import usersAPI from "./../apis/users";
 import { mapState } from "vuex";
 import { Toast } from "./../utils/helpers";
@@ -105,6 +112,7 @@ export default {
     UserPageEdit,
     MostFollowerUserRecommend,
     Spinner,
+    RepliedLikedTweetCards
   },
   data() {
     return {
@@ -157,6 +165,11 @@ export default {
           throw new Error(data.message);
         }
         this.userTweets = data;
+        this.userTweets = this.userTweets.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -178,6 +191,11 @@ export default {
         }
         console.log("replied", data);
         this.replieds = data;
+        this.replieds = this.replieds.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -201,6 +219,11 @@ export default {
           return
         }
         this.likeds = data;
+        this.likeds = this.likeds.sort((a, b) => {
+          a = new Date(a.createdAt);
+          b = new Date(b.createdAt);
+          return b - a;
+        });
         this.isLoading = false;
       } catch (error) {
         this.isLoading = false;
@@ -213,6 +236,7 @@ export default {
     },
     showtweets(page) {
       this.nowPage = page;
+
     },
     async handleAfterSubmit(formData) {
       try {
@@ -247,6 +271,21 @@ export default {
         });
       }
     },
+    afterAddLike () {
+      const { id } = this.$route.params;
+      this.fetchUser(id);
+      this.fetchUserTweets(id);
+      this.fetchUserRepliedTweets(id);
+      this.fetchUserLikedTweets(id);
+
+    },
+    afterDeleteLike () {
+      const { id } = this.$route.params;
+      this.fetchUser(id);
+      this.fetchUserTweets(id);
+      this.fetchUserRepliedTweets(id);
+      this.fetchUserLikedTweets(id);
+    }
   },
 };
 </script>

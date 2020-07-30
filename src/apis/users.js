@@ -40,4 +40,10 @@ export default {
   deleteliked({ tweetId }) {
     return apiHelper.post(`/api/tweets/${tweetId}/unlike`, null)
   },
+  addReplyLiked({ replyId }) {
+    return apiHelper.post(`/api/replies/${replyId}/like`, null)
+  },
+  deleteReplyLiked({ replyId }) {
+    return apiHelper.post(`/api/replies/${replyId}/unlike`, null)
+  },
 }

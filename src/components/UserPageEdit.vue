@@ -42,7 +42,7 @@
             <div class="form-group image-input">
               <img
                 :src="user.avatar | emptyImage"
-                class="avator-image"
+                class="avatar-image"
                 alt="avatar"
                 width="100px"
                 height="100px"
@@ -52,7 +52,7 @@
                 type="file"
                 name="avatar"
                 accept="image/*"
-                class="form-control-file avator-image-input"
+                class="form-control-file avatar-image-input"
                 @change="handleFileChangePImg"
               />
             </div>
@@ -208,15 +208,15 @@ export default {
   top: 0;
 }
 
-.avator-image,
-.avator-image-input {
+.avatar-image,
+.avatar-image-input {
   border-radius: 50%;
   width: 100px;
   height: 100px;
   border: 4px solid #ffffff;
   transform: translateY(-50%) translateX(5%);
 }
-.avator-image-input {
+.avatar-image-input {
   position: absolute;
   top: 0;
 }

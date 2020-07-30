@@ -2,8 +2,8 @@
   <div class="tweets">
     <div class="tweetcard">
       <img
-        class="tweetcard-avator"
-        :src="tweets.User.avator | emptyImage"
+        class="tweetcard-avatar"
+        :src="tweets.User.avatar | emptyImage"
         width="50rem"
         height="50rem"
       />
@@ -55,6 +55,12 @@ export default {
       if (data.status !== 'success') {
         throw new Error(data.message)
       }
+      if (data.status === 'success') {
+        Toast.fire({
+          icon: 'success',
+          title: '刪除成功'
+        })
+      }
       this.$emit("after-delete-tweet", tweetId);
       } catch (error) {
           console.log(error.message)
@@ -85,7 +91,7 @@ export default {
   border-top: none;
   position: relative;
 }
-.tweetcard-avator {
+.tweetcard-avatar {
   border-radius: 50%;
   margin: 1rem;
 }

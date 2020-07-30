@@ -2,8 +2,8 @@
   <div class="tweetcard">
     <router-link :to="{name: 'user-tweets', params: {id:follower.followerId}}">
       <img
-        class="tweetcard-avator"
-        :src="follower.avator | emptyImage"
+        class="tweetcard-avatar"
+        :src="follower.avatar | emptyImage"
         width="50rem"
         height="50rem"
       />
@@ -20,14 +20,14 @@
             v-if="follower.isFollowedByLoginUser"
             type="submit"
             class="tweetcard-button isFollowed"
-            :class="{isFollowed: follower.isFollowed}"
+            :class="{isFollowed: follower.isFollowedByLoginUser}"
             @click.stop.prevent="deleteFollow(follower.followerId)"
           >正在跟隨</button>
           <button
             v-else
             type="submit"
             class="tweetcard-button"
-            :class="{isFollowed: follower.isFollowed}"
+            :class="{isFollowed: follower.isFollowedByLoginUser}"
             @click.stop.prevent="addFollow(follower.followerId)"
           >跟隨</button>
         </div>
@@ -116,7 +116,7 @@ export default {
   width: 100%;
 }
 
-.tweetcard-avator {
+.tweetcard-avatar {
   border-radius: 50%;
   margin: 1rem;
 }

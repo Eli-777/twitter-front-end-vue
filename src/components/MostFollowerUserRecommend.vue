@@ -5,7 +5,7 @@
       <ul class="list-group list-group-flush">
         <li class="list-group-item" v-for="user in users" :key="user.id">
           <router-link :to="{ name: 'user-tweets', params: { id: user.id } }">
-            <img class="card-avator" :src="user.avatar | emptyImage" />
+            <img class="card-avatar" :src="user.avatar | emptyImage" />
           </router-link>
           <div class="card-text">
             {{ user.name }}
@@ -15,7 +15,7 @@
           <div class="card-button-area">
             <button
               class="card-button isFollowed"
-              v-if="user.isFollowed"
+              v-if="user.isFollowedByLoginUser"
               @click.stop.prevent="deleteFollow(user.id)"
             >
               正在跟隨
@@ -86,27 +86,52 @@ export default {
         });
       }
     },
-    addFollow(userId) {
-      this.users = this.users.map((user) => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: true,
-          };
+    async addFollow(userId) {
+      try {
+        const id = userId.toString()
+        const {data} = await usersAPI.addFollowing({id})
+        if ( data.status !== 'success') {
+          throw new Error(data.message)
         }
-        return user;
-      });
+        this.users = this.users.map((user) => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              isFollowedByLoginUser: true,
+            };
+          }
+          return user;
+        });
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: error.message
+        })
+      }
     },
-    deleteFollow(userId) {
-      this.users = this.users.map((user) => {
-        if (user.id === userId) {
-          return {
-            ...user,
-            isFollowed: false,
-          };
+    async deleteFollow(userId) {
+      try {
+        const {data} = await usersAPI.deleteFollowing({userId})
+        if ( data.status !== 'success') {
+          throw new Error(data.message)
         }
-        return user;
-      });
+        this.users = this.users.map((user) => {
+          if (user.id === userId) {
+            return {
+              ...user,
+              isFollowedByLoginUser: false,
+            };
+          }
+          return user;
+        });
+      } catch (error) {
+        console.log(error.message)
+        Toast.fire({
+          icon: 'error',
+          title: error.message
+        })
+      }
     },
   },
 };
@@ -138,7 +163,7 @@ export default {
   background-color: var(--form-background-color);
   padding: 7px 20px;
 }
-.card-avator {
+.card-avatar {
   width: 40px;
   height: 40px;
   border-radius: 50%;
