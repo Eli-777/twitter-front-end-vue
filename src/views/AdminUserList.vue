@@ -7,7 +7,8 @@
           <p class="header-name pl-3">使用者列表</p>
         </div>
       </div>
-      <div class="user-cards ">
+      <Spinner v-if="isLoading" />
+      <div class="user-cards " v-else>
         <AdminUserCards 
           v-for="User in Users" 
           :key="User.id" 
@@ -22,6 +23,7 @@
 <script>
 import AdminNavbar from "./../components/AdminNavbar";
 import AdminUserCards from "./../components/AdminUserCards";
+import Spinner from "./../components/Spinner";
 import adminAPI from './../apis/admin'
 import { Toast } from './../utils/helpers'
 
@@ -30,12 +32,14 @@ import { Toast } from './../utils/helpers'
 export default {
   components: {
     AdminNavbar,
-    AdminUserCards
+    AdminUserCards,
+    Spinner
   },
   data() {
     return {
       Users: [],
-      nowPage: 'users'
+      nowPage: 'users',
+      isLoading: true,
     };
   },
   created() {
@@ -47,16 +51,17 @@ export default {
         const {data} = await adminAPI.getUsers()
         this.Users = data
         this.Users = this.Users.sort((a, b) => {
-        return b.tweetCount - a.tweetCount
-      })
+          return b.tweetCount - a.tweetCount
+        })
+        this.isLoading = false;
       } catch (error) {
+        this.isLoading = false;
         console.log(error.message)
         Toast.fire({
           icon: 'error',
           titlw: '無法取得使用者資訊，請稍後再試'
         })
       }
-      
     },
     afterDeleteUser (UserId) {
       this.Users = this.Users.filter(

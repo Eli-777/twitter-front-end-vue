@@ -12,7 +12,7 @@
       <div class="tweetcard-title">
         {{replied.User.name}}
         <span class="tweetcard-account">
-          {{replied.User.account}}
+          @{{replied.User.account}}
           ．{{replied.createdAt | fromNow}}
         </span>
       </div>

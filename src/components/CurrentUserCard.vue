@@ -47,7 +47,7 @@
       </div>
       <div class="card-body-text">
         <h5 class="card-body-name">{{user.name}}</h5>
-        <p class="card-body-account">{{user.account}}</p>
+        <p class="card-body-account">@{{user.account}}</p>
         <p class="card-body-introduction">{{user.introduction}}</p>
       </div>
       <div class="card-body-follow">

@@ -10,7 +10,7 @@
           <div class="card-text">
             {{ user.name }}
             <br />
-            <span>{{ user.account }}</span>
+            <span>@{{ user.account }}</span>
           </div>
           <div class="card-button-area">
             <button
@@ -145,6 +145,8 @@ export default {
 }
 .card-text {
   font-size: 0.875rem;
+  width: 100%;
+  padding-left: .5rem;
 }
 .card-text span {
   color: var(--form-text-color);

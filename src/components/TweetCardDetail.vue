@@ -17,7 +17,7 @@
         </router-link>
         <div class="card-body-username ">
           <h5 class="card-body-name">{{tweet.User.name}}</h5>
-          <p class="card-body-account">{{tweet.User.account}}</p>
+          <p class="card-body-account">@{{tweet.User.account}}</p>
         </div>
       </div>
 

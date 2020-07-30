@@ -10,7 +10,7 @@
      
       <div class="card-body-text">
         <p class="card-body-name">{{user.name}}</p>
-        <p class="card-body-account">{{user.account}}</p>
+        <p class="card-body-account">@{{user.account}}</p>
       </div>
       <div class="card-body-icon">
           <button type="button" data-toggle="modal" data-target="#tweet-replied-modal">

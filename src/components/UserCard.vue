@@ -47,7 +47,7 @@
       </div>
       <div class="card-body-text">
         <h5 class="card-body-name">{{user.name}}</h5>
-        <p class="card-body-account">{{user.account}}</p>
+        <p class="card-body-account">@{{user.account}}</p>
         <p class="card-body-introduction">{{user.introduction}}</p>
       </div>
       <div class="card-body-follow">
@@ -97,26 +97,11 @@ export default {
   },
   created() {
     this.fetchUser();
-    // const { id } = this.$route.params;
-    // this.fetchUserTweets(id);
   },
   methods: {
     async fetchUser() {
       this.user = this.initialUser;
     },
-    // async fetchUserTweets(userId) {
-    //   try {
-    //     const { data } = await usersAPI.getUserTweets({ userId });
-    //     this.tweets = data;
-    //     this.userTweets = data;
-    //   } catch (error) {
-    //     console.log(error.message);
-    //     Toast.fire({
-    //       icon: "error",
-    //       title: "無法取得使用者推文，請稍後再試",
-    //     });
-    //   }
-    // },
     async addFollow(userId) {
       try {
         const id = userId.toString()

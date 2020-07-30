@@ -180,7 +180,7 @@ export default {
         console.error(error.message)
         Toast.fire({
           icon: 'error',
-          title: '無法修改帳號，請稍後再試'
+          title: error.message
         })
       }
     }

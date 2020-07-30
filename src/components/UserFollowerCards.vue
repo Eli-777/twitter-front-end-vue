@@ -13,7 +13,7 @@
         <div class="tweetcard-title">
           {{follower.name}}
           <br />
-          <span class="tweetcard-account">{{follower.account}}</span>
+          <span class="tweetcard-account">@{{follower.account}}</span>
         </div>
         <div class="tweetcard-icon mr-3" v-if="currentUser.id !== follower.followerId">
           <button

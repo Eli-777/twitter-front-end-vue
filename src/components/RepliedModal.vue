@@ -13,13 +13,13 @@
             <div class="tweet-original-right">
               <p>
                 {{tweet.User.name}}
-                <span>{{tweet.User.account}}．{{tweet.createdAt | fromNow}}</span>
+                <span>@{{tweet.User.account}}．{{tweet.createdAt | fromNow}}</span>
               </p>
               <div class="tweet-original-right-description">
                 <p>{{tweet.description}}</p>
                 <p class="tweet-original-right-replyTo">
                   <span>回覆給</span>
-                  {{tweet.User.account}}
+                  @{{tweet.User.account}}
                 </p>
               </div>
             </div>

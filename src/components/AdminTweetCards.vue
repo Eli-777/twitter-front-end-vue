@@ -12,7 +12,7 @@
         <div class="tweetcard-title">
           {{ tweets.User.name }}
           <span class="tweetcard-account">
-            {{ tweets.User.account }}
+            @{{ tweets.User.account }}
             ．{{ tweets.createdAt | fromNow }}
           </span>
         </div>
