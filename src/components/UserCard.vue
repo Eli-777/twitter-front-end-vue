@@ -91,6 +91,7 @@ export default {
         ...newValue,
       };
     },
+    deep: true,
   },
   computed: {
     ...mapState(["currentUser"]),

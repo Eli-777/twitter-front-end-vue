@@ -109,7 +109,7 @@
             @after-delete-like="afterDeleteLike"
           />
         </div>
-        <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)" class="nodata-sign">使用者尚無推文</div>
+        <div v-else-if="(nowPage === 'userTweet' && userTweets.length === 0 && !isFirstLoad)" class="nodata-sign">使用者尚無推文</div>
         <div class="tweet-cards" v-if="(nowPage === 'replied' && replieds.length > 0)">
           <RepliedLikedTweetCards
             v-for="tweet in replieds"
@@ -164,7 +164,8 @@ export default {
       likeds: [],
       nowPage: "userTweet",
       isLoading: true,
-      isLoad: false
+      isLoad: false,
+      isFirstLoad: true
     };
   },
   watch: {
@@ -174,6 +175,7 @@ export default {
         ...newValue,
       };
     },
+    deep: true,
   },
   computed: {
     ...mapState(["currentUser"]),
@@ -204,8 +206,10 @@ export default {
           return b - a;
         });
         this.isLoading = false;
+        this.isFirstLoad = false
       } catch (error) {
         this.isLoading = false;
+        this.isFirstLoad = false
         console.log(error.message);
         Toast.fire({
           icon: "error",

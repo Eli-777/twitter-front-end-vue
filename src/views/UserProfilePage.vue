@@ -1,8 +1,8 @@
 <template>
   <div class="container">
     <Navbar :initial-now-page="nowPage" />
-    <CurrentUserCard :initial-user="User" />
-    <MostFollowerUserRecommend />
+    <CurrentUserCard :initial-user="User" :key="componentKey" />
+    <MostFollowerUserRecommend @after-add-follow-user="afteraddFollowUser" @after-delete-follow-user="afterdeleteFollowUser"/>
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit
       :initial-user="User"
@@ -10,7 +10,7 @@
       @after-submit="handleAfterSubmit"
     />
 
-    <TweetCreate />
+    <TweetCreate @after-create-tweet="afterCreateTweet" />
   </div>
 </template>
 
@@ -39,6 +39,7 @@ export default {
       isProcessing: false,
       nowPage: "profile",
       isLoading: true,
+      componentKey: 0,
     };
   },
   computed: {
@@ -95,6 +96,15 @@ export default {
         });
       }
     },
+    afterCreateTweet() {
+      this.componentKey += 1;  
+    },
+    afteraddFollowUser() {
+      this.User.followingCount += 1
+    },
+    afterdeleteFollowUser() {
+      this.User.followingCount -= 1
+    }
   },
 };
 </script>

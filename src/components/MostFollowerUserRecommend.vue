@@ -106,6 +106,7 @@ export default {
           }
           return user;
         });
+        this.$emit('after-add-follow-user')
       } catch (error) {
         console.log(error.message)
         Toast.fire({
@@ -129,6 +130,7 @@ export default {
           }
           return user;
         });
+        this.$emit('after-delete-follow-user')
       } catch (error) {
         console.log(error.message)
         Toast.fire({

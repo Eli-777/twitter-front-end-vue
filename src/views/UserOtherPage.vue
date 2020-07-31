@@ -53,7 +53,7 @@
             @after-delete-like="afterDeleteLike"
           />
         </div>
-        <div v-if="(nowPage === 'userTweet' && userTweets.length === 0)"  class="nodata-sign">使用者尚無推文</div>
+        <div v-if="(nowPage === 'userTweet' && userTweets.length === 0 && !isFirstLoad)"  class="nodata-sign">使用者尚無推文</div>
         <div class="tweet-cards" v-if="nowPage === 'replied'">
           <RepliedLikedTweetCards
             v-for="tweet in replieds"
@@ -77,7 +77,7 @@
       </template>
     </div>
 
-    <MostFollowerUserRecommend />
+    <MostFollowerUserRecommend @after-add-follow-user="afteraddFollowUser" @after-delete-follow-user="afterdeleteFollowUser"/>
     <!-- modal 編輯使用者資料 -->
     <UserPageEdit
       :initial-user="User"
@@ -85,7 +85,7 @@
       @after-submit="handleAfterSubmit"
     />
 
-    <TweetCreate />
+    <TweetCreate @after-create-tweet="afterCreateTweet" />
   </div>
 </template>
 
@@ -124,6 +124,7 @@ export default {
       replieds: [],
       likeds: [],
       isLoading: true,
+      isFirstLoad: true,
     };
   },
   computed: {
@@ -171,6 +172,7 @@ export default {
           return b - a;
         });
         this.isLoading = false;
+        this.isFirstLoad = false
       } catch (error) {
         this.isLoading = false;
         console.log(error.message);
@@ -285,6 +287,16 @@ export default {
       this.fetchUserTweets(id);
       this.fetchUserRepliedTweets(id);
       this.fetchUserLikedTweets(id);
+    },
+    afterCreateTweet() {
+      const { id } = this.$route.params;
+      this.fetchUserTweets(id);  
+    },
+    afteraddFollowUser() {
+      this.User.followerCount += 1
+    },
+    afterdeleteFollowUser() {
+      this.User.followerCount -= 1
     }
   },
 };
