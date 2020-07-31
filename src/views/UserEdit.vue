@@ -22,7 +22,7 @@
         </div>
 
         <div class="form-label-group text-center mb-3">
-          <label class="input-title" for="account">名稱</label>
+          <label class="input-title" for="name">名稱</label>
           <input
             id="name"
             v-model="User.name"
@@ -35,7 +35,7 @@
         </div>
 
         <div class="form-label-group text-center mb-3">
-          <label class="input-title" for="account">Email</label>
+          <label class="input-title" for="email">Email</label>
           <input
             id="email"
             v-model="User.email"
@@ -48,7 +48,7 @@
         </div>
 
         <div class="form-label-group text-center mb-3">
-          <label class="input-title" for="account">密碼</label>
+          <label class="input-title" for="password">密碼</label>
           <input
             id="password"
             v-model="User.password"
@@ -61,7 +61,7 @@
         </div>
 
         <div class="form-label-group text-center mb-4">
-          <label class="input-title" for="password">密碼確認</label>
+          <label class="input-title" for="password-check">密碼確認</label>
           <input
             id="password-check"
             v-model="User.passwordCheck"
