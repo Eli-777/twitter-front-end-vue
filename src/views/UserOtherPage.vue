@@ -151,7 +151,7 @@ export default {
         const { data } = await usersAPI.get({ userId });
         this.User = data;
       } catch (error) {
-        console.log("error", error);
+        console.log(error.message);
         Toast.fire({
           icon: "error",
           title: "無法取得使用者資料，請稍後再試",
@@ -190,7 +190,7 @@ export default {
         if (data.message === "使用者尚未回覆任何推文") {
           return
         }
-        console.log("replied", data);
+        // console.log("replied", data);
         this.replieds = data;
         this.replieds = this.replieds.sort((a, b) => {
           a = new Date(a.createdAt);
@@ -213,7 +213,7 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log("liked", data);
+        // console.log("liked", data);
         if (data.message === "使用者尚未按任何推文讚") {
           this.likeds = []
           return
@@ -241,10 +241,10 @@ export default {
     async handleAfterSubmit(formData) {
       try {
         this.isProcessing = true;
-        console.log("formdata", formData);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
+        // console.log("formdata", formData);
+        // for (let [name, value] of formData.entries()) {
+        //   console.log(name + ": " + value);
+        // }
 
         const { data } = await usersAPI.updateProfile({
           userId: this.currentUser.id,

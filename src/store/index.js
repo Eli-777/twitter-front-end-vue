@@ -41,7 +41,7 @@ export default new Vuex.Store({
         let decodedData = window.atob(payload);
         let payloadObject = JSON.parse(decodedData)
         let userId = payloadObject.id
-        console.log('userId',userId)
+        // console.log('userId',userId)
 
         if (userId === 1) {
           commit('setCurrentUser',{id: 1, name: '我是管理者', isAdmin: true})

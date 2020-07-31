@@ -110,7 +110,7 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        console.log('add',data)
+        
         this.tweet.isLikedByLoginUser = true;
         this.tweet.likeCount = this.tweet.likeCount + 1;
       } catch (error) {
@@ -127,7 +127,6 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        console.log('delete',data)
         this.tweet.isLikedByLoginUser = false;
         this.tweet.likeCount = this.tweet.likeCount - 1;
       } catch (error) {

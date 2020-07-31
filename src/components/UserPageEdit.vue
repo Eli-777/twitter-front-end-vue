@@ -149,7 +149,7 @@ export default {
     handleFileChangeBImg(e) {
       // const files = e.target.files; // = filefist
       const { files } = e.target;
-      console.log("files", files);
+      
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
         this.user.cover = "";
@@ -162,7 +162,7 @@ export default {
     handleFileChangePImg(e) {
       // const files = e.target.files; // = filefist
       const { files } = e.target;
-      console.log("files", files);
+ 
       if (files.length === 0) {
         // 使用者沒有選擇上傳的檔案
         this.user.avatar = "";

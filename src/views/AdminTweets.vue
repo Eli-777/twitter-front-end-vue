@@ -46,7 +46,7 @@ export default {
     async fetchTweets() {
       try {
         const { data } = await adminAPI.getTweets();
-        console.log("admintweet", data);
+        
         if (data.status === "error") {
           throw new Error(data.message);
         }

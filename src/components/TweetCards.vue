@@ -111,7 +111,6 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        console.log('add', data,tweetId)
         this.tweet.isLikedByLoginUser = true;
         this.tweet.likeCount = this.tweet.likeCount + 1;
         this.$emit("after-add-like", tweetId);
@@ -132,7 +131,6 @@ export default {
         if (data.status === 'error') {
           throw new Error(data.message)
         }
-        console.log('delete', data,tweetId)
         this.tweet.isLikedByLoginUser = false;
         this.tweet.likeCount = this.tweet.likeCount - 1;
         this.$emit("after-delete-like", tweetId);

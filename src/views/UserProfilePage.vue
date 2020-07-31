@@ -53,7 +53,7 @@ export default {
       try {
         const userId = this.currentUser.id;
         const { data } = await usersAPI.get({ userId });
-        console.log('isdata',data)
+  
         this.User = data;
       } catch (error) {
         console.log("error", error);
@@ -66,10 +66,10 @@ export default {
     async handleAfterSubmit(formData ) {
       try {
         this.isProcessing = true;
-        console.log("formdata", formData);
-        for (let [name, value] of formData.entries()) {
-          console.log(name + ": " + value);
-        }
+        // console.log("formdata", formData);
+        // for (let [name, value] of formData.entries()) {
+        //   console.log(name + ": " + value);
+        // }
 
         const { data } = await usersAPI.updateProfile({
           userId: this.currentUser.id,
@@ -79,7 +79,6 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        console.log("updata", data);
         Toast.fire({
           icon: "success",
           title: "更新成功",

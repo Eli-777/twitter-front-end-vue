@@ -77,7 +77,6 @@ export default {
   },
   created() {
     this.replied = this.initialReplied
-    console.log('inititla',this.initialReplied)
   },
   methods: {
     async addLike (replyId) {

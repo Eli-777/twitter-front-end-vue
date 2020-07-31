@@ -1,9 +1,9 @@
 <template>
   <div class="container">
-    <Navbar :initial-now-page="nowPage"/>
+    <Navbar :initial-now-page="nowPage" />
     <form class="center-area w-100" @submit.stop.prevent="handleSubmit">
-      <div class="form-width col-12 ">
-        <div class="form-title  mt-4">
+      <div class="form-width col-12">
+        <div class="form-title mt-4">
           <h3 class="title">帳戶設定</h3>
         </div>
 
@@ -77,12 +77,7 @@
           class="submit-button mb-3 action bottom-text-big"
           :disabled="isProcessing"
           type="submit"
-          
-        >
-          {{ isProcessing ? '處理中...' : '儲存'}}
-        </button>
-
-
+        >{{ isProcessing ? '處理中...' : '儲存'}}</button>
       </div>
     </form>
 
@@ -92,41 +87,39 @@
 
 <script>
 import Navbar from "./../components/Navbar";
-import TweetCreate from "./../components/TweetCreate"
-import usersAPI from './../apis/users'
-import { Toast } from "./../utils/helpers"
+import TweetCreate from "./../components/TweetCreate";
+import usersAPI from "./../apis/users";
+import { Toast } from "./../utils/helpers";
 import { mapState } from "vuex";
-
-
 
 export default {
   components: {
     Navbar,
-    TweetCreate
+    TweetCreate,
   },
-  data () {
+  data() {
     return {
       User: {
         id: -1,
-        account: '',
-        name: '',
-        email: '',
-        password: '',
-        passwordCheck: '',
+        account: "",
+        name: "",
+        email: "",
+        password: "",
+        passwordCheck: "",
       },
       isProcessing: false,
-      nowPage: 'setting'
-    }
+      nowPage: "setting",
+    };
   },
   computed: {
     ...mapState(["currentUser"]),
   },
-  created () {
-    this.fetchUser()
+  created() {
+    this.fetchUser();
   },
   methods: {
-    fetchUser () {
-      const  data = this.currentUser
+    fetchUser() {
+      const data = this.currentUser;
       this.User = {
         ...this.User,
         id: data.id,
@@ -134,63 +127,74 @@ export default {
         name: data.name,
         email: data.email,
         password: data.password,
-        passwordCheck: data.password
-      }
+        passwordCheck: data.password,
+      };
     },
-    async handleSubmit () {
+    async handleSubmit() {
       try {
-        this.isProcessing = true
-        if (!this.User.account || !this.User.name || !this.User.email || !this.User.password || !this.User.passwordCheck) {
+        this.isProcessing = true;
+        if (
+          !this.User.account ||
+          !this.User.name ||
+          !this.User.email ||
+          !this.User.password ||
+          !this.User.passwordCheck
+        ) {
           Toast.fire({
-            icon: 'error',
-            title: '請確認已填寫所有欄位'
-          })
-          this.isProcessing = false
-          return
-        } else if (this.User.password !== this.User.passwordCheck ) {
+            icon: "error",
+            title: "請確認已填寫所有欄位",
+          });
+          this.isProcessing = false;
+          return;
+        } else if (this.User.password !== this.User.passwordCheck) {
           Toast.fire({
-            icon: 'error',
-            title: '兩次輸入密碼不同'
-          })
-          this.isProcessing = false
-          this.User.passwordCheck = ''
-          return
-        } 
-        
+            icon: "error",
+            title: "兩次輸入密碼不同",
+          });
+          this.isProcessing = false;
+          this.User.passwordCheck = "";
+          return;
+        }
 
-        const {data} = await usersAPI.update({ 
+        const { data } = await usersAPI.update({
           userId: this.currentUser.id,
           account: this.User.account,
           name: this.User.name,
           email: this.User.email,
-          password: this.User.password
-        })
+          password: this.User.password,
+        });
 
-        if (data.status !== 'success'){
-          throw new Error(data.message)
+        if (data.status !== "success") {
+          throw new Error(data.message);
         }
+        this.$store.commit("setCurrentUser", {
+          id: this.User.id,
+          account: this.User.account,
+          name: this.User.name,
+          email: this.User.email,
+        });
 
         Toast.fire({
-          icon: 'success',
-          title: '儲存成功！'
-        })
-        this.isProcessing = false
+          icon: "success",
+          title: "儲存成功！",
+        });
+        this.isProcessing = false;
       } catch (error) {
-        this.isProcessing = false
-        console.error(error.message)
+        this.isProcessing = false;
+        console.error(error.message);
         Toast.fire({
-          icon: 'error',
-          title: error.message
-        })
+          icon: "error",
+          title: error.message,
+        });
       }
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
 .center-area {
-  border-left: 1px solid var(--border-light-grey)
+  border-left: 1px solid var(--border-light-grey);
 }
 .form-title {
   margin-bottom: 40px;

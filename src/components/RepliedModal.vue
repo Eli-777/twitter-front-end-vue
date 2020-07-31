@@ -91,8 +91,8 @@ export default {
           })
           return
         }
-        console.log("submit");
-        console.log('this tweet id', this.tweet.id,'this text',this.text)
+        // console.log("submit");
+        // console.log('this tweet id', this.tweet.id,'this text',this.text)
         const {data} = await repliedsAPI.create({tweetId: this.tweet.id, comment: this.text})
         if (data.status === 'error') {
           throw Error(data.message)

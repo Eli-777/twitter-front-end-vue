@@ -65,7 +65,6 @@ export default {
   },
   created() {
     const { id } = this.$route.params;
-    console.log("id", id);
     this.fetchTweet(id);
     this.fetchReplies(id);
   },
@@ -95,7 +94,6 @@ export default {
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log("tweet", data);
       } catch (error) {
         console.log(error.message);
         Toast.fire({
