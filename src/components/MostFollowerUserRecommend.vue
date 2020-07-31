@@ -15,14 +15,14 @@
           <div class="card-button-area">
             <button
               class="card-button isFollowed"
-              v-if="user.isFollowedByLoginUser"
+              v-if="user.isFollowedByLoginUser && !(currentUser.id === user.id)"
               @click.stop.prevent="deleteFollow(user.id)"
             >
               正在跟隨
             </button>
             <button
               class="card-button"
-              v-else
+              v-else-if="!user.isFollowedByLoginUser && !(currentUser.id === user.id)"
               @click.stop.prevent="addFollow(user.id)"
             >
               跟隨
@@ -51,6 +51,7 @@
 import usersAPI from "./../apis/users";
 import { emptyImageFilter } from "./../utils/mixins";
 import { Toast } from "./../utils/helpers";
+import { mapState } from "vuex";
 
 
 
@@ -61,6 +62,9 @@ export default {
       users: [],
       isShowAll: false,
     };
+  },
+  computed: {
+    ...mapState(["currentUser"]),
   },
   created() {
     this.fetchMostFollowerUser(5);
