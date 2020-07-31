@@ -63,7 +63,7 @@ export default {
         });
       }
     },
-    async handleAfterSubmit(formData) {
+    async handleAfterSubmit(formData ) {
       try {
         this.isProcessing = true;
         console.log("formdata", formData);
@@ -84,8 +84,9 @@ export default {
           icon: "success",
           title: "更新成功",
         });
+        this.componentKey += 1;
+        this.fetchUser()
         $("#user-edit-modal").modal("hide");
-        this.fetchUser();
         this.isProcessing = false;
       } catch (error) {
         this.isProcessing = false;
@@ -100,10 +101,16 @@ export default {
       this.componentKey += 1;  
     },
     afteraddFollowUser() {
-      this.User.followingCount += 1
+      this.User = {
+        ...this.User,
+        followingCount: this.User.followingCount + 1
+      }
     },
     afterdeleteFollowUser() {
-      this.User.followingCount -= 1
+      this.User = {
+        ...this.User,
+        followingCount: this.User.followingCount - 1
+      }
     }
   },
 };

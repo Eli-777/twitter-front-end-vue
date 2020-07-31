@@ -149,7 +149,6 @@ export default {
     async fetchUser(userId) {
       try {
         const { data } = await usersAPI.get({ userId });
-        console.log("user", data);
         this.User = data;
       } catch (error) {
         console.log("error", error);
@@ -210,7 +209,6 @@ export default {
     },
     async fetchUserLikedTweets(userId) {
       try {
-        console.log("liked", data);
         const { data } = await usersAPI.getLikedTweets({ userId });
         if (data.status === "error") {
           throw new Error(data.message);
@@ -256,7 +254,6 @@ export default {
         if (data.status !== "success") {
           throw new Error(data.message);
         }
-        console.log("updata", data);
         Toast.fire({
           icon: "success",
           title: "更新成功",
@@ -293,10 +290,30 @@ export default {
       this.fetchUserTweets(id);  
     },
     afteraddFollowUser() {
-      this.User.followerCount += 1
+      if (this.currentUser.id === this.User.id) {
+         this.User = {
+          ...this.User,
+          followingCount: this.User.followingCount + 1
+        }
+        return
+      }
+      this.User = {
+        ...this.User,
+        followerCount: this.User.followerCount + 1
+      }
     },
     afterdeleteFollowUser() {
-      this.User.followerCount -= 1
+      if (this.currentUser.id === this.User.id) {
+         this.User = {
+          ...this.User,
+          followingCount: this.User.followingCount - 1
+        }
+        return
+      }
+      this.User = {
+        ...this.User,
+        followerCount: this.User.followerCount - 1
+      }
     }
   },
 };

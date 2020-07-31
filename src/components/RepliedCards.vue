@@ -37,7 +37,7 @@
 <script>
 import { fromNowFilter } from "./../utils/mixins";
 import { emptyImageFilter } from "./../utils/mixins";
-import usersAPI from "./../apis/users";
+// import usersAPI from "./../apis/users";
 import { Toast } from "./../utils/helpers";
 
 export default {
@@ -82,11 +82,12 @@ export default {
   methods: {
     async addLike (replyId) {
       try {
-        const {data} = await usersAPI.addReplyLiked({replyId})
-        if (data.status === 'error') {
-          throw new Error(data.message)
-        }
-        console.log(3343,this.initialReplied)
+        // const {data} = await usersAPI.addReplyLiked({replyId})
+        // if (data.status === 'error') {
+        //   throw new Error(data.message)
+        // }
+        // console.log(3343,this.initialReplied)
+        console.log(replyId)
         this.replied.isLiked = true
         this.replied.likeCount = this.replied.likedCount +1 
       } catch (error) {
@@ -100,11 +101,12 @@ export default {
     },
     async deleteLike (replyId) {
       try {
-        const {data} = await usersAPI.deleteReplyLiked({replyId})
-        if (data.status === 'error') {
-          throw new Error(data.message)
-        }
-        console.log(3343,this.initialReplied)
+        // const {data} = await usersAPI.deleteReplyLiked({replyId})
+        // if (data.status === 'error') {
+        //   throw new Error(data.message)
+        // }
+        // console.log(3343,this.initialReplied)
+        console.log(replyId)
         this.replied.isLiked = false
         this.replied.likeCount = this.replied.likedCount -1
       } catch (error) {

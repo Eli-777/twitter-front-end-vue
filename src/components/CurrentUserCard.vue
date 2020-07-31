@@ -195,7 +195,7 @@ export default {
       try {
         const userId = this.currentUser.id;
         const { data } = await usersAPI.getUserTweets({ userId });
-        console.log('usetTweet',data)
+        // console.log('usetTweet',data)
         if (data.status === "error") {
           throw new Error(data.message);
         }
@@ -227,7 +227,7 @@ export default {
         if (data.message === "使用者尚未回覆任何推文") {
           return
         }
-        console.log("replied", data);
+        // console.log("replied", data);
         this.replieds = data;
         this.replieds = this.replieds.sort((a, b) => {
           a = new Date(a.createdAt);
@@ -247,12 +247,12 @@ export default {
     async fetchUserLikedTweets() {
       try {
         const userId = this.currentUser.id;
-        console.log("liked", data);
+        // console.log("liked", data);
         const { data } = await usersAPI.getLikedTweets({ userId });
         if (data.status === "error") {
           throw new Error(data.message);
         }
-        console.log("liked", data);
+        // console.log("liked", data);
         if (data.message === "使用者尚未按任何推文讚") {
           return
         }
@@ -268,7 +268,7 @@ export default {
         console.log(error.message);
         Toast.fire({
           icon: "error",
-          title: "無法取得使用者回覆過的推文，請稍後再試",
+          title: "無法取得使用者喜歡的推文，請稍後再試",
         });
       }
     },

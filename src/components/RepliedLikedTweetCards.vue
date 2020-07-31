@@ -114,7 +114,7 @@ export default {
     async addLike(tweetId) {
       try {
         this.isProcessing = true
-        console.log('tweetId',tweetId)
+        // console.log('tweetId',tweetId)
         const { data } = await usersAPI.addliked({ tweetId });
         if (data.status === "error") {
           throw new Error(data.message);
@@ -135,7 +135,7 @@ export default {
     async deleteLike(tweetId) {
       try {
         this.isProcessing = true
-        console.log('tweetId',tweetId)
+        // console.log('tweetId',tweetId)
         const { data } = await usersAPI.deleteliked({ tweetId });
         if (data.status === "error") {
           throw new Error(data.message);
