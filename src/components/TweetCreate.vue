@@ -4,7 +4,7 @@
       <div class="modal-content">
         <div class="modal-header">
           <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-            <span aria-hidden="true">&times;</span>
+            <span aria-hidden="true" @click="noTweet">&times;</span>
           </button>
         </div>
         <div class="modal-body">
@@ -95,6 +95,9 @@ export default {
           title: '無法新增評論，請稍後再試'
         })
       } 
+    },
+    noTweet () {
+      this.text = ''
     }
   }
   

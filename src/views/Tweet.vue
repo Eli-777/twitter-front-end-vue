@@ -6,11 +6,12 @@
       <Spinner v-if="isLoading" />
       <template v-else>
         <!-- 回覆留言區 -->
-        <RepliedCards v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
+        <RepliedCards  v-for="replied in replieds" :key="replied.id" :initial-replied="replied" />
         <div v-if="!hasReplied" class="noReply">此推文還沒有人留言唷</div>
       </template>
     </div>
     <RepliedModal :tweet="tweet" @after-create-replied="afterCreateReplied" />
+    <TweetCreate />
     <MostFollowerUserRecommend />
   </div>
 </template>
@@ -20,6 +21,7 @@ import Navbar from "./../components/Navbar";
 import TweetCardDetail from "./../components/TweetCardDetail";
 import RepliedCards from "./../components/RepliedCards";
 import RepliedModal from "./../components/RepliedModal";
+import TweetCreate from "./../components/TweetCreate";
 import MostFollowerUserRecommend from "./../components/MostFollowerUserRecommend";
 import Spinner from "./../components/Spinner";
 import tweetsAPI from "./../apis/tweets";
@@ -32,6 +34,7 @@ export default {
     TweetCardDetail,
     RepliedCards,
     RepliedModal,
+    TweetCreate,
     MostFollowerUserRecommend,
     Spinner,
   },
@@ -110,6 +113,7 @@ export default {
         }
         if (data.message === "推文尚未有任何回覆") {
           this.hasReplied = false;
+          this.replieds = []
         }
         this.isLoading = false;
       } catch (error) {
@@ -133,6 +137,7 @@ export default {
         comment: text,
         createdAt: new Date(),
       });
+      this.hasReplied = true
     },
   },
 };
