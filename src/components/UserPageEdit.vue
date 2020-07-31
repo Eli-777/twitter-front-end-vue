@@ -22,11 +22,12 @@
             >{{ isProcessing ? '處理中...' : '儲存'}}</button>
           </div>
           <div class="modal-body">
-            <div class="form-group image-input">
+            <div class="form-group image-input cover-input">
+              <i class="material-icons cover-icon">camera_enhance </i>
               <img
                 :src="user.cover | emptyImage"
-                class="background-image"
-                alt="background-image"
+                class="cover-image"
+                alt="cover-image"
                 width="100%"
                 height="150px"
               />
@@ -35,11 +36,13 @@
                 type="file"
                 name="cover"
                 accept="image/*"
-                class="form-control-file background-image-input"
+                class="form-control-file cover-image-input"
                 @change="handleFileChangeBImg"
               />
             </div>
             <div class="form-group image-input">
+              <div class="avatar-input"></div>
+              <i class="material-icons avatar-icon">camera_enhance</i>
               <img
                 :src="user.avatar | emptyImage"
                 class="avatar-image"
@@ -100,16 +103,16 @@ export default {
     initialUser: {
       type: Object,
       default: () => ({
-        name: '',
-        introduction: '',
-        avatar: '',
-        cover: '',
-      })
+        name: "",
+        introduction: "",
+        avatar: "",
+        cover: "",
+      }),
     },
     initialIsProcessing: {
       type: Boolean,
-      required: true
-    }
+      required: true,
+    },
   },
   data() {
     return {
@@ -119,19 +122,19 @@ export default {
         avatar: "",
         cover: "",
       },
-      isProcessing: false
+      isProcessing: false,
     };
   },
   watch: {
-    initialUser (newValue) {
+    initialUser(newValue) {
       this.user = {
         ...this.user,
-        ...newValue
-      }
+        ...newValue,
+      };
     },
-    initialIsProcessing (newValue) {
-      this.isProcessing = newValue
-    }
+    initialIsProcessing(newValue) {
+      this.isProcessing = newValue;
+    },
   },
   created() {
     this.fetchUser();
@@ -155,7 +158,6 @@ export default {
         const imageURL = window.URL.createObjectURL(files[0]);
         this.user.cover = imageURL;
       }
-      
     },
     handleFileChangePImg(e) {
       // const files = e.target.files; // = filefist
@@ -174,19 +176,50 @@ export default {
       if (!this.user.name) {
         Toast.fire({
           icon: "error",
-          title: "請填寫名稱"
+          title: "請填寫名稱",
         });
       }
 
       const form = e.target; // <form></form>
       const formData = new FormData(form);
       this.$emit("after-submit", formData);
-    }
-  }
+    },
+  },
 };
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/icon?family=Material+Icons");
+.material-icons { 
+  color: rgb(129, 126, 126); 
+  position: absolute;
+  z-index: 10;
+  
+}
+.cover-icon {
+  left: 50%;
+  top: 50%;
+  transform: translateY(-50%) translateX(-50%);
+}
+.avatar-icon {
+  left: 43px;
+  transform: translateY(-50%) translateX(5%);
+}
+.cover-image, .avatar-image {
+  opacity: 0.5;
+}
+.cover-input, .avatar-input {
+  background: white;
+}
+.avatar-input {
+  position: absolute;
+  top: 0;
+  z-index: -1;
+}
+.button-x {
+  margin-left: 10px;
+}
+
 .modal-header {
   align-items: center;
   padding: 0;
@@ -196,20 +229,23 @@ export default {
 }
 .image-input {
   position: relative;
+  z-index: 999;
 }
 
-.background-image,
-.background-image-input {
+.cover-image,
+.cover-image-input {
   height: 150px;
 }
-.background-image-input {
+.cover-image-input {
   position: absolute;
   border: none;
   top: 0;
+  z-index: 999;
 }
 
 .avatar-image,
-.avatar-image-input {
+.avatar-image-input,
+.avatar-input {
   border-radius: 50%;
   width: 100px;
   height: 100px;
@@ -219,6 +255,7 @@ export default {
 .avatar-image-input {
   position: absolute;
   top: 0;
+  z-index: 999;
 }
 input[type="file"] {
   opacity: 0;
