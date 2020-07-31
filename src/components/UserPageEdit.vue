@@ -61,7 +61,7 @@
             </div>
             <div class="user-input">
               <div class="form-label-group text-center mb-3">
-                <label class="input-title" for="account">名稱</label>
+                <label class="input-title" for="name">名稱</label>
                 <input
                   id="name"
                   v-model="user.name"
@@ -74,7 +74,7 @@
                 />
               </div>
               <div class="form-label-group text-center">
-                <label class="input-title" for="account">自我介紹</label>
+                <label class="input-title" for="introduction">自我介紹</label>
                 <textarea
                   id="introduction"
                   v-model="user.introduction"
@@ -211,6 +211,9 @@ export default {
 .cover-input, .avatar-input {
   background: white;
 }
+.avatar-image-input:hover, .cover-image-input {
+  cursor: pointer;
+}
 .avatar-input {
   position: absolute;
   top: 0;
@@ -229,7 +232,7 @@ export default {
 }
 .image-input {
   position: relative;
-  z-index: 999;
+  z-index: 99;
 }
 
 .cover-image,
@@ -255,7 +258,7 @@ export default {
 .avatar-image-input {
   position: absolute;
   top: 0;
-  z-index: 999;
+  z-index: 990;
 }
 input[type="file"] {
   opacity: 0;
@@ -265,6 +268,10 @@ input[type="file"] {
 #name {
   width: 100%;
 }
+.user-input {
+  z-index: 999;
+}
+
 #introduction {
   height: 150px;
   border: 0;
