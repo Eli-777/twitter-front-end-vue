@@ -31,10 +31,10 @@
             </button>
             {{tweet.commentCount}}
           </router-link>
-          <button type="button" v-if="!tweet.isLikedByLoginUser" @click.stop.prevent="addLike(tweet.id)">
+          <button type="button" v-if="!tweet.isLikedByLoginUser" :disabled="isProcessing" @click.stop.prevent="addLike(tweet.id)">
             <img src="./../assets/like.png" alt />
           </button>
-          <button type="button" v-else @click.stop.prevent="deleteLike(tweet.id)">
+          <button type="button" v-else :disabled="isProcessing" @click.stop.prevent="deleteLike(tweet.id)">
             <img src="./../assets/heart-red.png" alt />
           </button>
           {{tweet.likeCount}}
@@ -61,6 +61,7 @@ export default {
   data() {
     return {
       tweet: {},
+      isProcessing: false
     };
   },
   watch: {
@@ -105,6 +106,7 @@ export default {
     },
     async addLike(tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await usersAPI.addliked({tweetId})
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -113,7 +115,9 @@ export default {
         this.tweet.isLikedByLoginUser = true;
         this.tweet.likeCount = this.tweet.likeCount + 1;
         this.$emit("after-add-like", tweetId);
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.log(error.message)
         Toast.fire({
           icon: 'error',
@@ -123,6 +127,7 @@ export default {
     },
     async deleteLike(tweetId) {
       try {
+        this.isProcessing = true
         const { data } = await usersAPI.deleteliked({tweetId})
         if (data.status === 'error') {
           throw new Error(data.message)
@@ -131,7 +136,9 @@ export default {
         this.tweet.isLikedByLoginUser = false;
         this.tweet.likeCount = this.tweet.likeCount - 1;
         this.$emit("after-delete-like", tweetId);
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.log(error.message)
         Toast.fire({
           icon: 'error',

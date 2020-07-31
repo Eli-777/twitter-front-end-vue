@@ -34,11 +34,12 @@
           <button
             type="button"
             v-if="!tweet.isLikedByLoginUser"
+            :disabled="isProcessing"
             @click.stop.prevent="addLike(tweet.tweetId)"
           >
             <img src="./../assets/like.png" alt />
           </button>
-          <button type="button" v-else @click.stop.prevent="deleteLike(tweet.tweetId)">
+          <button type="button" v-else :disabled="isProcessing" @click.stop.prevent="deleteLike(tweet.tweetId)">
             <img src="./../assets/heart-red.png" alt />
           </button>
           {{tweet.likeCount}}
@@ -72,6 +73,7 @@ export default {
         isLikedByLoginUser: false,
         createdAt: ''
       },
+      isProcessing: false
     };
   },
   watch: {
@@ -111,6 +113,7 @@ export default {
     },
     async addLike(tweetId) {
       try {
+        this.isProcessing = true
         console.log('tweetId',tweetId)
         const { data } = await usersAPI.addliked({ tweetId });
         if (data.status === "error") {
@@ -120,6 +123,7 @@ export default {
         this.$emit("after-add-like", tweetId);
         this.tweet.isLikedByLoginUser = true;
         this.tweet.likeCount = this.tweet.likeCount + 1;
+        this.isProcessing = false
       } catch (error) {
         console.log(error.message);
         Toast.fire({
@@ -130,6 +134,7 @@ export default {
     },
     async deleteLike(tweetId) {
       try {
+        this.isProcessing = true
         console.log('tweetId',tweetId)
         const { data } = await usersAPI.deleteliked({ tweetId });
         if (data.status === "error") {
@@ -139,7 +144,9 @@ export default {
         this.$emit("after-delete-like", tweetId);
         this.tweet.isLikedByLoginUser = false;
         this.tweet.likeCount = this.tweet.likeCount - 1;
+        this.isProcessing = false
       } catch (error) {
+        this.isProcessing = false
         console.log(error.message);
         Toast.fire({
           icon: "error",
