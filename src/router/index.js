@@ -45,6 +45,11 @@ Vue.use(VueRouter)
     component: () => import('../views/SignUp.vue')
   },
   {
+    path: '/chatroom',
+    name: 'chat-room',
+    component: () => import('../views/PublicChatRoom.vue')
+  },
+  {
     path: '/users/tweets',
     name: 'users-tweets',
     component: UserTweets,
