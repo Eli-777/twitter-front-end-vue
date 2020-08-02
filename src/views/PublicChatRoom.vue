@@ -75,7 +75,7 @@ console.log('token',tokenInLocalStorage)
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO('http://3b086c99eff5.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
+  connection: SocketIO('https://3b086c99eff5.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
   vuex: {
  
     actionPrefix: 'SOCKET_',
@@ -118,6 +118,7 @@ export default {
   },
   mounted() {
     console.log('emit')
+    this.$socket.connect()
     
     this.$socket.emit("login", { ...this.currentUser });
     // this.sockets.subscribe("connection", function () {
@@ -182,6 +183,8 @@ export default {
   },
   beforeDestroy() {
     this.$socket.emit("logout", { ...this.currentUser });
+    this.$socket.disconnect()
+    console.log("socket disconnected");
   },
   methods: {
     messageOut() {
