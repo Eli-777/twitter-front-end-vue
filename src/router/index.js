@@ -47,7 +47,8 @@ Vue.use(VueRouter)
   {
     path: '/chatroom',
     name: 'chat-room',
-    component: () => import('../views/PublicChatRoom.vue')
+    component: () => import('../views/PublicChatRoom.vue'),
+    beforeEnter: authorizeIsNotAdmin
   },
   {
     path: '/users/tweets',

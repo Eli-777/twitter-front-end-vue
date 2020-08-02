@@ -6,16 +6,39 @@ import store from './store'
 import VueSocketIO from 'vue-socket.io'
 import SocketIO from "socket.io-client"
 
+const tokenInLocalStorage = localStorage.getItem('token')
 
 Vue.use(new VueSocketIO({
   debug: true,
-  connection: SocketIO('http://localhost:4000'),
+  connection: SocketIO('https://9395ece590f4.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
   vuex: {
     store,
     actionPrefix: 'SOCKET_',
     mutationPrefix: 'SOCKET_'
   }
 }))
+
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: SocketIO('http://localhost:4000/'),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   }
+// }))
+
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: SocketIO('http://b195c310421c.ngrok.io/chats'),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   }
+// }))
+
+
 
 
 
@@ -31,3 +54,4 @@ new Vue({
   store,
   render: h => h(App)
 }).$mount('#app')
+

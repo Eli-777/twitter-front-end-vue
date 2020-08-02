@@ -16,6 +16,17 @@
           首頁
         </div>
       </router-link>
+      <router-link :to="{name: 'chat-room'}">
+        <div
+          class="sidebar__menu__link"
+          :class="{sidebarMenuLinkActive: isChatRoom}"
+          @click="showLight('chatroom')"
+        >
+          <div>
+            <span class="material-icons">record_voice_over</span>
+          </div>公開聊天室
+        </div>
+      </router-link>
       <router-link :to="{name: 'user-profile'}">
         <div
           class="sidebar__menu__link"
@@ -77,6 +88,7 @@ export default {
       isHome: true,
       isUser: false,
       isSetting: false,
+      isChatRoom: false,
     };
   },
   computed: {
@@ -90,6 +102,7 @@ export default {
       this.nowPage = slect;
       if (this.nowPage === "home") {
         this.isHome = true;
+        this.isChatRoom = false;
         this.isUser = false;
         this.isSetting = false;
         this.homeImg = this.img.isHome;
@@ -97,6 +110,7 @@ export default {
         this.settingImg = this.img.isNotSetting;
       } else if (this.nowPage === "profile") {
         this.isHome = false;
+        this.isChatRoom = false;
         this.isUser = true;
         this.isSetting = false;
         this.homeImg = this.img.isNotHome;
@@ -104,11 +118,20 @@ export default {
         this.settingImg = this.img.isNotSetting;
       } else if (this.nowPage === "setting") {
         this.isHome = false;
+        this.isChatRoom = false;
         this.isUser = false;
         this.isSetting = true;
         this.homeImg = this.img.isNotHome;
         this.userImg = this.img.isNotUser;
         this.settingImg = this.img.isSetting;
+      } else if (this.nowPage === "chatroom") {
+        this.isHome = false;
+        this.isChatRoom = true;
+        this.isUser = false;
+        this.isSetting = false;
+        this.homeImg = this.img.isNotHome;
+        this.userImg = this.img.isNotUser;
+        this.settingImg = this.img.isNotSetting;
       }
     },
     logout() {
@@ -175,5 +198,14 @@ export default {
 button {
   width: 100%;
   height: 2.81rem;
+}
+
+.sidebar__menu__link {
+  display: flex !important;
+  flex-direction: row;
+  align-items: center;
+}
+.material-icons {
+  margin-top: 5px;
 }
 </style>

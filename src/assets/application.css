@@ -145,6 +145,10 @@ input {
   border-right: 1px solid var(--border-light-grey);
 }
 
+/* .chat-room {
+  display: flex;
+} */
+
 /*** scrollbar ***/
  /* width */
 /* ::-webkit-scrollbar {
