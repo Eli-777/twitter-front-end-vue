@@ -23,7 +23,7 @@
           @click="showLight('chatroom')"
         >
           <div>
-            <span class="material-icons">record_voice_over</span>
+            <span class="material-icons img-icon">record_voice_over</span>
           </div>公開聊天室
         </div>
       </router-link>
@@ -193,6 +193,7 @@ export default {
 .img-icon {
   width: 1.25rem;
   height: 1.25rem;
+  margin-right: .5rem;
 }
 
 button {

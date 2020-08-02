@@ -3,20 +3,25 @@ import App from './App.vue'
 import router from './router'
 import './assets/application.css'
 import store from './store'
-import VueSocketIO from 'vue-socket.io'
-import SocketIO from "socket.io-client"
+// import VueSocketIO from 'vue-socket.io'
+// import SocketIO from "socket.io-client"
 
-const tokenInLocalStorage = localStorage.getItem('token')
 
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('https://9395ece590f4.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
-  vuex: {
-    store,
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  }
-}))
+// const tokenInLocalStorage = window.localStorage.getItem('token');
+// console.log('token',tokenInLocalStorage)
+
+// Vue.use(new VueSocketIO({
+//   debug: true,
+//   connection: SocketIO('http://3b086c99eff5.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
+//   vuex: {
+//     store,
+//     actionPrefix: 'SOCKET_',
+//     mutationPrefix: 'SOCKET_'
+//   },
+//   options: { path: "/chatroom" }
+// }))
+
+
 
 // Vue.use(new VueSocketIO({
 //   debug: true,
