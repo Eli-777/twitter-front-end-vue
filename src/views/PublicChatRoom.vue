@@ -74,7 +74,7 @@ console.log("token", tokenInLocalStorage);
 Vue.use(
   new VueSocketIO({
     debug: true,
-    connection: SocketIO("https://3b086c99eff5.ngrok.io", {
+    connection: SocketIO("https://simple-twitter-jez.herokuapp.com/", {
       query: `token=${tokenInLocalStorage}`,
     }),
     vuex: {
@@ -94,8 +94,6 @@ export default {
     //建立連線時
     connect: function () {
       console.log("socket connected");
-      this.$socket.emit("myId", { ...this.currentUser });
-      // this.$socket.emit("login", { ...this.currentUser });
     },
     disconnect: function () {
       console.log("socket disconnected");
@@ -119,10 +117,7 @@ export default {
     this.$socket.connect();
 
     this.$socket.emit("login", { ...this.currentUser });
-    // this.sockets.subscribe("connection", function () {
-    //   console.log("loginin");
-    //   this.$socket.emit("myId", { ...this.currentUser });
-    // });
+ 
     this.sockets.subscribe("message", function (obj) {
       console.log("收到訊息了", obj);
       let speaker = this.onlineUsers.find(
@@ -161,7 +156,6 @@ export default {
         isUserLoginLogout: true,
       };
       this.messages.push(obj);
-      // this.onlineUsers.push(obj);
     });
     this.sockets.subscribe("logout", function (obj) {
       console.log("收到下線使用者");
@@ -171,9 +165,6 @@ export default {
         isUserLoginLogout: true,
       };
       this.messages.push(obj);
-      // this.onlineUsers = this.onlineUsers.filter(
-      //   (onlineUser) => onlineUser.id !== obj.id
-      // );
     });
   },
   beforeDestroy() {
