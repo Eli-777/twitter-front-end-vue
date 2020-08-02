@@ -65,27 +65,25 @@ import { emptyImageFilter } from "./../utils/mixins";
 import { mapState } from "vuex";
 
 
-import VueSocketIO from 'vue-socket.io'
-import SocketIO from "socket.io-client"
-import Vue from 'vue'
+import VueSocketIO from "vue-socket.io";
+import SocketIO from "socket.io-client";
+import Vue from "vue";
+const tokenInLocalStorage = window.localStorage.getItem("token");
+console.log("token", tokenInLocalStorage);
 
-
-const tokenInLocalStorage = window.localStorage.getItem('token');
-console.log('token',tokenInLocalStorage)
-
-Vue.use(new VueSocketIO({
-  debug: true,
-  connection: SocketIO('https://3b086c99eff5.ngrok.io',{ query: `token=${tokenInLocalStorage}`}),
-  vuex: {
- 
-    actionPrefix: 'SOCKET_',
-    mutationPrefix: 'SOCKET_'
-  },
-  options: { path: "/chatroom" }
-}))
-
-
-
+Vue.use(
+  new VueSocketIO({
+    debug: true,
+    connection: SocketIO("https://3b086c99eff5.ngrok.io", {
+      query: `token=${tokenInLocalStorage}`,
+    }),
+    vuex: {
+      actionPrefix: "SOCKET_",
+      mutationPrefix: "SOCKET_",
+    },
+    options: { path: "/chatroom" },
+  })
+);
 
 export default {
   mixins: [emptyImageFilter],
@@ -113,13 +111,13 @@ export default {
       messages: [],
       onlineUsers: [],
       temp: {},
-      isTop: false
+      isTop: false,
     };
   },
+
   mounted() {
-    console.log('emit')
-    this.$socket.connect()
-    
+    this.$socket.connect();
+
     this.$socket.emit("login", { ...this.currentUser });
     // this.sockets.subscribe("connection", function () {
     //   console.log("loginin");
@@ -143,23 +141,20 @@ export default {
     });
     this.sockets.subscribe("old-message", function (objs) {
       this.messagesId += 1;
-      console.log('收到舊訊息',objs)
+      console.log("收到舊訊息", objs);
       objs = objs.map((obj) => {
         this.messages.unshift(obj);
       });
       console.log("oldMessages=", this.messages);
     });
 
-    // this.sockets.subscribe("onlineUsers", function (obj) {
-    //   this.onlineUsers = obj;
-    //   console.log(obj, "onlieUsers", this.onlineUsers);
-    // });
+   
     this.sockets.subscribe("online-users", function (obj) {
       this.onlineUsers = obj;
       console.log(obj, "收到上線使用者清單", this.onlineUsers);
     });
     this.sockets.subscribe("new-user", function (obj) {
-      console.log('收到上線使用者')
+      console.log("收到上線使用者");
       obj = {
         ...obj,
         name: obj.name + " " + "上線",
@@ -169,7 +164,7 @@ export default {
       // this.onlineUsers.push(obj);
     });
     this.sockets.subscribe("logout", function (obj) {
-      console.log('收到下線使用者')
+      console.log("收到下線使用者");
       obj = {
         ...obj,
         name: obj.name + " " + "下線",
@@ -183,7 +178,7 @@ export default {
   },
   beforeDestroy() {
     this.$socket.emit("logout", { ...this.currentUser });
-    this.$socket.disconnect()
+    this.$socket.disconnect();
     console.log("socket disconnected");
   },
   methods: {
@@ -196,24 +191,19 @@ export default {
     },
     detect(e) {
       let intElemScrollTop = e.srcElement.scrollTop;
-      let lastMessages = this.messages.slice(0,1) 
+      let lastMessages = this.messages.slice(0, 1);
       let lastMessagesId = lastMessages[0].messageId;
-      console.log('最後的訊息',lastMessages)
-      console.log('最後的訊息id',lastMessagesId)
+      console.log("最後的訊息", lastMessages);
+      console.log("最後的訊息id", lastMessagesId);
 
-      lastMessagesId -= 1
-      // if(lastMessagesId === 1) {
-      //   this.isTop = true
-      //   this.messages = this.messages.unshift({
-      //     id: -1,
-      //     isUserLoginLogout: false,
-      //     name: '已經沒有歷史的留言囉'
-      //   })
-      // }
-      if (intElemScrollTop < 10 && lastMessagesId > 0)  {
-        this.$socket.emit("old-message", { startId: lastMessagesId, count: 10 });
+      lastMessagesId -= 1;
+      if (intElemScrollTop < 10 && lastMessagesId > 0) {
+        this.$socket.emit("old-message", {
+          startId: lastMessagesId,
+          count: 10,
+        });
       }
-      
+
       console.log(intElemScrollTop);
     },
   },

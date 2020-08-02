@@ -136,6 +136,7 @@ export default {
     },
     logout() {
       this.$store.commit("revokeAuthentication");
+       window.location.reload(true);
       this.$router.push("/signin");
     },
   },
